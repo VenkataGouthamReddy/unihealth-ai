@@ -1,0 +1,235 @@
+import random
+from datetime import datetime
+import shutil
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from core.config import settings
+from core.security import get_password_hash, verify_password, create_access_token
+from database.mongodb import db
+from models.user import UserCreate, UserInDB, UserResponse, Token, TokenData, OTPVerify, PasswordChange, ProfileUpdate
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+        token_data = TokenData(email=email)
+    except JWTError:
+        raise credentials_exception
+    user = await db.db["users"].find_one({"email": token_data.email})
+    if user is None:
+        raise credentials_exception
+    return user
+
+@router.post("/send-otp")
+async def send_otp(user_data: UserCreate):
+    if user_data.role == "admin":
+        raise HTTPException(status_code=400, detail="Admin accounts cannot be created via registration.")
+    
+    # Check if user already exists
+    existing_user = await db.db["users"].find_one({"email": user_data.email})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Generate 6-digit OTP
+    otp = str(random.randint(100000, 999999))
+    
+    # Store temporary user data and OTP
+    # In a real app, you'd send this via email/SMS
+    await db.db["temp_users"].update_one(
+        {"email": user_data.email},
+        {"$set": {
+            "name": user_data.name,
+            "role": user_data.role,
+            "password": user_data.password, # Plain password temporarily, will hash on verification
+            "otp": otp,
+            "created_at": datetime.utcnow()
+        }},
+        upsert=True
+    )
+    
+    print(f"OTP for {user_data.email}: {otp}") # Log for testing
+    return {"message": "OTP sent successfully", "otp": otp} # Return OTP for demo purposes
+
+@router.post("/verify-otp", response_model=Token)
+async def verify_otp(verify_data: OTPVerify):
+    temp_user = await db.db["temp_users"].find_one({"email": verify_data.email})
+    
+    if not temp_user or temp_user["otp"] != verify_data.otp:
+        raise HTTPException(status_code=400, detail="Invalid or expired OTP")
+    
+    # Move to main users collection
+    user_in_db = UserInDB(
+        name=temp_user["name"],
+        email=temp_user["email"],
+        role=temp_user["role"],
+        hashed_password=get_password_hash(temp_user["password"])
+    )
+    
+    new_user = await db.db["users"].insert_one(user_in_db.dict(exclude={"id"}))
+    created_user = await db.db["users"].find_one({"_id": new_user.inserted_id})
+    
+    # Clean up temp collection
+    await db.db["temp_users"].delete_one({"email": verify_data.email})
+    
+    access_token = create_access_token(data={
+        "sub": created_user["email"], 
+        "id": str(created_user["_id"]),
+        "role": created_user.get("role"),
+        "name": created_user.get("name"),
+        "profile_picture": created_user.get("profile_picture")
+    })
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/register", response_model=UserResponse)
+async def register_user(user: UserCreate):
+    # This endpoint is now a fallback or simplified registration
+    # For a professional app, we use the OTP flow above
+    return await verify_otp(OTPVerify(email=user.email, otp="123456")) # Mocked for direct use if needed
+
+@router.post("/login", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = await db.db["users"].find_one({"email": form_data.username})
+    if not user or not verify_password(form_data.password, user["hashed_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token = create_access_token(data={
+        "sub": user["email"], 
+        "id": str(user["_id"]),
+        "role": user.get("role"),
+        "name": user.get("name"),
+        "profile_picture": user.get("profile_picture")
+    })
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/change-password")
+async def change_password(data: PasswordChange, current_user: dict = Depends(get_current_user)):
+    if not verify_password(data.old_password, current_user["hashed_password"]):
+        raise HTTPException(status_code=400, detail="Incorrect old password")
+    
+    new_hashed_password = get_password_hash(data.new_password)
+    await db.db["users"].update_one(
+        {"_id": current_user["_id"]},
+        {"$set": {"hashed_password": new_hashed_password}}
+    )
+    
+    return {"message": "Password changed successfully"}
+
+@router.post("/forgot-password")
+async def forgot_password(data: dict):
+    email = data.get("email")
+    user = await db.db["users"].find_one({"email": email})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Generate 6-digit OTP for reset
+    otp = str(random.randint(100000, 999999))
+    
+    # Store OTP in a temporary collection for reset
+    await db.db["password_resets"].update_one(
+        {"email": email},
+        {"$set": {
+            "otp": otp,
+            "created_at": datetime.utcnow()
+        }},
+        upsert=True
+    )
+    
+    print(f"Reset OTP for {email}: {otp}")
+    return {"message": "OTP sent successfully", "otp": otp}
+
+@router.post("/reset-password")
+async def reset_password(data: dict):
+    email = data.get("email")
+    otp = data.get("otp")
+    new_password = data.get("new_password")
+    
+    reset_data = await db.db["password_resets"].find_one({"email": email})
+    if not reset_data or reset_data["otp"] != otp:
+        raise HTTPException(status_code=400, detail="Invalid or expired OTP")
+    
+    # Check if OTP is older than 10 minutes
+    if (datetime.utcnow() - reset_data["created_at"]).total_seconds() > 600:
+        await db.db["password_resets"].delete_one({"email": email})
+        raise HTTPException(status_code=400, detail="OTP expired")
+    
+    # Update password
+    hashed_password = get_password_hash(new_password)
+    await db.db["users"].update_one(
+        {"email": email},
+        {"$set": {"hashed_password": hashed_password}}
+    )
+    
+    # Clean up reset data
+    await db.db["password_resets"].delete_one({"email": email})
+    
+    return {"message": "Password reset successfully"}
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(current_user: dict = Depends(get_current_user)):
+    current_user["_id"] = str(current_user["_id"])
+    return current_user
+
+@router.put("/update-profile", response_model=UserResponse)
+async def update_profile(data: ProfileUpdate, current_user: dict = Depends(get_current_user)):
+    update_data = {k: v for k, v in data.dict().items() if v is not None}
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No data provided to update")
+        
+    await db.db["users"].update_one(
+        {"_id": current_user["_id"]},
+        {"$set": update_data}
+    )
+    
+    updated_user = await db.db["users"].find_one({"_id": current_user["_id"]})
+    updated_user["_id"] = str(updated_user["_id"])
+    return updated_user
+
+@router.post("/upload-profile-picture")
+async def upload_profile_picture(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
+    file_extension = file.filename.split(".")[-1]
+    file_name = f"{current_user['_id']}.{file_extension}"
+    file_path = f"static/profiles/{file_name}"
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # In a real app, use a proper URL. Here we use a relative path.
+    profile_url = f"/static/profiles/{file_name}"
+    await db.db["users"].update_one(
+        {"_id": current_user["_id"]},
+        {"$set": {"profile_picture": profile_url}}
+    )
+    
+    return {"profile_picture": profile_url}
+
+@router.get("/user-profile/{email_or_id}", response_model=UserResponse)
+async def get_user_profile(email_or_id: str):
+    from bson import ObjectId
+    query = {}
+    try:
+        query["_id"] = ObjectId(email_or_id)
+    except:
+        query["email"] = email_or_id
+        
+    user = await db.db["users"].find_one(query)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    user["_id"] = str(user["_id"])
+    return user
