@@ -42,7 +42,7 @@ export default function Reminders() {
 
   const fetchReminders = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/alerts/student/${user.email}`);
+      const res = await axios.get(`/alerts/student/${user.email}`);
       setReminders(res.data);
     } catch (err) {
       console.error("Error fetching alerts:", err);
@@ -85,12 +85,12 @@ export default function Reminders() {
 
     try {
       if (editingId) {
-        await axios.put(`http://127.0.0.1:8000/alerts/${editingId}`, {
+        await axios.put(`/alerts/${editingId}`, {
           ...formData,
           student_id: user.email
         });
       } else {
-        await axios.post(`http://127.0.0.1:8000/alerts/`, {
+        await axios.post(`/alerts/`, {
           ...formData,
           student_id: user.email
         });
@@ -105,7 +105,7 @@ export default function Reminders() {
 
   const deleteReminder = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/alerts/${id}`);
+      await axios.delete(`/alerts/${id}`);
       fetchReminders();
     } catch (err) {
       console.error("Error deleting alert:", err);

@@ -31,7 +31,7 @@ export default function Notifications() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/notifications/student/${user.email}`);
+      const res = await axios.get(`/notifications/student/${user.email}`);
       setNotifications(res.data);
     } catch (err) {
       console.error("Error fetching notifications:", err);
@@ -58,7 +58,7 @@ export default function Notifications() {
 
   const markAsRead = async (id) => {
     try {
-      await axios.put(`http://127.0.0.1:8000/notifications/${id}/read`);
+      await axios.put(`/notifications/${id}/read`);
       fetchNotifications();
     } catch (err) {
       console.error("Error marking read:", err);
@@ -67,7 +67,7 @@ export default function Notifications() {
 
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/notifications/${id}`);
+      await axios.delete(`/notifications/${id}`);
       fetchNotifications();
     } catch (err) {
       console.error("Error deleting notification:", err);
@@ -76,7 +76,7 @@ export default function Notifications() {
 
   const markAllRead = async () => {
     try {
-      await axios.put(`http://127.0.0.1:8000/notifications/mark-all-read/${user.email}`);
+      await axios.put(`/notifications/mark-all-read/${user.email}`);
       fetchNotifications();
     } catch (err) {
       console.error("Error marking all read:", err);

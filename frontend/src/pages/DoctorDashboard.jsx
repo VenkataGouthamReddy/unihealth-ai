@@ -115,7 +115,7 @@ export default function DoctorDashboard() {
     setLoading(true);
     try {
       // 1. Fetch appointments
-      const apptRes = await axios.get(`http://127.0.0.1:8000/appointments/doctor/${user.id}`);
+      const apptRes = await axios.get(`/appointments/doctor/${user.id}`);
       // Sort appointments by date then time
       const sortedAppts = apptRes.data.sort((a, b) => {
         if (a.date !== b.date) return a.date.localeCompare(b.date);
@@ -124,7 +124,7 @@ export default function DoctorDashboard() {
       setAppointments(sortedAppts);
 
       // 2. Fetch doctor profile data
-      const docRes = await axios.get(`http://127.0.0.1:8000/doctors/${user.id}`);
+      const docRes = await axios.get(`/doctors/${user.id}`);
       setProfileData({
         name: docRes.data.name || user.name || '',
         specialization: docRes.data.specialization || 'General Physician',
@@ -134,17 +134,17 @@ export default function DoctorDashboard() {
       });
 
       // 3. Fetch doctor schedule
-      const schedRes = await axios.get(`http://127.0.0.1:8000/doctors/${user.id}/schedule`);
+      const schedRes = await axios.get(`/doctors/${user.id}/schedule`);
       if (schedRes.data && schedRes.data.availability) {
         setSchedule(schedRes.data);
       }
 
       // 4. Fetch prescriptions
-      const presRes = await axios.get(`http://127.0.0.1:8000/prescriptions/doctor/${user.id}`);
+      const presRes = await axios.get(`/prescriptions/doctor/${user.id}`);
       setPrescriptions(presRes.data);
 
       // 5. Fetch notifications
-      const notifRes = await axios.get(`http://127.0.0.1:8000/notifications/student/${user.email}`);
+      const notifRes = await axios.get(`/notifications/student/${user.email}`);
       setNotifications(notifRes.data);
 
     } catch (err) {
@@ -159,7 +159,7 @@ export default function DoctorDashboard() {
   const handleCancelAppointment = async (apptId) => {
     if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
     try {
-      await axios.put(`http://127.0.0.1:8000/appointments/${apptId}/cancel`);
+      await axios.put(`/appointments/${apptId}/cancel`);
       showToast('success', "Appointment cancelled successfully.");
       fetchDashboardData();
     } catch (err) {
@@ -172,10 +172,10 @@ export default function DoctorDashboard() {
   const handleViewPatientDetails = async (patientEmail) => {
     setLoadingPatient(true);
     try {
-      const patientRes = await axios.get(`http://127.0.0.1:8000/auth/user-profile/${patientEmail}`);
+      const patientRes = await axios.get(`/auth/user-profile/${patientEmail}`);
       setSelectedPatient(patientRes.data);
       
-      const historyRes = await axios.get(`http://127.0.0.1:8000/prescriptions/student/${patientEmail}`);
+      const historyRes = await axios.get(`/prescriptions/student/${patientEmail}`);
       setSelectedPatientHistory(historyRes.data);
     } catch (err) {
       console.error("Error fetching patient details:", err);
@@ -188,7 +188,7 @@ export default function DoctorDashboard() {
   // Save Schedule Settings
   const handleSaveSchedule = async (updatedSchedule) => {
     try {
-      const res = await axios.put(`http://127.0.0.1:8000/doctors/${user.id}/schedule`, updatedSchedule);
+      const res = await axios.put(`/doctors/${user.id}/schedule`, updatedSchedule);
       setSchedule(res.data.schedule);
       showToast('success', "Availability and scheduling updated successfully.");
     } catch (err) {
@@ -235,7 +235,7 @@ export default function DoctorDashboard() {
     setSavingProfile(true);
     try {
       // 1. Update basic auth details
-      await axios.put(`http://127.0.0.1:8000/auth/update-profile`, {
+      await axios.put(`/auth/update-profile`, {
         name: profileData.name,
         phone: profileData.phone
       });
@@ -243,7 +243,7 @@ export default function DoctorDashboard() {
       // 2. Save professional attributes in DB user document (schemaless mongo accepts custom fields)
       // The update profile route also accepts customization if we supply it. Let's make sure
       // user.py has these fields Optional so they write successfully.
-      await axios.put(`http://127.0.0.1:8000/auth/update-profile`, {
+      await axios.put(`/auth/update-profile`, {
         specialization: profileData.specialization,
         experience_years: parseInt(profileData.experience_years),
         consultation_fee: parseFloat(profileData.consultation_fee)
@@ -290,7 +290,7 @@ export default function DoctorDashboard() {
 
     setSubmittingPres(true);
     try {
-      await axios.post('http://127.0.0.1:8000/prescriptions', {
+      await axios.post('/prescriptions', {
         appointment_id: activeAptForPrescription._id,
         doctor_id: user.id,
         student_id: activeAptForPrescription.student_id,
@@ -1000,7 +1000,7 @@ export default function DoctorDashboard() {
                   <button 
                     onClick={async () => {
                       try {
-                        await axios.put(`http://127.0.0.1:8000/notifications/mark-all-read/${user.email}`);
+                        await axios.put(`/notifications/mark-all-read/${user.email}`);
                         fetchDashboardData();
                       } catch (err) { console.error(err); }
                     }}
@@ -1035,7 +1035,7 @@ export default function DoctorDashboard() {
                           <button 
                             onClick={async () => {
                               try {
-                                await axios.put(`http://127.0.0.1:8000/notifications/${notif._id}/read`);
+                                await axios.put(`/notifications/${notif._id}/read`);
                                 fetchDashboardData();
                               } catch (err) { console.error(err); }
                             }}

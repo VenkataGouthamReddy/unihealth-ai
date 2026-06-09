@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://127.0.0.1:8000/admin/stats', {
+      const res = await axios.get('/admin/stats', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStats(res.data);
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://127.0.0.1:8000/admin/users', {
+      const res = await axios.get('/admin/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
   const handleUpdateRole = async (userId, newRole) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://127.0.0.1:8000/admin/users/${userId}/role?role=${newRole}`, {}, {
+      await axios.patch(`/admin/users/${userId}/role?role=${newRole}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(users.map(u => u._id === userId ? { ...u, role: newRole } : u));
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/admin/users/${userId}`, {
+      await axios.delete(`/admin/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(users.filter(u => u._id !== userId));

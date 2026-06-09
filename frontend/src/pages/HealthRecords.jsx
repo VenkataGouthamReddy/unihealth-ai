@@ -39,7 +39,7 @@ export default function HealthRecords() {
   const fetchPrescriptions = async () => {
     if (!user?.email) return;
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/prescriptions/student/${user.email}`);
+      const res = await axios.get(`/prescriptions/student/${user.email}`);
       setPrescriptions(res.data);
     } catch (err) {
       console.error("Error fetching student prescriptions:", err);

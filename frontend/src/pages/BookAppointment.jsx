@@ -34,7 +34,7 @@ export default function BookAppointment() {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/doctors/${doctorId}`);
+        const res = await axios.get(`/doctors/${doctorId}`);
         setDoctor(res.data);
       } catch (err) {
         console.error("Error fetching doctor:", err);
@@ -49,7 +49,7 @@ export default function BookAppointment() {
       if (!date || !doctorId) return;
       setLoadingSlots(true);
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/doctors/${doctorId}/slots?date=${date}`);
+        const res = await axios.get(`/doctors/${doctorId}/slots?date=${date}`);
         setSlots(res.data);
         setTime(''); // Reset time selection
       } catch (err) {
@@ -70,7 +70,7 @@ export default function BookAppointment() {
     }
     setLoading(true);
     try {
-      await axios.post('http://127.0.0.1:8000/appointments', {
+      await axios.post('/appointments', {
         student_id: user.email,
         doctor_id: doctorId,
         date,

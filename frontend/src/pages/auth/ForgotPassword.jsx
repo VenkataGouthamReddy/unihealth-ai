@@ -16,7 +16,7 @@ export default function ForgotPassword() {
     setError('');
     
     try {
-      await axios.post('http://127.0.0.1:8000/auth/forgot-password', { email });
+      await axios.post('/auth/forgot-password', { email });
       setSubmitted(true);
       setTimeout(() => navigate('/verify-otp', { state: { email, isReset: true } }), 2000);
     } catch (err) {

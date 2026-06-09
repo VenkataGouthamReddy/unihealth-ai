@@ -42,7 +42,7 @@ export default function StudentDashboard() {
     const fetchLatestAppointment = async () => {
       if (user?.email) {
         try {
-          const res = await axios.get(`http://127.0.0.1:8000/appointments/student/${user.email}`);
+          const res = await axios.get(`/appointments/student/${user.email}`);
           const scheduled = res.data.find(apt => apt.status === 'scheduled');
           if (scheduled) {
             setUpcomingApt({
@@ -95,7 +95,7 @@ export default function StudentDashboard() {
                className="w-12 h-12 bg-white rounded-[1.25rem] border-2 border-white shadow-xl flex items-center justify-center text-primary font-black cursor-pointer hover:scale-105 transition-all overflow-hidden ring-4 ring-primary/5"
             >
                {user?.profile_picture ? (
-                 <img src={`http://127.0.0.1:8000${user.profile_picture}`} alt="" className="w-full h-full object-cover" />
+                 <img src={`${import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000'}${user.profile_picture}`} alt="" className="w-full h-full object-cover" />
                ) : (
                  <span className="text-xl font-black">{user?.name?.charAt(0) || 'S'}</span>
                )}

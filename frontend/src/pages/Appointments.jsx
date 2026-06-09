@@ -35,7 +35,7 @@ export default function Appointments() {
 
   const fetchAppointments = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/appointments/student/${user.email}`);
+      const res = await axios.get(`/appointments/student/${user.email}`);
       setAppointments(res.data);
     } catch (err) {
       console.error("Error fetching appointments:", err);
@@ -57,9 +57,9 @@ export default function Appointments() {
     if (!actionId) return;
     try {
       if (modalType === 'cancel') {
-        await axios.put(`http://127.0.0.1:8000/appointments/${actionId}/cancel`);
+        await axios.put(`/appointments/${actionId}/cancel`);
       } else if (modalType === 'delete') {
-        await axios.delete(`http://127.0.0.1:8000/appointments/${actionId}`);
+        await axios.delete(`/appointments/${actionId}`);
       }
       fetchAppointments();
       setModalType(null);

@@ -28,7 +28,7 @@ export default function Doctors() {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:8000/doctors');
+        const res = await axios.get('/doctors');
         setDoctors(res.data);
       } catch (err) {
         console.error("Error fetching doctors:", err);
