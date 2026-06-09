@@ -14,6 +14,13 @@ from routers.prescriptions import router as prescriptions_router
 from fastapi.staticfiles import StaticFiles
 import os
 
+# Build allowed origins list from env var (comma-separated) or default to allow all
+_raw_origins = os.environ.get("ALLOWED_ORIGINS", "*")
+if _raw_origins == "*":
+    ALLOWED_ORIGINS = ["*"]
+else:
+    ALLOWED_ORIGINS = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect_to_mongo()
@@ -42,7 +49,7 @@ app.include_router(prescriptions_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For development, allowing all origins is easier. Update for production.
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

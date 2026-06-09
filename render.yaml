@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: unihealth-api
+    env: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MONGODB_URL
+        sync: false
+      - key: DATABASE_NAME
+        value: unihealth
+      - key: SECRET_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
