@@ -5,12 +5,10 @@ __pycache__/
 *.pyd
 *.egg
 *.egg-info/
-dist/
 build/
 .eggs/
 venv/
 env/
-.env
 .venv
 
 # Node
@@ -20,8 +18,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Frontend build output
-frontend/dist/
-frontend/dist-ssr/
+dist/
+dist-ssr/
 
 # Environment files (NEVER commit secrets)
 .env
@@ -39,7 +37,7 @@ frontend/dist-ssr/
 .DS_Store
 
 # Android (Capacitor)
-frontend/android/
+android/
 
 # Static uploads (profile pictures uploaded at runtime)
-backend/static/profiles/
+static/profiles/
