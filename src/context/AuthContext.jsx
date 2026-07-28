@@ -15,6 +15,37 @@ export const AuthProvider = ({ children }) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 
+  // Axios Automatic Request Retry Interceptor (FastAPI Resiliency)
+  axios.defaults.retry = 3; // Retry up to 3 times
+  axios.defaults.retryDelay = 1500; // Wait 1.5 seconds between retries
+
+  axios.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const { config } = error;
+      // If config doesn't exist or retry isn't set, reject
+      if (!config || !config.retry) {
+        return Promise.reject(error);
+      }
+      
+      // Initialize retry count tracker
+      config.__retryCount = config.__retryCount || 0;
+      
+      // If maximum retries exceeded, reject
+      if (config.__retryCount >= config.retry) {
+        return Promise.reject(error);
+      }
+      
+      config.__retryCount += 1;
+      
+      // Wait for backoff delay
+      await new Promise((resolve) => setTimeout(resolve, config.retryDelay));
+      
+      // Trigger new request
+      return axios(config);
+    }
+  );
+
   useEffect(() => {
     // A real app would verify the token with the backend here.
     const initAuth = async () => {
