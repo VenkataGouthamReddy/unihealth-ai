@@ -43,10 +43,7 @@ export default function Register() {
     }
 
     try {
-      const data = await sendOtp(name, email, password, role);
-      if (data.otp) {
-        alert(`DEMO MODE: Your OTP is ${data.otp}`);
-      }
+      await sendOtp(name, email, password, role);
       // Pass email to verify page
       navigate('/verify-otp', { state: { email } });
     } catch (err) {

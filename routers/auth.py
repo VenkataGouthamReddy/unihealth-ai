@@ -102,11 +102,10 @@ async def send_otp(user_data: UserCreate):
         
     except Exception as e:
         print(f"Failed to send email: {e}")
-        # We don't fail the registration if email fails during development, 
-        # but in production we probably should.
         print(f"OTP for {user_data.email}: {otp}")
+        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please ensure email settings are configured on the server.")
         
-    return {"message": "OTP sent successfully. Please check your email.", "otp": otp}
+    return {"message": "OTP sent successfully. Please check your email."}
 
 @router.post("/verify-otp", response_model=Token)
 async def verify_otp(verify_data: OTPVerify):
@@ -227,6 +226,7 @@ async def forgot_password(data: dict):
         print(f"Failed to send reset email: {e}")
         # Log it for development fallback
         print(f"Reset OTP for {email}: {otp}")
+        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please ensure email settings are configured on the server.")
         
     return {"message": "OTP sent successfully. Please check your email.", "otp_sent": True}
 
