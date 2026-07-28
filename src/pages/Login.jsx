@@ -21,7 +21,13 @@ export default function Login() {
       else if (user.role === 'doctor') navigate('/doctor');
       else navigate('/admin');
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      if (err.message && (err.message.includes('Network Error') || err.message.includes('Failed to fetch'))) {
+        setError('Network Error: Cannot connect to the server. Check your connection or API URL.');
+      } else if (err.response && err.response.data && err.response.data.detail) {
+        setError(err.response.data.detail);
+      } else {
+        setError('Invalid email or password. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

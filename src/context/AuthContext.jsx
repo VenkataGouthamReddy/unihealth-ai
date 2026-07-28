@@ -8,9 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [loading, setLoading] = useState(true);
 
-  // Always use relative API paths — Vite proxy forwards them to FastAPI in dev,
-  // and FastAPI serves them directly in production (same origin).
-  axios.defaults.baseURL = '';
+  // Always use the explicit API URL if provided (crucial for mobile/Capacitor), 
+  // otherwise fallback to relative path (Vite proxy/production).
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }

@@ -22,94 +22,59 @@ if _raw_origins == "*":
 else:
     ALLOWED_ORIGINS = [o.strip() for o in _raw_origins.split(",") if o.strip()]
 
-async def seed_doctors_non_destructive():
+async def init_db_and_cleanup_sample_data():
     try:
         from database.mongodb import db
         from core.security import get_password_hash
         from datetime import datetime
-        
-        # Check if database has been seeded before
-        config = await db.db["system_config"].find_one({"key": "seeded"})
-        if config:
-            return
-            
-        hashed_pwd = get_password_hash("doctor123")
-        mock_doctors = [
-            {"name": "Dr. Sarah Johnson", "full_name": "Dr. Sarah Johnson", "email": "sarah.j@unihealth.edu", "role": "doctor", "specialization": "Cardiologist", "experience_years": 12, "consultation_fee": 75.0, "hashed_password": hashed_pwd},
-            {"name": "Dr. Michael Chen", "full_name": "Dr. Michael Chen", "email": "m.chen@unihealth.edu", "role": "doctor", "specialization": "Neurologist", "experience_years": 8, "consultation_fee": 90.0, "hashed_password": hashed_pwd},
-            {"name": "Dr. Emily Rodriguez", "full_name": "Dr. Emily Rodriguez", "email": "e.rodriguez@unihealth.edu", "role": "doctor", "specialization": "Dermatologist", "experience_years": 15, "consultation_fee": 80.0, "hashed_password": hashed_pwd},
-            {"name": "Dr. David Smith", "full_name": "Dr. David Smith", "email": "d.smith@unihealth.edu", "role": "doctor", "specialization": "General Physician", "experience_years": 10, "consultation_fee": 50.0, "hashed_password": hashed_pwd}
+
+        # Seed Default Admin User if missing
+        admin_email = "admin@unihealth.ai"
+        existing_admin = await db.db["users"].find_one({"email": admin_email})
+        if not existing_admin:
+            admin_data = {
+                "name": "Admin Master",
+                "full_name": "Admin Master",
+                "email": admin_email,
+                "hashed_password": get_password_hash("admin123"),
+                "role": "admin",
+                "created_at": datetime.utcnow()
+            }
+            await db.db["users"].insert_one(admin_data)
+            print("Default admin user seeded on startup.")
+
+        # Sample doctor emails to purge
+        sample_emails = [
+            "sarah.j@unihealth.edu",
+            "m.chen@unihealth.edu",
+            "e.rodriguez@unihealth.edu",
+            "d.smith@unihealth.edu"
         ]
-        
-        doctor_ids = {}
-        for doc in mock_doctors:
-            existing = await db.db["users"].find_one({"email": doc["email"]})
-            if not existing:
-                doc["created_at"] = datetime.utcnow()
-                res = await db.db["users"].insert_one(doc)
-                doctor_ids[doc["email"]] = str(res.inserted_id)
-            else:
-                doctor_ids[doc["email"]] = str(existing["_id"])
-                # Ensure fields are correctly populated if they were missing or null
-                updates = {}
-                if not existing.get("specialization"):
-                    updates["specialization"] = doc["specialization"]
-                if not existing.get("full_name"):
-                    updates["full_name"] = doc["full_name"]
-                if updates:
-                    await db.db["users"].update_one({"_id": existing["_id"]}, {"$set": updates})
-                    
-        # Seed schedules for mock doctors
-        default_avail = {
-            "Monday": {"active": True, "slots": [{"start": "09:00", "end": "13:00"}, {"start": "15:00", "end": "18:00"}]},
-            "Tuesday": {"active": True, "slots": [{"start": "09:00", "end": "13:00"}, {"start": "15:00", "end": "18:00"}]},
-            "Wednesday": {"active": True, "slots": [{"start": "09:00", "end": "13:00"}, {"start": "15:00", "end": "18:00"}]},
-            "Thursday": {"active": True, "slots": [{"start": "09:00", "end": "13:00"}, {"start": "15:00", "end": "18:00"}]},
-            "Friday": {"active": True, "slots": [{"start": "09:00", "end": "13:00"}, {"start": "15:00", "end": "18:00"}]},
-            "Saturday": {"active": False, "slots": []},
-            "Sunday": {"active": False, "slots": []}
-        }
-        
-        default_breaks = {
-            "Monday": [{"start": "13:00", "end": "15:00"}],
-            "Tuesday": [{"start": "13:00", "end": "15:00"}],
-            "Wednesday": [{"start": "13:00", "end": "15:00"}],
-            "Thursday": [{"start": "13:00", "end": "15:00"}],
-            "Friday": [{"start": "13:00", "end": "15:00"}],
-            "Saturday": [],
-            "Sunday": []
-        }
-        
-        for email, doc_id in doctor_ids.items():
-            existing_sched = await db.db["doctor_schedules"].find_one({"doctor_id": doc_id})
-            if not existing_sched:
-                schedule = {
-                    "doctor_id": doc_id,
-                    "availability": default_avail,
-                    "custom_dates": {},
-                    "breaks": default_breaks,
-                    "settings": {
-                        "slot_duration": 15,
-                        "max_patients_per_slot": 1,
-                        "max_patients_per_day": 10
-                    },
-                    "updated_at": datetime.utcnow()
-                }
-                await db.db["doctor_schedules"].insert_one(schedule)
-                
+
+        # Find any sample doctor accounts
+        sample_docs = await db.db["users"].find({"email": {"$in": sample_emails}}).to_list(100)
+        if sample_docs:
+            sample_ids = [str(doc["_id"]) for doc in sample_docs]
+            # Delete sample doctors from users collection
+            await db.db["users"].delete_many({"email": {"$in": sample_emails}})
+            # Clean up schedules, appointments, prescriptions for sample doctors
+            await db.db["doctor_schedules"].delete_many({"doctor_id": {"$in": sample_ids}})
+            await db.db["appointments"].delete_many({"doctor_id": {"$in": sample_ids}})
+            await db.db["prescriptions"].delete_many({"doctor_id": {"$in": sample_ids}})
+            print(f"Purged {len(sample_docs)} sample doctors and associated data.")
+
         await db.db["system_config"].update_one(
-            {"key": "seeded"},
-            {"$set": {"value": True, "seeded_at": datetime.utcnow()}},
+            {"key": "sample_doctors_removed"},
+            {"$set": {"value": True, "updated_at": datetime.utcnow()}},
             upsert=True
         )
-        print("Non-destructive seeding of mock doctors and schedules completed.")
     except Exception as e:
-        print(f"Error during non-destructive seeding: {e}")
+        print(f"Error during DB initialization / sample cleanup: {e}")
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect_to_mongo()
-    await seed_doctors_non_destructive()
+    await init_db_and_cleanup_sample_data()
     yield
     await close_mongo_connection()
 

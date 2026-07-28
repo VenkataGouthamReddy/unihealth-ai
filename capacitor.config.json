@@ -1,5 +1,8 @@
 {
   "appId": "com.unihealth.ai",
   "appName": "UniHealth AI",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "cleartext": true
+  }
 }

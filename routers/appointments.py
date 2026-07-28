@@ -16,7 +16,7 @@ async def book_appointment(appointment: Appointment):
     try:
         doctor = await db.db["users"].find_one({"_id": ObjectId(appointment.doctor_id)})
         if doctor:
-            appointment_dict["doctor_name"] = doctor.get("name", "Campus Specialist")
+            appointment_dict["doctor_name"] = doctor.get("name") or doctor.get("full_name") or "Campus Specialist"
         else:
             appointment_dict["doctor_name"] = "Campus Specialist"
     except Exception:
@@ -49,7 +49,7 @@ async def get_student_appointments(student_email: str):
             try:
                 doctor = await db.db["users"].find_one({"_id": ObjectId(apt["doctor_id"])})
                 if doctor:
-                    apt["doctor_name"] = doctor["name"]
+                    apt["doctor_name"] = doctor.get("name") or doctor.get("full_name") or "Campus Specialist"
                 else:
                     apt["doctor_name"] = "Campus Specialist"
             except Exception:

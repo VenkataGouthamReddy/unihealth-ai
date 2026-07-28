@@ -62,6 +62,8 @@ async def get_doctors():
     doctors = await db.db["users"].find({"role": "doctor"}).to_list(100)
     for doc in doctors:
         doc["_id"] = str(doc["_id"])
+        if not doc.get("name"):
+            doc["name"] = doc.get("full_name", "Doctor")
         if not doc.get("specialization"):
             doc["specialization"] = "General Physician"
     return doctors
@@ -72,6 +74,8 @@ async def get_doctor(doctor_id: str):
     if not doctor:
         raise HTTPException(status_code=404, detail="Doctor not found")
     doctor["_id"] = str(doctor["_id"])
+    if not doctor.get("name"):
+        doctor["name"] = doctor.get("full_name", "Doctor")
     if not doctor.get("specialization"):
         doctor["specialization"] = "General Physician"
     return doctor
@@ -204,19 +208,4 @@ async def get_doctor_slots(doctor_id: str, date: str):
 
 @router.post("/seed")
 async def seed_doctors():
-    hashed_pwd = get_password_hash("doctor123")
-    mock_doctors = [
-        {"name": "Dr. Sarah Johnson", "email": "sarah.j@unihealth.edu", "role": "doctor", "specialization": "Cardiologist", "hashed_password": hashed_pwd},
-        {"name": "Dr. Michael Chen", "email": "m.chen@unihealth.edu", "role": "doctor", "specialization": "Neurologist", "hashed_password": hashed_pwd},
-        {"name": "Dr. Emily Rodriguez", "email": "e.rodriguez@unihealth.edu", "role": "doctor", "specialization": "Dermatologist", "hashed_password": hashed_pwd},
-        {"name": "Dr. David Smith", "email": "d.smith@unihealth.edu", "role": "doctor", "specialization": "General Physician", "hashed_password": hashed_pwd}
-    ]
-    
-    seeded = 0
-    for doc in mock_doctors:
-        existing = await db.db["users"].find_one({"email": doc["email"]})
-        if not existing:
-            await db.db["users"].insert_one(doc)
-            seeded += 1
-            
-    return {"message": f"Mock doctors seeded successfully. Seeded: {seeded} doctors. Password: doctor123"}
+    return {"message": "Sample doctor seeding is disabled. Doctors can register directly or be promoted by system Admin."}

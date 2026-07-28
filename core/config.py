@@ -9,6 +9,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     SUPABASE_URL: str = ""
     SUPABASE_KEY: str = ""
+    
+    # Email config
+    MAIL_USERNAME: str = ""
+    MAIL_PASSWORD: str = ""
+    MAIL_FROM: str = ""
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "smtp.gmail.com"
+    MAIL_FROM_NAME: str = "UniHealth AI"
 
     model_config = {
         "env_file": ".env",

@@ -21,7 +21,7 @@ async def create_prescription(prescription: PrescriptionCreateSchema):
     
     # Fetch doctor details for notifications
     doctor = await db.db["users"].find_one({"_id": ObjectId(prescription.doctor_id)})
-    doctor_name = doctor["name"] if doctor else "Campus Doctor"
+    doctor_name = (doctor.get("name") or doctor.get("full_name")) if doctor else "Campus Doctor"
     
     # Trigger notification to student
     notification = {
@@ -56,7 +56,7 @@ async def get_student_prescriptions(student_email: str):
         try:
             doc = await db.db["users"].find_one({"_id": ObjectId(pres["doctor_id"])})
             if doc:
-                pres["doctor_name"] = doc.get("name", "Campus Specialist")
+                pres["doctor_name"] = doc.get("name") or doc.get("full_name") or "Campus Specialist"
                 pres["doctor_specialization"] = doc.get("specialization", "Specialist")
             else:
                 pres["doctor_name"] = "Campus Specialist"

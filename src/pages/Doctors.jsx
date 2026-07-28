@@ -40,7 +40,7 @@ export default function Doctors() {
   }, []);
 
   const filteredDoctors = doctors.filter(doc => {
-    const name = doc.name || '';
+    const name = doc.name || doc.full_name || '';
     const specialization = doc.specialization || 'General Physician';
     const term = searchTerm.toLowerCase();
     
@@ -148,13 +148,14 @@ export default function Doctors() {
 }
 
 function DoctorCard({ doctor, onBook }) {
+   const doctorName = doctor.name || doctor.full_name || 'Doctor';
    return (
       <div className="card-premium group hover:bg-white overflow-hidden p-0">
          <div className="h-2 bg-gradient-to-r from-blue-500 to-emerald-400 w-full"></div>
          <div className="p-8">
             <div className="flex justify-between items-start mb-8">
                <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center font-black text-slate-400 text-3xl group-hover:bg-primary/5 group-hover:text-primary transition-all duration-500 border border-slate-50 group-hover:border-primary/10">
-                  {doctor.name.charAt(0)}
+                  {doctorName.charAt(0)}
                </div>
                <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border border-amber-100">
                   <Star className="w-3 h-3 fill-amber-600" /> 4.9 (120+)
@@ -162,9 +163,9 @@ function DoctorCard({ doctor, onBook }) {
             </div>
 
             <div className="mb-8">
-               <h3 className="text-2xl font-black text-slate-900 mb-2 group-hover:text-primary transition-colors">{doctor.name}</h3>
+               <h3 className="text-2xl font-black text-slate-900 mb-2 group-hover:text-primary transition-colors">{doctorName}</h3>
                <div className="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest mb-4">
-                  <ShieldCheck className="w-4 h-4" /> {doctor.specialization}
+                  <ShieldCheck className="w-4 h-4" /> {doctor.specialization || 'General Physician'}
                </div>
                
                <div className="space-y-3">

@@ -5,9 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"venv\\Scripts\\uvicorn main:app --reload\" \"vite\"",
-    "dev:frontend": "vite",
-    "dev:backend": "venv\\Scripts\\uvicorn main:app --reload",
+    "dev": "concurrently \"venv\\Scripts\\uvicorn main:app --host 0.0.0.0 --reload --reload-dir routers --reload-dir core --reload-dir database --reload-dir models\" \"vite --host\"",
+    "dev:frontend": "vite --host",
+    "dev:backend": "venv\\Scripts\\uvicorn main:app --host 0.0.0.0 --reload --reload-dir routers --reload-dir core --reload-dir database --reload-dir models",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

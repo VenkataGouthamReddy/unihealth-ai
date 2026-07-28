@@ -102,7 +102,7 @@ export default function BookAppointment() {
           </div>
           <h1 className="text-4xl font-black text-slate-900 mb-4">Confirmed!</h1>
           <p className="text-slate-500 font-medium leading-relaxed mb-8">
-            Your appointment with <span className="text-primary font-bold">{doctor?.name}</span> is scheduled. A confirmation notification has been sent to your student portal.
+            Your appointment with <span className="text-primary font-bold">{doctor?.name || doctor?.full_name || 'Doctor'}</span> is scheduled. A confirmation notification has been sent to your student portal.
           </p>
           <div className="bg-slate-50 rounded-2xl p-6 mb-8 text-left space-y-4">
              <div className="flex justify-between items-center">
@@ -140,7 +140,7 @@ export default function BookAppointment() {
                      <div className="w-20 h-20 bg-primary/20 rounded-3xl flex items-center justify-center mb-6 border border-white/10 backdrop-blur-md">
                         <Stethoscope className="text-primary w-10 h-10" />
                      </div>
-                     <h2 className="text-3xl font-black mb-2">{doctor?.name}</h2>
+                     <h2 className="text-3xl font-black mb-2">{doctor?.name || doctor?.full_name || 'Doctor'}</h2>
                      <p className="text-primary font-black text-xs uppercase tracking-widest">{doctor?.specialization || 'General Physician'}</p>
                   </div>
                   <div className="p-8 space-y-6 bg-white">

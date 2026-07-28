@@ -31,15 +31,60 @@ import Notifications from './pages/Notifications';
 
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="h-screen flex items-center justify-center font-black text-teal-600 animate-pulse">UniHealth AI Loading...</div>;
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-slate-50 font-sans">
+        <div className="relative mb-6">
+          <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center text-teal-500">
+            <svg className="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+        </div>
+        <h2 className="text-xl font-black text-slate-800 tracking-tight mb-2">UniHealth AI</h2>
+        <p className="text-xs text-slate-400 font-black uppercase tracking-[0.2em] animate-pulse">Synchronizing Session...</p>
+      </div>
+    );
+  }
   if (!user) return <Navigate to="/login" />;
-  if (role && user.role !== role) return <Navigate to={user.role === 'student' ? '/student' : '/doctor'} />;
+  if (role && user.role !== role) return <Navigate to={user.role === 'admin' ? '/admin' : user.role === 'doctor' ? '/doctor' : '/student'} />;
   return children;
 }
 
 export default function App() {
+  const [isOnline, setIsOnline] = React.useState(navigator.onLine);
+
+  React.useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   return (
     <Router>
+      {!isOnline && (
+        <div className="fixed bottom-4 left-4 right-4 z-[9999] bg-rose-600 text-white p-4 rounded-2xl shadow-2xl flex items-center justify-between border border-rose-500 animate-in slide-in-from-bottom duration-300">
+          <div className="flex items-center gap-3">
+            <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-3.536 5 5 0 011.414-3.536m0 0l2.829 2.829m-2.829 4.243L3 21M7.757 16.243L10.586 13.41M12 12a1 1 0 100-2 1 1 0 000 2z" />
+            </svg>
+            <div className="text-xs font-black uppercase tracking-widest">
+              Offline Mode — Check your connection
+            </div>
+          </div>
+          <button onClick={() => setIsOnline(navigator.onLine)} className="text-[10px] font-black uppercase bg-white/20 px-3 py-1.5 rounded-lg hover:bg-white/30 active:scale-95 transition-all">
+            Retry
+          </button>
+        </div>
+      )}
       <Routes>
         {/* LANDING & AUTH */}
         <Route path="/" element={<Landing />} />
