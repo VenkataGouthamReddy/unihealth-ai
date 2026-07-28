@@ -40,7 +40,9 @@ import {
   ShieldCheck,
   ChevronRight,
   AlertCircle,
-  KeyRound
+  KeyRound,
+  Menu,
+  X
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -50,6 +52,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview'); 
   const [stats, setStats] = useState({ students: 0, doctors: 0, appointments: 0, revenue: '0' });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchStats = async () => {
     try {
@@ -116,22 +119,43 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 flex font-sans">
+    <div className="min-h-screen bg-[#0f172a] text-slate-100 flex font-sans relative">
+      {/* Mobile Header (Hamburger) */}
+      <div className="md:hidden flex items-center justify-between p-4 border-b border-slate-800 w-full absolute top-0 bg-[#0f172a] z-50">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+            <ShieldCheck className="w-5 h-5" />
+          </div>
+          <h1 className="text-lg font-black tracking-tight">Admin <span className="text-primary">Panel</span></h1>
+        </div>
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-slate-400">
+          {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Sidebar overlay for mobile */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-80 border-r border-slate-800 bg-[#0f172a] p-8 flex flex-col">
-        <div className="flex items-center gap-3 mb-12">
+      <aside className={`fixed inset-y-0 left-0 z-40 w-72 md:w-80 border-r border-slate-800 bg-[#0f172a] p-6 md:p-8 flex flex-col transition-transform duration-300 md:relative md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex items-center gap-3 mb-12 hidden md:flex">
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <h1 className="text-xl font-black tracking-tight">Admin <span className="text-primary">Panel</span></h1>
         </div>
 
-        <nav className="flex-1 space-y-2">
-          <SidebarItem icon={<BarChart3 className="w-5 h-5" />} label="Overview" active={activeTab === 'overview'} onClick={() => setActiveTab('overview')} />
-          <SidebarItem icon={<Users className="w-5 h-5" />} label="Users" active={activeTab === 'users'} onClick={() => setActiveTab('users')} />
-          <SidebarItem icon={<UserCheck className="w-5 h-5" />} label="Doctor Verification" active={activeTab === 'doctors'} onClick={() => setActiveTab('doctors')} />
-          <SidebarItem icon={<Shield className="w-5 h-5" />} label="Security Hub" active={activeTab === 'security'} onClick={() => setActiveTab('security')} />
-          <SidebarItem icon={<Settings className="w-5 h-5" />} label="Settings" active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} />
+        <nav className="flex-1 space-y-2 mt-12 md:mt-0">
+          <SidebarItem icon={<BarChart3 className="w-5 h-5" />} label="Overview" active={activeTab === 'overview'} onClick={() => {setActiveTab('overview'); setSidebarOpen(false);}} />
+          <SidebarItem icon={<Users className="w-5 h-5" />} label="Users" active={activeTab === 'users'} onClick={() => {setActiveTab('users'); setSidebarOpen(false);}} />
+          <SidebarItem icon={<UserCheck className="w-5 h-5" />} label="Doctor Verification" active={activeTab === 'doctors'} onClick={() => {setActiveTab('doctors'); setSidebarOpen(false);}} />
+          <SidebarItem icon={<Shield className="w-5 h-5" />} label="Security Hub" active={activeTab === 'security'} onClick={() => {setActiveTab('security'); setSidebarOpen(false);}} />
+          <SidebarItem icon={<Settings className="w-5 h-5" />} label="Settings" active={activeTab === 'settings'} onClick={() => {setActiveTab('settings'); setSidebarOpen(false);}} />
         </nav>
 
         <button 
@@ -143,7 +167,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-12 overflow-y-auto">
+      <main className="flex-1 p-4 pt-24 md:p-12 md:pt-12 overflow-y-auto min-w-0">
         {activeTab === 'overview' && (
           <div className="space-y-10 animate-fade-in">
             <div className="flex justify-between items-center">
@@ -155,15 +179,15 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <AdminStatCard title="Students" value={stats.students} trend="+12%" icon={<Users className="w-6 h-6" />} color="text-blue-500" />
               <AdminStatCard title="Doctors" value={stats.doctors} trend="+4%" icon={<UserCheck className="w-6 h-6" />} color="text-emerald-500" />
               <AdminStatCard title="Appointments" value={stats.appointments} trend="+18%" icon={<Calendar className="w-6 h-6" />} color="text-amber-500" />
               <AdminStatCard title="Revenue" value={`$${stats.revenue}`} trend="+24%" icon={<Globe className="w-6 h-6" />} color="text-indigo-500" />
             </div>
 
-            <div className="grid grid-cols-3 gap-8">
-              <div className="col-span-2 bg-slate-900/50 border border-slate-800 p-8 rounded-3xl">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800 p-6 md:p-8 rounded-3xl overflow-hidden">
                 <h3 className="text-xl font-bold mb-6">User Growth Analytics</h3>
                 <div className="h-64 flex items-end gap-2">
                   {[40, 70, 45, 90, 65, 80, 55, 75, 50, 85, 60, 95].map((h, i) => (
@@ -199,8 +223,8 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="bg-slate-900/50 border border-slate-800 rounded-3xl overflow-hidden">
-              <table className="w-full text-left">
+            <div className="bg-slate-900/50 border border-slate-800 rounded-3xl overflow-x-auto">
+              <table className="w-full text-left min-w-[800px]">
                 <thead>
                   <tr className="border-b border-slate-800 bg-slate-900">
                     <th className="px-6 py-4 text-xs font-black uppercase tracking-widest text-slate-500">User</th>

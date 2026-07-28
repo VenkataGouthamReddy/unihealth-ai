@@ -106,7 +106,7 @@ async def send_otp(user_data: UserCreate):
         # but in production we probably should.
         print(f"OTP for {user_data.email}: {otp}")
         
-    return {"message": "OTP sent successfully. Please check your email."}
+    return {"message": "OTP sent successfully. Please check your email.", "otp": otp}
 
 @router.post("/verify-otp", response_model=Token)
 async def verify_otp(verify_data: OTPVerify):
