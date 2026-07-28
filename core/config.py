@@ -11,9 +11,9 @@ class Settings(BaseSettings):
     SUPABASE_KEY: str = ""
     
     # Email config
-    MAIL_USERNAME: str = ""
+    MAIL_USERNAME: str = "noreply@unihealth.ai"
     MAIL_PASSWORD: str = ""
-    MAIL_FROM: str = ""
+    MAIL_FROM: str = "noreply@unihealth.ai"
     MAIL_PORT: int = 587
     MAIL_SERVER: str = "smtp.gmail.com"
     MAIL_FROM_NAME: str = "UniHealth AI"
