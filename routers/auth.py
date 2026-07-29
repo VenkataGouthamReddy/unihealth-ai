@@ -105,8 +105,7 @@ async def send_otp(user_data: UserCreate):
         print(f"⚠️ SMTP FAILED (Likely blocked by network/firewall)")
         print(f"⚠️ DEVELOPMENT FALLBACK - USE THIS OTP: {otp}")
         print(f"{'='*50}\n")
-        # Do not raise 500 error so that development/APK testing can continue
-        # raise HTTPException(status_code=500, detail="Failed to send OTP email...")
+        return {"message": "Email blocked by Gmail firewall. Using Demo Mode.", "demo_otp": otp}
         
     return {"message": "OTP sent successfully. Please check your email."}
 

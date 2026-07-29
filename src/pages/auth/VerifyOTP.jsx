@@ -136,6 +136,13 @@ export default function VerifyOTP() {
                <span className="block font-black text-slate-900 mt-2 p-3 bg-slate-50 rounded-xl border border-slate-100">{email}</span>
            </p>
 
+           {location.state?.demoOtp && (
+             <div className="p-4 bg-amber-50 text-amber-700 rounded-2xl border border-amber-200 mb-8 text-xs font-bold text-center animate-pulse">
+               <AlertCircle className="w-4 h-4 inline-block mr-2" /> 
+               Demo Mode Active! Use OTP: <span className="text-lg bg-amber-200 px-2 py-1 rounded">{location.state.demoOtp}</span>
+             </div>
+           )}
+
            {error && (
              <div className="p-4 bg-rose-50 text-rose-600 rounded-2xl border border-rose-100 mb-8 text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top-2">
                <AlertCircle className="w-4 h-4" /> {error}

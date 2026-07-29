@@ -43,9 +43,9 @@ export default function Register() {
     }
 
     try {
-      await sendOtp(name, email, password, role);
-      // Pass email to verify page
-      navigate('/verify-otp', { state: { email } });
+      const res = await sendOtp(name, email, password, role);
+      // Pass email and demo_otp (if any) to verify page
+      navigate('/verify-otp', { state: { email, demoOtp: res?.demo_otp } });
     } catch (err) {
       let errorMessage = 'Registration failed. Please check your connection.';
       
