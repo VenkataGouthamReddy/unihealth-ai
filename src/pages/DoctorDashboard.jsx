@@ -94,7 +94,11 @@ export default function DoctorDashboard() {
     specialization: '',
     experience_years: 0,
     phone: '',
-    consultation_fee: 0.0
+    consultation_fee: 0.0,
+    degree: '',
+    qualification: '',
+    medical_registration_number: '',
+    hospital_name: ''
   });
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -132,8 +136,17 @@ export default function DoctorDashboard() {
         specialization: docRes.data.specialization || 'General Physician',
         experience_years: docRes.data.experience_years || 5,
         phone: docRes.data.phone || '',
-        consultation_fee: docRes.data.consultation_fee || 0.0
+        consultation_fee: docRes.data.consultation_fee || 0.0,
+        degree: docRes.data.degree || '',
+        qualification: docRes.data.qualification || '',
+        medical_registration_number: docRes.data.medical_registration_number || '',
+        hospital_name: docRes.data.hospital_name || ''
       });
+
+      if (!docRes.data.medical_registration_number || !docRes.data.degree) {
+        setActiveTab('profile');
+        showToast('error', 'Please complete your professional profile details to accept appointments.');
+      }
 
       // 3. Fetch doctor schedule
       const schedRes = await axios.get(`/doctors/${user.id}/schedule`);
@@ -248,7 +261,11 @@ export default function DoctorDashboard() {
       await axios.put(`/auth/update-profile`, {
         specialization: profileData.specialization,
         experience_years: parseInt(profileData.experience_years),
-        consultation_fee: parseFloat(profileData.consultation_fee)
+        consultation_fee: parseFloat(profileData.consultation_fee),
+        degree: profileData.degree,
+        qualification: profileData.qualification,
+        medical_registration_number: profileData.medical_registration_number,
+        hospital_name: profileData.hospital_name
       });
 
       showToast('success', "Professional profile synced successfully.");
@@ -988,18 +1005,65 @@ export default function DoctorDashboard() {
                 </div>
 
                 <form onSubmit={handleUpdateProfile} className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Full Doctor Name</label>
-                    <input 
-                      type="text"
-                      required
-                      value={profileData.name}
-                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
-                    />
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Full Doctor Name</label>
+                      <input 
+                        type="text"
+                        required
+                        value={profileData.name}
+                        onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Medical Registration Number</label>
+                      <input 
+                        type="text"
+                        required
+                        placeholder="e.g. MED-12345"
+                        value={profileData.medical_registration_number}
+                        onChange={(e) => setProfileData({ ...profileData, medical_registration_number: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-rose-500"
+                      />
+                    </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Degree</label>
+                      <input 
+                        type="text"
+                        required
+                        placeholder="e.g. MBBS, MD"
+                        value={profileData.degree}
+                        onChange={(e) => setProfileData({ ...profileData, degree: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Additional Qualification</label>
+                      <input 
+                        type="text"
+                        placeholder="e.g. FRCS, MRCP"
+                        value={profileData.qualification}
+                        onChange={(e) => setProfileData({ ...profileData, qualification: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Hospital / Clinic Name</label>
+                      <input 
+                        type="text"
+                        required
+                        value={profileData.hospital_name}
+                        onChange={(e) => setProfileData({ ...profileData, hospital_name: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
+                      />
+                    </div>
                     <div className="space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Specialization</label>
                       <input 
@@ -1010,7 +1074,9 @@ export default function DoctorDashboard() {
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
                       />
                     </div>
+                  </div>
 
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Experience Years</label>
                       <input 

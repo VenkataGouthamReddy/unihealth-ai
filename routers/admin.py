@@ -29,7 +29,7 @@ async def get_admin_stats(admin: dict = Depends(admin_required)):
         "revenue": "0" # Placeholder for now
     }
 
-@router.get("/users", response_model=List[UserResponse])
+@router.get("/users")
 async def get_all_users(admin: dict = Depends(admin_required)):
     users = await db.db["users"].find().to_list(1000)
     for user in users:
