@@ -31,9 +31,19 @@ class Prescription(BaseModel):
     appointment_id: str
     doctor_id: str
     student_id: str
-    medicines: List[dict] # [{"name": "Aspirin", "dosage": "1 tablet", "frequency": "twice a day"}]
+    medicines: List[dict] # [{"name": "Aspirin", "dosage": "1 tablet", "timings": "Morning, Night", "before_food": True, "duration": "5 days"}]
     notes: str = ""
+    diagnosis: str = ""
     created_at: datetime = datetime.utcnow()
+
+class MedicalReport(BaseModel):
+    id: Optional[str] = Field(alias="_id", default=None)
+    student_id: str
+    doctor_id: str
+    report_type: str # Blood Test, X-Ray, etc.
+    file_name: str
+    file_data: str # Base64 encoded file data
+    uploaded_at: datetime = datetime.utcnow()
 
 class Alert(BaseModel):
     id: Optional[str] = Field(alias="_id", default=None)

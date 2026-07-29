@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import { 
   LogOut, 
   Calendar, 
@@ -313,16 +315,82 @@ export default function DoctorDashboard() {
 
   // Download prescription file helper
   const handleDownloadPrescription = (pres) => {
-    const element = document.createElement("a");
-    const formattedMeds = pres.medicines.map((m, i) => `${i+1}. ${m.name} - ${m.dosage} (${m.frequency}) for ${m.duration}`).join('\n');
-    const content = `UniHealth AI - Medical Prescription\n=================================\n\nPrescription ID: ${pres._id}\nDate: ${new Date(pres.created_at).toLocaleDateString()}\nPatient ID (Email): ${pres.student_id}\n\nPrescribed Medicines:\n${formattedMeds}\n\nNotes/Instructions:\n${pres.notes || "None"}\n\nAuthorized by: ${user.name}\nUniHealth Campus Medical Services`;
-    
-    const file = new Blob([content], {type: 'text/plain'});
-    element.href = URL.createObjectURL(file);
-    element.download = `Prescription_${pres._id}.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    try {
+      const doc = new jsPDF();
+      
+      // Header
+      doc.setFontSize(22);
+      doc.setTextColor(13, 148, 136); // teal color
+      doc.text("UniHealth Pro Medical Center", 105, 20, { align: "center" });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text("Campus Healthcare & Wellness", 105, 27, { align: "center" });
+      
+      doc.line(20, 35, 190, 35);
+      
+      // Doctor Info
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Dr. ${user.name || 'Campus Specialist'}`, 20, 45);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`${profileData.specialization || 'General Physician'}`, 20, 52);
+      
+      // Patient Info
+      doc.setFontSize(10);
+      doc.setTextColor(0);
+      doc.text(`Patient ID: ${pres.student_id}`, 130, 45);
+      doc.text(`Date: ${new Date(pres.created_at).toLocaleDateString()}`, 130, 52);
+      
+      // Medicines Table
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Prescribed Medicines:`, 20, 70);
+      
+      const tableColumn = ["Medicine", "Dosage", "Timings", "Duration"];
+      const tableRows = [];
+      
+      if (pres.medicines && Array.isArray(pres.medicines)) {
+         pres.medicines.forEach(med => {
+            const row = [
+               med.name || '-',
+               med.dosage || '-',
+               med.frequency || '-',
+               med.duration || '-'
+            ];
+            tableRows.push(row);
+         });
+      }
+      
+      doc.autoTable({
+        startY: 75,
+        head: [tableColumn],
+        body: tableRows,
+        theme: 'grid',
+        headStyles: { fillColor: [13, 148, 136] }
+      });
+      
+      // Notes
+      const finalY = doc.lastAutoTable.finalY || 80;
+      if (pres.notes) {
+          doc.text(`Notes:`, 20, finalY + 15);
+          doc.setFontSize(10);
+          doc.setTextColor(100);
+          doc.text(pres.notes, 20, finalY + 22);
+      }
+      
+      // Footer / Signature
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Doctor's Signature`, 140, finalY + 50);
+      doc.line(130, finalY + 45, 180, finalY + 45);
+      
+      doc.save(`Prescription_${pres._id}.pdf`);
+    } catch (err) {
+      console.error(err);
+      showToast('error', "Failed to download prescription PDF");
+    }
   };
 
   // Counts for Stats Cards

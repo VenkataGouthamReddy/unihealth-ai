@@ -32,6 +32,8 @@ export default function StudentDashboard() {
   const navigate = useNavigate();
   const [greeting, setGreeting] = useState('');
   const [upcomingApt, setUpcomingApt] = useState(null);
+  const [completedApt, setCompletedApt] = useState(null);
+  const [notifications, setNotifications] = useState([]);
   const baseURL = ''; // Vite proxy (dev) and FastAPI (prod) both serve /static/*
 
   useEffect(() => {
@@ -58,6 +60,15 @@ export default function StudentDashboard() {
           } else {
             setUpcomingApt(null);
           }
+          
+          const completed = res.data.filter(apt => apt.status === 'completed');
+          if (completed.length > 0) {
+            setCompletedApt(completed[0]);
+          }
+
+          // Fetch notifications for alerts and prescriptions
+          const notifRes = await axios.get(`/notifications/student/${user.email}`);
+          setNotifications(notifRes.data.slice(0, 4)); // Get top 4 recent notifications
         } catch (err) {
           console.error("Error fetching latest appointment:", err);
         }
@@ -181,22 +192,49 @@ export default function StudentDashboard() {
                 desc="Configure medication timings and wellness notices." 
                 onClick={() => navigate('/student/reminders')}
               />
+              {completedApt && (
+                <ActionCard 
+                  icon={<ShieldCheck className="w-8 h-8 text-indigo-500" />} 
+                  title="Completed Visit" 
+                  desc={`Dr. ${completedApt.doctor_name} on ${completedApt.date}`} 
+                  onClick={() => navigate('/student/appointments')}
+                  badge="Recent"
+                />
+              )}
            </div>
 
            {/* Sidebar: Vitals & Status */}
            <div className="lg:col-span-4 space-y-8">
-              {/* Health Indicators (Replaces Live Vitals) */}
+              {/* Dynamic Health Alerts / Activity Stream */}
               <div className="bg-white p-8 rounded-[3.5rem] border border-slate-100 shadow-xl shadow-slate-200/40 relative overflow-hidden group">
                  <div className="absolute top-0 right-0 p-8">
-                    <ShieldCheck className="w-6 h-6 text-emerald-100 group-hover:text-emerald-500 transition-colors" />
+                    <Bell className="w-6 h-6 text-amber-100 group-hover:text-amber-500 transition-colors" />
                  </div>
-                 <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight">Normal Vitals</h3>
-                 <div className="space-y-8">
-                    <VitalItem label="Heart Rate" value="72" unit="bpm" color="rose" status="Normal Range" />
-                    <VitalItem label="Blood Pressure" value="120/80" unit="mmHg" color="blue" status="Optimal" />
-                    <VitalItem label="Body Temp" value="36.6" unit="°C" color="amber" status="Steady" />
-                    <VitalItem label="Oxygen Sat." value="98" unit="%" color="emerald" status="Stable" />
-                 </div>
+                 <h3 className="text-xl font-black text-slate-900 mb-8 tracking-tight">Recent Activity</h3>
+                 
+                 {notifications.length > 0 ? (
+                    <div className="space-y-6">
+                       {notifications.map((notif, idx) => (
+                          <div key={idx} className="flex items-start gap-4">
+                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                                notif.category === 'prescription' ? 'bg-blue-50 text-blue-500' :
+                                notif.category === 'alert' ? 'bg-amber-50 text-amber-500' : 'bg-slate-50 text-slate-500'
+                             }`}>
+                                {notif.category === 'prescription' ? <FileText className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+                             </div>
+                             <div>
+                                <h4 className="text-sm font-black text-slate-900">{notif.title}</h4>
+                                <p className="text-xs font-medium text-slate-500 leading-snug mt-1">{notif.desc}</p>
+                             </div>
+                          </div>
+                       ))}
+                    </div>
+                 ) : (
+                    <div className="space-y-8">
+                       <VitalItem label="Heart Rate" value="72" unit="bpm" color="rose" status="Normal Range" />
+                       <VitalItem label="Blood Pressure" value="120/80" unit="mmHg" color="blue" status="Optimal" />
+                    </div>
+                 )}
               </div>
 
               {/* Active Appointment Sidebar Widget */}

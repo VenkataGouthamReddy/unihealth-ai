@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -22,7 +24,8 @@ import {
   Trash2,
   AlertTriangle,
   RefreshCw,
-  CalendarX
+  CalendarX,
+  Download
 } from 'lucide-react';
 
 export default function Appointments() {
@@ -79,6 +82,104 @@ export default function Appointments() {
       case 'cancelled': return { label: 'Cancelled', style: 'bg-rose-50 text-rose-600 border-rose-100', icon: <XCircle className="w-3.5 h-3.5" /> };
       case 'expired':   return { label: 'Overdue', style: 'bg-amber-50 text-amber-600 border-amber-200', icon: <CalendarX className="w-3.5 h-3.5" /> };
       default: return { label: status, style: 'bg-slate-50 text-slate-600 border-slate-100', icon: <AlertCircle className="w-3.5 h-3.5" /> };
+    }
+  };
+
+  const handleDownloadPrescription = async (apt) => {
+    try {
+      const res = await axios.get(`/prescriptions/student/${user.email}`);
+      const prescription = res.data.find(p => p.appointment_id === apt._id);
+      
+      if (!prescription) {
+        alert("No prescription found for this appointment.");
+        return;
+      }
+      
+      const doc = new jsPDF();
+      
+      // Header
+      doc.setFontSize(22);
+      doc.setTextColor(37, 99, 235); // primary color
+      doc.text("UniHealth AI Medical Center", 105, 20, { align: "center" });
+      
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text("Campus Healthcare & Wellness", 105, 27, { align: "center" });
+      
+      doc.line(20, 35, 190, 35);
+      
+      // Doctor Info
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Dr. ${prescription.doctor_name || 'Campus Specialist'}`, 20, 45);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`${prescription.doctor_specialization || 'General Physician'}`, 20, 52);
+      
+      // Patient Info (Right side)
+      doc.setFontSize(10);
+      doc.setTextColor(0);
+      doc.text(`Patient: ${user.name || user.email}`, 130, 45);
+      doc.text(`Date: ${apt.date}`, 130, 52);
+      doc.text(`Status: Completed`, 130, 59);
+      
+      // Diagnosis
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Diagnosis:`, 20, 70);
+      doc.setFontSize(11);
+      doc.setTextColor(80);
+      doc.text(`${prescription.diagnosis || 'General Consultation'}`, 20, 78);
+      
+      // Medicines Table
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Prescribed Medicines:`, 20, 95);
+      
+      const tableColumn = ["Medicine", "Dosage", "Timings", "Instructions", "Duration"];
+      const tableRows = [];
+      
+      if (prescription.medicines && Array.isArray(prescription.medicines)) {
+         prescription.medicines.forEach(med => {
+            const row = [
+               med.name || '-',
+               med.dosage || '-',
+               med.timings || '-',
+               med.before_food ? 'Before Food' : 'After Food',
+               med.duration || '-'
+            ];
+            tableRows.push(row);
+         });
+      }
+      
+      doc.autoTable({
+        startY: 100,
+        head: [tableColumn],
+        body: tableRows,
+        theme: 'grid',
+        headStyles: { fillColor: [37, 99, 235] }
+      });
+      
+      // Notes
+      const finalY = doc.lastAutoTable.finalY || 100;
+      if (prescription.notes) {
+          doc.text(`Notes:`, 20, finalY + 15);
+          doc.setFontSize(10);
+          doc.setTextColor(100);
+          doc.text(prescription.notes, 20, finalY + 22);
+      }
+      
+      // Footer / Signature
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Doctor's Signature`, 140, finalY + 50);
+      doc.line(130, finalY + 45, 180, finalY + 45);
+      
+      doc.save(`Prescription_${apt.date}.pdf`);
+      
+    } catch (error) {
+      console.error("Error downloading prescription:", error);
+      alert("Failed to download prescription. Please try again.");
     }
   };
 
@@ -273,6 +374,16 @@ export default function Appointments() {
                       </div>
 
                       <div className="flex items-center gap-4 md:border-l border-slate-100 md:pl-10 h-full">
+                         {apt.status === 'completed' && (
+                           <button 
+                             onClick={() => handleDownloadPrescription(apt)}
+                             className="flex flex-col items-center gap-2 p-4 bg-blue-50 rounded-[2rem] text-primary hover:bg-primary hover:text-white hover:shadow-xl hover:border-primary border border-transparent transition-all group/btn"
+                             title="Download Prescription"
+                           >
+                              <Download className="w-6 h-6 group-hover/btn:scale-110 transition-transform" />
+                              <span className="text-[8px] font-black uppercase tracking-widest">Prescription</span>
+                           </button>
+                         )}
                          <button 
                            onClick={() => navigate(`/student/report-viewer`)}
                            className="flex flex-col items-center gap-2 p-4 bg-slate-50 rounded-[2rem] text-slate-400 hover:bg-white hover:text-primary hover:shadow-xl hover:border-primary/20 border border-transparent transition-all group/btn"

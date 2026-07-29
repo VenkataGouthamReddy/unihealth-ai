@@ -209,3 +209,19 @@ async def get_doctor_slots(doctor_id: str, date: str):
 @router.post("/seed")
 async def seed_doctors():
     return {"message": "Sample doctor seeding is disabled. Doctors can register directly or be promoted by system Admin."}
+
+@router.get("/{doctor_id}/patients", response_model=List[dict])
+async def get_doctor_patients(doctor_id: str):
+    # Find all appointments for this doctor
+    appointments = await db.db["appointments"].find({"doctor_id": doctor_id}).to_list(1000)
+    
+    # Extract unique student IDs (emails)
+    student_emails = list(set([apt["student_id"] for apt in appointments]))
+    
+    # Fetch student details
+    patients = await db.db["users"].find({"email": {"$in": student_emails}, "role": "student"}).to_list(1000)
+    
+    for patient in patients:
+        patient["_id"] = str(patient["_id"])
+        
+    return patients

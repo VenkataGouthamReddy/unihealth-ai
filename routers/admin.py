@@ -54,3 +54,59 @@ async def delete_user(user_id: str, admin: dict = Depends(admin_required)):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
     return {"message": "User deleted successfully"}
+
+@router.patch("/users/{user_id}/status")
+async def update_user_status(user_id: str, status_data: dict, admin: dict = Depends(admin_required)):
+    from bson import ObjectId
+    status = status_data.get("status")
+    result = await db.db["users"].update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": {"status": status}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"message": f"User status updated to {status}"}
+
+@router.get("/appointments")
+async def get_all_appointments(admin: dict = Depends(admin_required)):
+    appointments = await db.db["appointments"].find().sort("date", -1).to_list(1000)
+    for apt in appointments:
+        apt["_id"] = str(apt["_id"])
+    return appointments
+
+@router.patch("/appointments/{appointment_id}/status")
+async def update_appointment_status(appointment_id: str, status_data: dict, admin: dict = Depends(admin_required)):
+    from bson import ObjectId
+    status = status_data.get("status")
+    result = await db.db["appointments"].update_one(
+        {"_id": ObjectId(appointment_id)},
+        {"$set": {"status": status}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    return {"message": f"Appointment status updated to {status}"}
+
+@router.post("/notify-all")
+async def send_global_notification(notification: dict, admin: dict = Depends(admin_required)):
+    from datetime import datetime
+    title = notification.get("title")
+    desc = notification.get("desc")
+    
+    users = await db.db["users"].find({"role": "student"}).to_list(1000)
+    
+    notifications = []
+    for user in users:
+        notifications.append({
+            "student_id": user["email"],
+            "category": "alert",
+            "title": title,
+            "desc": desc,
+            "read": False,
+            "created_at": datetime.utcnow()
+        })
+        
+    if notifications:
+        await db.db["notifications"].insert_many(notifications)
+        
+    return {"message": f"Sent global notification to {len(notifications)} users"}
+

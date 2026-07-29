@@ -11,6 +11,7 @@ from routers.admin import router as admin_router
 from routers.alerts import router as alerts_router
 from routers.notifications import router as notifications_router
 from routers.prescriptions import router as prescriptions_router
+from routers.reports import router as reports_router
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 import os
@@ -108,6 +109,7 @@ app.include_router(admin_router)
 app.include_router(alerts_router)
 app.include_router(notifications_router)
 app.include_router(prescriptions_router)
+app.include_router(reports_router)
 
 # ── Frontend (Vite production build) ────────────────────────────────────────
 # Mount the compiled JS/CSS assets only when the dist folder exists
@@ -120,7 +122,7 @@ if os.path.isdir(_DIST_ASSETS):
 # API route prefixes – the catch-all must NOT intercept these
 _API_PREFIXES = (
     "/auth", "/ai", "/doctors", "/appointments",
-    "/admin", "/alerts", "/notifications", "/prescriptions",
+    "/admin", "/alerts", "/notifications", "/prescriptions", "/reports",
     "/static", "/assets", "/docs", "/openapi",
 )
 

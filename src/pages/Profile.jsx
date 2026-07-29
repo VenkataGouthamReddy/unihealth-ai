@@ -40,7 +40,15 @@ export default function Profile() {
     department: '',
     roll_number: '',
     age: '',
-    gender: ''
+    gender: '',
+    dob: '',
+    course: '',
+    branch: '',
+    university_register_number: '',
+    university_name: '',
+    blood_group: '',
+    emergency_contact: '',
+    address: ''
   });
 
   const [isUpdatingInfo, setIsUpdatingInfo] = useState(false);
@@ -63,12 +71,20 @@ export default function Profile() {
         const res = await axios.get('/auth/me');
         setProfileData(res.data);
         setFormData({
-          name: res.data.name || '',
+          name: res.data.name || res.data.full_name || '',
           phone: res.data.phone || '',
           department: res.data.department || '',
           roll_number: res.data.roll_number || '',
           age: res.data.age || '',
-          gender: res.data.gender || ''
+          gender: res.data.gender || '',
+          dob: res.data.dob || '',
+          course: res.data.course || '',
+          branch: res.data.branch || '',
+          university_register_number: res.data.university_register_number || '',
+          university_name: res.data.university_name || '',
+          blood_group: res.data.blood_group || '',
+          emergency_contact: res.data.emergency_contact || '',
+          address: res.data.address || ''
         });
       } catch (err) {
         console.error("Failed to fetch profile", err);
@@ -299,15 +315,7 @@ export default function Profile() {
                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Full Legal Name</label>
                            <div className="relative">
                               <User className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                              <input 
-                                 type="text" 
-                                 disabled={!isEditing}
-                                 value={formData.name}
-                                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                 className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${
-                                    isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'
-                                 }`}
-                              />
+                              <input type="text" disabled={!isEditing} value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
                            </div>
                         </div>
 
@@ -316,70 +324,16 @@ export default function Profile() {
                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Contact Number</label>
                            <div className="relative">
                               <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                              <input 
-                                 type="text" 
-                                 placeholder="+1 234 567 890"
-                                 disabled={!isEditing}
-                                 value={formData.phone}
-                                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                 className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${
-                                    isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'
-                                 }`}
-                              />
+                              <input type="text" placeholder="+1 234 567 890" disabled={!isEditing} value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
                            </div>
                         </div>
 
-                        {/* Department */}
+                        {/* DOB */}
                         <div className="space-y-3">
-                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Department / Course</label>
-                           <div className="relative">
-                              <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                              <input 
-                                 type="text" 
-                                 placeholder="e.g. Computer Science"
-                                 disabled={!isEditing}
-                                 value={formData.department}
-                                 onChange={(e) => setFormData({...formData, department: e.target.value})}
-                                 className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${
-                                    isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'
-                                 }`}
-                              />
-                           </div>
-                        </div>
-
-                        {/* Roll Number */}
-                        <div className="space-y-3">
-                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">University Roll Number</label>
-                           <div className="relative">
-                              <Hash className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                              <input 
-                                 type="text" 
-                                 placeholder="UNI2026-X"
-                                 disabled={!isEditing}
-                                 value={formData.roll_number}
-                                 onChange={(e) => setFormData({...formData, roll_number: e.target.value})}
-                                 className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${
-                                    isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'
-                                 }`}
-                              />
-                           </div>
-                        </div>
-
-                        {/* Age */}
-                        <div className="space-y-3">
-                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Current Age</label>
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Date of Birth</label>
                            <div className="relative">
                               <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                              <input 
-                                 type="number" 
-                                 placeholder="18"
-                                 disabled={!isEditing}
-                                 value={formData.age}
-                                 onChange={(e) => setFormData({...formData, age: e.target.value})}
-                                 className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${
-                                    isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'
-                                 }`}
-                              />
+                              <input type="date" disabled={!isEditing} value={formData.dob} onChange={(e) => setFormData({...formData, dob: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
                            </div>
                         </div>
 
@@ -388,20 +342,82 @@ export default function Profile() {
                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Gender Identification</label>
                            <div className="relative">
                               <Users className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
-                              <select 
-                                 disabled={!isEditing}
-                                 value={formData.gender}
-                                 onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                                 className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all appearance-none ${
-                                    isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'
-                                 }`}
-                              >
+                              <select disabled={!isEditing} value={formData.gender} onChange={(e) => setFormData({...formData, gender: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all appearance-none ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`}>
                                  <option value="">Select Gender</option>
                                  <option value="Male">Male</option>
                                  <option value="Female">Female</option>
                                  <option value="Other">Other</option>
                                  <option value="Prefer not to say">Prefer not to say</option>
                               </select>
+                           </div>
+                        </div>
+
+                        {/* Blood Group */}
+                        <div className="space-y-3">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Blood Group</label>
+                           <div className="relative">
+                              <User className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <select disabled={!isEditing} value={formData.blood_group} onChange={(e) => setFormData({...formData, blood_group: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all appearance-none ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`}>
+                                 <option value="">Select Blood Group</option>
+                                 <option value="A+">A+</option><option value="A-">A-</option>
+                                 <option value="B+">B+</option><option value="B-">B-</option>
+                                 <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                 <option value="O+">O+</option><option value="O-">O-</option>
+                              </select>
+                           </div>
+                        </div>
+
+                        {/* Emergency Contact */}
+                        <div className="space-y-3">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Emergency Contact Number</label>
+                           <div className="relative">
+                              <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <input type="text" disabled={!isEditing} value={formData.emergency_contact} onChange={(e) => setFormData({...formData, emergency_contact: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
+                           </div>
+                        </div>
+
+                        {/* Course */}
+                        <div className="space-y-3">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Course</label>
+                           <div className="relative">
+                              <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <input type="text" placeholder="e.g. B.Tech" disabled={!isEditing} value={formData.course} onChange={(e) => setFormData({...formData, course: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
+                           </div>
+                        </div>
+
+                        {/* Branch / Department */}
+                        <div className="space-y-3">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Branch / Department</label>
+                           <div className="relative">
+                              <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <input type="text" placeholder="e.g. Computer Science" disabled={!isEditing} value={formData.branch} onChange={(e) => setFormData({...formData, branch: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
+                           </div>
+                        </div>
+
+                        {/* University Register Number */}
+                        <div className="space-y-3">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">University Register Number</label>
+                           <div className="relative">
+                              <Hash className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <input type="text" disabled={!isEditing} value={formData.university_register_number} onChange={(e) => setFormData({...formData, university_register_number: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
+                           </div>
+                        </div>
+
+                        {/* University Name */}
+                        <div className="space-y-3">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">University Name</label>
+                           <div className="relative">
+                              <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <input type="text" disabled={!isEditing} value={formData.university_name} onChange={(e) => setFormData({...formData, university_name: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} />
+                           </div>
+                        </div>
+                        
+                        {/* Address */}
+                        <div className="space-y-3 md:col-span-2">
+                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2">Address</label>
+                           <div className="relative">
+                              <User className="absolute left-6 top-5 -translate-y-1/2 w-5 h-5 text-slate-300" />
+                              <textarea disabled={!isEditing} value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} className={`w-full bg-slate-50 border rounded-[2rem] py-5 pl-16 pr-8 text-sm font-bold outline-none transition-all ${isEditing ? 'border-primary ring-8 ring-primary/5 focus:bg-white' : 'border-slate-100 text-slate-500 cursor-not-allowed'}`} rows="2"></textarea>
                            </div>
                         </div>
                      </div>
