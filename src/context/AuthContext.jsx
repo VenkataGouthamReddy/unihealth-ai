@@ -23,6 +23,12 @@ export const AuthProvider = ({ children }) => {
     (response) => response,
     async (error) => {
       const { config } = error;
+      
+      // Do not retry client errors (400-499) like wrong passwords or bad OTPs
+      if (error.response && error.response.status >= 400 && error.response.status < 500) {
+        return Promise.reject(error);
+      }
+
       // If config doesn't exist or retry isn't set, reject
       if (!config || !config.retry) {
         return Promise.reject(error);

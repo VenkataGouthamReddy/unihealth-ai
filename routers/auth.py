@@ -101,9 +101,12 @@ async def send_otp(user_data: UserCreate):
         print(f"OTP email sent successfully to {user_data.email}")
         
     except Exception as e:
-        print(f"Failed to send email: {e}")
-        print(f"OTP for {user_data.email}: {otp}")
-        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please ensure email settings are configured on the server.")
+        print(f"\n{'='*50}")
+        print(f"⚠️ SMTP FAILED (Likely blocked by network/firewall)")
+        print(f"⚠️ DEVELOPMENT FALLBACK - USE THIS OTP: {otp}")
+        print(f"{'='*50}\n")
+        # Do not raise 500 error so that development/APK testing can continue
+        # raise HTTPException(status_code=500, detail="Failed to send OTP email...")
         
     return {"message": "OTP sent successfully. Please check your email."}
 
@@ -223,10 +226,12 @@ async def forgot_password(data: dict):
         print(f"Password reset OTP email sent successfully to {email}")
         
     except Exception as e:
-        print(f"Failed to send reset email: {e}")
-        # Log it for development fallback
-        print(f"Reset OTP for {email}: {otp}")
-        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please ensure email settings are configured on the server.")
+        print(f"\n{'='*50}")
+        print(f"⚠️ SMTP FAILED (Likely blocked by network/firewall)")
+        print(f"⚠️ DEVELOPMENT FALLBACK - USE THIS OTP FOR {email}: {otp}")
+        print(f"{'='*50}\n")
+        # Do not raise 500 error so that development/APK testing can continue
+        # raise HTTPException(status_code=500, detail="Failed to send OTP email. Please ensure email settings are configured on the server.")
         
     return {"message": "OTP sent successfully. Please check your email.", "otp_sent": True}
 

@@ -15,3 +15,9 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         sync: false
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
