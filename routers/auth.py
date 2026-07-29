@@ -103,6 +103,7 @@ async def send_otp(user_data: UserCreate):
     except Exception as e:
         print(f"\n{'='*50}")
         print(f"⚠️ SMTP FAILED (Likely blocked by network/firewall)")
+        print(f"Error details: {str(e)}")
         print(f"⚠️ DEVELOPMENT FALLBACK - USE THIS OTP: {otp}")
         print(f"{'='*50}\n")
         return {"message": "Email blocked by Gmail firewall. Using Demo Mode.", "demo_otp": otp}
