@@ -169,10 +169,17 @@ function DoctorCard({ doctor, onBook }) {
                </div>
                
                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-slate-500 text-sm font-bold">
-                     <MapPin className="w-4 h-4 text-slate-400" /> Main Campus Health Hub
+                  <div className="flex items-start gap-3 text-slate-600 text-xs font-bold leading-relaxed">
+                     <MapPin className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" /> 
+                     <div>
+                       {doctor.block ? (
+                         <span>{doctor.block}{doctor.floor ? `, ${doctor.floor}` : ''}{doctor.room_number ? `, Room ${doctor.room_number}` : ''}</span>
+                       ) : (
+                         <span>{doctor.clinic_location || doctor.hospital_name || 'Main Campus Health Hub'}</span>
+                       )}
+                     </div>
                   </div>
-                  <div className="flex items-center gap-3 text-slate-500 text-sm font-bold">
+                  <div className="flex items-center gap-3 text-slate-500 text-xs font-bold">
                      <Clock className="w-4 h-4 text-slate-400" /> Mon - Fri (09:00 - 17:00)
                   </div>
                </div>

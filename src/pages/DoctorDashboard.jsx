@@ -103,7 +103,10 @@ export default function DoctorDashboard() {
     degree: '',
     qualification: '',
     medical_registration_number: '',
-    hospital_name: ''
+    hospital_name: '',
+    block: '',
+    floor: '',
+    room_number: ''
   });
   const [savingProfile, setSavingProfile] = useState(false);
 
@@ -145,12 +148,15 @@ export default function DoctorDashboard() {
         degree: docRes.data.degree || '',
         qualification: docRes.data.qualification || '',
         medical_registration_number: docRes.data.medical_registration_number || '',
-        hospital_name: docRes.data.hospital_name || ''
+        hospital_name: docRes.data.hospital_name || '',
+        block: docRes.data.block || '',
+        floor: docRes.data.floor || '',
+        room_number: docRes.data.room_number || ''
       });
 
-      if (!docRes.data.medical_registration_number || !docRes.data.degree) {
+      if (!docRes.data.medical_registration_number || !docRes.data.degree || !docRes.data.block || !docRes.data.room_number) {
         setActiveTab('profile');
-        showToast('error', 'Please complete your professional profile details to accept appointments.');
+        showToast('error', 'Please complete your clinic location details (Block, Floor, Room Number) to accept student appointments.');
       }
 
       // 3. Fetch doctor schedule
@@ -293,6 +299,7 @@ export default function DoctorDashboard() {
       // 2. Save professional attributes in DB user document (schemaless mongo accepts custom fields)
       // The update profile route also accepts customization if we supply it. Let's make sure
       // user.py has these fields Optional so they write successfully.
+      const clinicLocationStr = [profileData.hospital_name, profileData.block, profileData.floor, profileData.room_number ? `Room ${profileData.room_number}` : ''].filter(Boolean).join(', ');
       await axios.put(`/auth/update-profile`, {
         specialization: profileData.specialization,
         experience_years: parseInt(profileData.experience_years),
@@ -300,7 +307,11 @@ export default function DoctorDashboard() {
         degree: profileData.degree,
         qualification: profileData.qualification,
         medical_registration_number: profileData.medical_registration_number,
-        hospital_name: profileData.hospital_name
+        hospital_name: profileData.hospital_name,
+        block: profileData.block,
+        floor: profileData.floor,
+        room_number: profileData.room_number,
+        clinic_location: clinicLocationStr
       });
 
       showToast('success', "Professional profile synced successfully.");
@@ -1146,17 +1157,18 @@ export default function DoctorDashboard() {
 
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Hospital / Clinic Name</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Hospital / Medical Center Name *</label>
                       <input 
                         type="text"
                         required
+                        placeholder="e.g. Campus Health Center"
                         value={profileData.hospital_name}
                         onChange={(e) => setProfileData({ ...profileData, hospital_name: e.target.value })}
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Specialization</label>
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Specialization *</label>
                       <input 
                         type="text"
                         required
@@ -1164,6 +1176,48 @@ export default function DoctorDashboard() {
                         onChange={(e) => setProfileData({ ...profileData, specialization: e.target.value })}
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-bold outline-none focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500"
                       />
+                    </div>
+                  </div>
+
+                  {/* Doctor Location Inputs (Block, Floor, Room No) */}
+                  <div className="p-6 bg-teal-50/50 rounded-3xl border border-teal-100 space-y-4">
+                    <div className="text-xs font-black uppercase tracking-widest text-teal-800 flex items-center gap-2">
+                      <span>📍 Doctor Location Details (Where You Are Present)</span>
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Block / Building Name *</label>
+                        <input 
+                          type="text"
+                          required
+                          placeholder="e.g. Block A - Health Complex"
+                          value={profileData.block}
+                          onChange={(e) => setProfileData({ ...profileData, block: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold outline-none focus:border-teal-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Floor Level *</label>
+                        <input 
+                          type="text"
+                          required
+                          placeholder="e.g. 1st Floor / Ground Floor"
+                          value={profileData.floor}
+                          onChange={(e) => setProfileData({ ...profileData, floor: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold outline-none focus:border-teal-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Room / Cabin No *</label>
+                        <input 
+                          type="text"
+                          required
+                          placeholder="e.g. Room 104 / Cabin 3"
+                          value={profileData.room_number}
+                          onChange={(e) => setProfileData({ ...profileData, room_number: e.target.value })}
+                          className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold outline-none focus:border-teal-500"
+                        />
+                      </div>
                     </div>
                   </div>
 

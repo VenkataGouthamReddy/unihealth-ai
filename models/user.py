@@ -34,6 +34,10 @@ class UserBase(BaseModel):
     qualification: Optional[str] = None
     medical_registration_number: Optional[str] = None
     hospital_name: Optional[str] = None
+    block: Optional[str] = None
+    floor: Optional[str] = None
+    room_number: Optional[str] = None
+    clinic_location: Optional[str] = None
 
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
@@ -62,6 +66,10 @@ class ProfileUpdate(BaseModel):
     specialization: Optional[str] = None
     experience_years: Optional[int] = None
     hospital_name: Optional[str] = None
+    block: Optional[str] = None
+    floor: Optional[str] = None
+    room_number: Optional[str] = None
+    clinic_location: Optional[str] = None
     availability: Optional[dict] = None
 
 class UserCreate(UserBase):
