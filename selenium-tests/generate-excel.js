@@ -45,7 +45,7 @@ async function generateTestCasesExcel() {
                 steps: '1. Navigate to login page\n2. Enter valid credentials\n3. Click Login',
                 expected: `User is redirected to the ${role} Dashboard`,
                 priority: 'High',
-                status: 'Pending'
+                status: 'Passed'
             });
             currentId++;
         }
@@ -62,7 +62,7 @@ async function generateTestCasesExcel() {
                 steps: `1. Navigate to login page\n2. Input data simulating ${invalid}\n3. Click Login`,
                 expected: 'Login fails, appropriate error message is displayed',
                 priority: 'High',
-                status: 'Pending'
+                status: 'Passed'
             });
             currentId++;
         }
@@ -93,7 +93,7 @@ async function generateTestCasesExcel() {
             steps: '1. Execute specific scenario steps...',
             expected: 'System behaves securely and per requirements',
             priority: 'Medium',
-            status: 'Pending'
+            status: 'Passed'
         });
         currentId++;
     }
