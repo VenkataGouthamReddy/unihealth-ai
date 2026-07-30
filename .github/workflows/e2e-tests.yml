@@ -82,7 +82,9 @@ jobs:
     - name: Generate Excel Artifact
       if: always()
       working-directory: ./selenium-tests
-      run: node generate-excel.js
+      run: |
+        npm install
+        node generate-excel.js
 
     - name: Upload Excel Test Matrix
       if: always()
