@@ -148,7 +148,9 @@ async def register_user(user: UserCreate):
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await db.db["users"].find_one({"email": form_data.username})
+    import re
+    clean_email = form_data.username.strip() if form_data.username else ""
+    user = await db.db["users"].find_one({"email": {"$regex": f"^{re.escape(clean_email)}$", "$options": "i"}})
     if not user or not verify_password(form_data.password, user["hashed_password"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
