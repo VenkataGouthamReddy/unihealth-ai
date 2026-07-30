@@ -11,43 +11,34 @@ export const AuthProvider = ({ children }) => {
   // Always use the explicit API URL if provided (crucial for mobile/Capacitor), 
   // otherwise fallback to relative path (Vite proxy/production).
   axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+  axios.defaults.timeout = 60000; // 60s timeout to accommodate cloud server spin-up
+
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
-
-  // Axios Automatic Request Retry Interceptor (FastAPI Resiliency)
-  axios.defaults.retry = 3; // Retry up to 3 times
-  axios.defaults.retryDelay = 1500; // Wait 1.5 seconds between retries
 
   axios.interceptors.response.use(
     (response) => response,
     async (error) => {
       const { config } = error;
       
-      // Do not retry client errors (400-499) like wrong passwords or bad OTPs
+      // Do not retry 4xx client errors (e.g. 401 Incorrect credentials)
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
         return Promise.reject(error);
       }
 
-      // If config doesn't exist or retry isn't set, reject
-      if (!config || !config.retry) {
+      if (!config) {
         return Promise.reject(error);
       }
-      
-      // Initialize retry count tracker
+
       config.__retryCount = config.__retryCount || 0;
-      
-      // If maximum retries exceeded, reject
-      if (config.__retryCount >= config.retry) {
+      if (config.__retryCount >= 4) {
         return Promise.reject(error);
       }
       
       config.__retryCount += 1;
-      
-      // Wait for backoff delay
-      await new Promise((resolve) => setTimeout(resolve, config.retryDelay));
-      
-      // Trigger new request
+      // Wait 2s backoff between retries for cloud cold starts
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       return axios(config);
     }
   );

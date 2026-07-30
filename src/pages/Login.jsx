@@ -21,8 +21,8 @@ export default function Login() {
       else if (user.role === 'doctor') navigate('/doctor');
       else navigate('/admin');
     } catch (err) {
-      if (err.message && (err.message.includes('Network Error') || err.message.includes('Failed to fetch'))) {
-        setError('Network Error: Cannot connect to the server. Check your connection or API URL.');
+      if (err.message && (err.message.includes('Network Error') || err.message.includes('Failed to fetch') || err.code === 'ECONNABORTED')) {
+        setError('Server is waking up / connecting... Please wait a few seconds and try signing in again.');
       } else if (err.response && err.response.data && err.response.data.detail) {
         setError(err.response.data.detail);
       } else {
