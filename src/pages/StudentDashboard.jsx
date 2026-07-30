@@ -168,7 +168,17 @@ export default function StudentDashboard() {
                className="w-12 h-12 bg-white rounded-[1.25rem] border-2 border-white shadow-xl flex items-center justify-center text-primary font-black cursor-pointer hover:scale-105 transition-all overflow-hidden ring-4 ring-primary/5"
             >
                {user?.profile_picture ? (
-                 <img src={`${baseURL}${user.profile_picture}`} alt="" className="w-full h-full object-cover" />
+                 <img 
+                   src={user.profile_picture.startsWith('data:') || user.profile_picture.startsWith('http') 
+                     ? user.profile_picture 
+                     : `${baseURL}${user.profile_picture}`} 
+                   alt="" 
+                   onError={(e) => {
+                     e.target.onerror = null;
+                     e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Student')}&background=0D9488&color=fff&bold=true`;
+                   }}
+                   className="w-full h-full object-cover" 
+                 />
                ) : (
                  <span className="text-xl font-black">{user?.name?.charAt(0) || 'S'}</span>
                )}

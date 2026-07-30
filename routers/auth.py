@@ -285,21 +285,28 @@ async def update_profile(data: ProfileUpdate, current_user: dict = Depends(get_c
 
 @router.post("/upload-profile-picture")
 async def upload_profile_picture(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
-    file_extension = file.filename.split(".")[-1]
-    file_name = f"{current_user['_id']}.{file_extension}"
-    file_path = f"static/profiles/{file_name}"
-    
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    # In a real app, use a proper URL. Here we use a relative path.
-    profile_url = f"/static/profiles/{file_name}"
+    import base64
+    contents = await file.read()
+    mime_type = file.content_type or "image/jpeg"
+    base64_encoded = base64.b64encode(contents).decode('utf-8')
+    data_url = f"data:{mime_type};base64,{base64_encoded}"
+
+    # Best-effort disk save for local static serving if available
+    try:
+        file_extension = file.filename.split(".")[-1] if "." in file.filename else "jpg"
+        file_name = f"{current_user['_id']}.{file_extension}"
+        file_path = f"static/profiles/{file_name}"
+        with open(file_path, "wb") as buffer:
+            buffer.write(contents)
+    except Exception as e:
+        print(f"Skipped static file save: {e}")
+
     await db.db["users"].update_one(
         {"_id": current_user["_id"]},
-        {"$set": {"profile_picture": profile_url}}
+        {"$set": {"profile_picture": data_url}}
     )
     
-    return {"profile_picture": profile_url}
+    return {"profile_picture": data_url}
 
 @router.get("/user-profile/{email_or_id}", response_model=UserResponse)
 async def get_user_profile(email_or_id: str):

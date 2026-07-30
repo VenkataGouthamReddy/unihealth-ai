@@ -227,10 +227,20 @@ export default function Profile() {
                   <div className="relative mb-8 mt-4">
                      <div className="w-40 h-40 bg-slate-100 rounded-[3rem] border-4 border-white shadow-2xl overflow-hidden group ring-8 ring-primary/5">
                         {profileData?.profile_picture ? (
-                           <img src={`${baseURL}${profileData.profile_picture}`} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                           <img 
+                             src={profileData.profile_picture.startsWith('data:') || profileData.profile_picture.startsWith('http') 
+                               ? profileData.profile_picture 
+                               : `${baseURL}${profileData.profile_picture}`} 
+                             alt={profileData?.name || "Profile"} 
+                             onError={(e) => {
+                               e.target.onerror = null;
+                               e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData?.name || 'User')}&background=0D9488&color=fff&bold=true`;
+                             }}
+                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                           />
                         ) : (
                            <div className="w-full h-full flex items-center justify-center text-5xl font-black text-slate-300">
-                              {profileData?.name?.charAt(0)}
+                              {profileData?.name?.charAt(0) || 'U'}
                            </div>
                         )}
                         {isUploading && (
