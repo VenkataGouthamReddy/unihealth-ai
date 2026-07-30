@@ -9,6 +9,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    
+    # Add MongoDB Service
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
 
     steps:
     - uses: actions/checkout@v4
@@ -25,14 +32,32 @@ jobs:
 
     - name: Set up Environment Variables
       run: |
-        # Create a dummy .env file for the CI environment if needed
-        # Feel free to replace these with GitHub Secrets for production
-        echo "DATABASE_URL=sqlite:///./unihealth.db" > .env
-        echo "JWT_SECRET_KEY=ci_test_secret_key" >> .env
+        echo "MONGODB_URL=mongodb://localhost:27017" > .env
+        echo "DATABASE_NAME=unihealth" >> .env
+        echo "SECRET_KEY=ci_test_secret_key" >> .env
+
+    - name: Seed Test User in MongoDB
+      run: |
+        python -c '
+import asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
+from core.security import get_password_hash
+
+async def seed():
+    client = AsyncIOMotorClient("mongodb://localhost:27017")
+    db = client["unihealth"]
+    await db.users.insert_one({
+        "email": "gouthamgogireddy@gmail.com",
+        "hashed_password": get_password_hash("Goutham@19"),
+        "role": "student",
+        "name": "Goutham Test"
+    })
+    print("Database seeded with test user!")
+asyncio.run(seed())
+        '
 
     - name: Start backend server
       run: |
-        # Using nohup to ensure the process stays alive in the background
         nohup uvicorn main:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
         echo "Backend server started in background."
 
@@ -46,13 +71,11 @@ jobs:
 
     - name: Start frontend server
       run: |
-        # Start Vite dev server in background
         nohup npm run dev > frontend.log 2>&1 &
         echo "Frontend server started in background."
 
     - name: Wait for services to boot
       run: |
-        # Wait up to 30 seconds for both services to be responsive
         npx wait-on http://localhost:5173 http://localhost:8000/docs -t 30000
 
     - name: Run Selenium Tests
