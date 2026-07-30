@@ -118,7 +118,7 @@ export default function App() {
         
         {/* HEALTH SERVICES */}
         <Route path="/student/upload-prescription" element={<ComingSoon title="Upload Prescription" />} />
-        <Route path="/student/report-viewer" element={<ComingSoon title="Medical Reports Viewer" />} />
+        <Route path="/student/report-viewer" element={<ProtectedRoute role="student"><HealthRecords /></ProtectedRoute>} />
         <Route path="/student/health-tips" element={<ComingSoon title="Health Tips Feed" />} />
         <Route path="/student/emergency" element={<ComingSoon title="Emergency Support" />} />
         <Route path="/student/profile" element={<ProtectedRoute role="student"><Profile /></ProtectedRoute>} />
