@@ -67,20 +67,22 @@ export default function Landing() {
                 {recentUsers.map((u, idx) => {
                   const avatarSrc = u.profile_picture 
                     ? (u.profile_picture.startsWith?.('http') ? u.profile_picture : `${apiBase}${u.profile_picture}`)
-                    : null;
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || 'User')}&background=0D9488&color=fff&bold=true`;
+                  
                   return (
-                    <div key={idx} className="w-10 h-10 rounded-full border-2 border-white bg-slate-800 text-white font-bold flex items-center justify-center overflow-hidden text-sm shadow-sm" title={u.name}>
-                      {avatarSrc ? (
-                        <img src={avatarSrc} alt={u.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <span>{(u.name || 'U').charAt(0).toUpperCase()}</span>
-                      )}
+                    <div key={idx} className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 text-white font-bold flex items-center justify-center overflow-hidden text-sm shadow-md" title={u.name}>
+                      <img src={avatarSrc} alt={u.name} className="w-full h-full object-cover" />
                     </div>
                   );
                 })}
                 {userCount > recentUsers.length && (
-                  <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                  <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white shadow-md">
                     +{userCount - recentUsers.length}
+                  </div>
+                )}
+                {recentUsers.length === 0 && userCount === 0 && (
+                  <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white shadow-md">
+                    +0
                   </div>
                 )}
               </div>
