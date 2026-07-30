@@ -123,8 +123,14 @@ if os.path.isdir(_DIST_ASSETS):
 _API_PREFIXES = (
     "/auth", "/ai", "/doctors", "/appointments",
     "/admin", "/alerts", "/notifications", "/prescriptions", "/reports",
-    "/static", "/assets", "/docs", "/openapi",
+    "/static", "/assets", "/docs", "/openapi", "/public"
 )
+
+@app.get("/public/stats")
+async def get_public_stats():
+    from database.mongodb import db
+    total_users = await db.db["users"].count_documents({})
+    return {"total_users": total_users}
 
 @app.get("/{catchall:path}", include_in_schema=False)
 async def serve_spa(request: Request, catchall: str):

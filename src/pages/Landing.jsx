@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Activity, Shield, Zap, Heart, ArrowRight, Star, CheckCircle2 } from 'lucide-react';
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [userCount, setUserCount] = useState(0);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL || ''}/public/stats`)
+      .then(res => res.json())
+      .then(data => setUserCount(data.total_users || 0))
+      .catch(err => console.error("Failed to fetch stats", err));
+  }, []);
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
@@ -55,9 +63,11 @@ export default function Landing() {
                     <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="user" />
                   </div>
                 ))}
-                <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white">
-                  +2k
-                </div>
+                {userCount > 0 && (
+                  <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white">
+                    +{userCount}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -93,9 +103,7 @@ export default function Landing() {
 
       {/* Stats Section */}
       <section className="bg-slate-50 py-24 px-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12">
-          <StatItem value="15k+" label="Students Enrolled" />
-          <StatItem value="120+" label="Verified Doctors" />
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-2 gap-12 justify-center">
           <StatItem value="99.9%" label="Security Uptime" />
           <StatItem value="2min" label="Avg. AI Response" />
         </div>
