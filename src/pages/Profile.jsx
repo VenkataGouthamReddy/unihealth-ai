@@ -23,12 +23,13 @@ import {
   Users,
   FileText,
   Settings,
-  Scan
+  Scan,
+  Trash2
 } from 'lucide-react';
 import axios from 'axios';
 
 export default function Profile() {
-  const { user, changePassword, logout, uploadProfilePicture, updateProfile } = useAuth();
+  const { user, changePassword, logout, uploadProfilePicture, removeProfilePicture, updateProfile } = useAuth();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -128,6 +129,22 @@ export default function Profile() {
       setPassSuccess("Profile picture updated!");
     } catch (err) {
       setPassError("Failed to upload image.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    if (!window.confirm("Are you sure you want to remove your profile picture?")) return;
+    setIsUploading(true);
+    setPassError('');
+    setPassSuccess('');
+    try {
+      await removeProfilePicture();
+      setProfileData(prev => ({ ...prev, profile_picture: null }));
+      setPassSuccess("Profile picture removed!");
+    } catch (err) {
+      setPassError("Failed to remove profile picture.");
     } finally {
       setIsUploading(false);
     }
@@ -258,6 +275,15 @@ export default function Profile() {
                      </div>
                   </div>
                   
+                  {profileData?.profile_picture && (
+                     <button
+                       onClick={handleRemoveImage}
+                       className="mb-4 text-xs font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1.5 bg-rose-50 px-4 py-2 rounded-xl border border-rose-100 transition-all hover:bg-rose-100 shadow-sm cursor-pointer"
+                     >
+                       <Trash2 className="w-3.5 h-3.5" /> Remove Profile Photo
+                     </button>
+                   )}
+
                   <h2 className="text-3xl font-black text-slate-900 mb-1 tracking-tight">{profileData?.name}</h2>
                   <p className="text-slate-500 font-medium mb-6">{profileData?.email}</p>
                   

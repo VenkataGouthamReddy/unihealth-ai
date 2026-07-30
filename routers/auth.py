@@ -308,6 +308,14 @@ async def upload_profile_picture(file: UploadFile = File(...), current_user: dic
     
     return {"profile_picture": data_url}
 
+@router.delete("/profile-picture")
+async def remove_profile_picture(current_user: dict = Depends(get_current_user)):
+    await db.db["users"].update_one(
+        {"_id": current_user["_id"]},
+        {"$unset": {"profile_picture": ""}}
+    )
+    return {"message": "Profile picture removed successfully", "profile_picture": None}
+
 @router.get("/user-profile/{email_or_id}", response_model=UserResponse)
 async def get_user_profile(email_or_id: str):
     from bson import ObjectId

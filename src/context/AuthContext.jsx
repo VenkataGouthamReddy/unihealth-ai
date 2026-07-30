@@ -152,6 +152,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const removeProfilePicture = async () => {
+    try {
+      const res = await axios.delete('/auth/profile-picture');
+      setUser(prev => ({ ...prev, profile_picture: null }));
+      return res.data;
+    } catch (err) {
+      console.error("Remove picture error:", err);
+      throw err;
+    }
+  };
+
   const updateProfile = async (profileData) => {
     try {
       const res = await axios.put('/auth/update-profile', profileData);
@@ -171,7 +182,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, sendOtp, verifyOtp, changePassword, uploadProfilePicture, updateProfile }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, sendOtp, verifyOtp, changePassword, uploadProfilePicture, removeProfilePicture, updateProfile }}>
       {!loading && children}
     </AuthContext.Provider>
   );
