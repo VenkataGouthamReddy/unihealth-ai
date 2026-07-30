@@ -54,7 +54,7 @@ jobs:
         python -m uvicorn main:app --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
         
         # Start frontend in the background
-        npm run dev -- --host 127.0.0.1 > frontend.log 2>&1 &
+        npm run dev:frontend -- --host 127.0.0.1 > frontend.log 2>&1 &
         
         # Wait up to 120 seconds for both services to be responsive
         if ! npx wait-on http://127.0.0.1:5173 http://127.0.0.1:8000/docs -t 120000; then
