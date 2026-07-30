@@ -9,6 +9,9 @@ router = APIRouter(prefix="/appointments", tags=["appointments"])
 
 @router.post("", response_model=dict)
 async def book_appointment(appointment: Appointment):
+    if not appointment.symptoms or not appointment.symptoms.strip():
+        raise HTTPException(status_code=400, detail="Reason and symptoms are required to book an appointment.")
+    
     appointment_dict = appointment.dict(exclude={"id"})
     appointment_dict["created_at"] = datetime.utcnow()
     

@@ -68,6 +68,10 @@ export default function BookAppointment() {
       alert("Please select a time slot.");
       return;
     }
+    if (!symptoms || !symptoms.trim()) {
+      alert("Please provide your symptoms or reason for the visit before booking your appointment.");
+      return;
+    }
     setLoading(true);
     try {
       await axios.post('/appointments', {
@@ -226,9 +230,12 @@ export default function BookAppointment() {
                      </div>
 
                      <div className="space-y-3">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Symptoms or Reason for Visit</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">
+                           Symptoms or Reason for Visit <span className="text-rose-500">*</span>
+                        </label>
                         <textarea 
-                           placeholder="Describe symptoms, how you're feeling, or reason for this visit..."
+                           required
+                           placeholder="Describe your symptoms, how you're feeling, or reason for this visit..."
                            value={symptoms}
                            onChange={(e) => setSymptoms(e.target.value)}
                            className="w-full bg-slate-50 border border-slate-200 rounded-3xl py-4 px-6 text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none min-h-[120px] resize-none"
@@ -244,7 +251,7 @@ export default function BookAppointment() {
 
                      <button 
                         type="submit"
-                        disabled={loading || !time}
+                        disabled={loading || !time || !symptoms.trim()}
                         className="w-full btn-premium bg-slate-900 text-white flex items-center justify-center gap-3 py-5 shadow-2xl hover:bg-primary group disabled:opacity-50 disabled:cursor-not-allowed"
                      >
                         {loading ? 'Confirming...' : 'Securely Book Appointment'}
