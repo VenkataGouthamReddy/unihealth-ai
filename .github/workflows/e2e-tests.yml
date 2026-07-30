@@ -38,7 +38,7 @@ jobs:
 
     - name: Seed Test User in MongoDB
       run: |
-        python -c "import asyncio; from motor.motor_asyncio import AsyncIOMotorClient; from core.security import get_password_hash; async def seed(): db = AsyncIOMotorClient('mongodb://localhost:27017')['unihealth']; await db.users.insert_one({'email': 'gouthamgogireddy@gmail.com', 'hashed_password': get_password_hash('Goutham@19'), 'role': 'student', 'name': 'Goutham Test'}); print('Database seeded with test user!'); asyncio.run(seed())"
+        python -c "import asyncio; from motor.motor_asyncio import AsyncIOMotorClient; from core.security import get_password_hash; client = AsyncIOMotorClient('mongodb://localhost:27017'); db = client['unihealth']; user = {'email': 'gouthamgogireddy@gmail.com', 'hashed_password': get_password_hash('Goutham@19'), 'role': 'student', 'name': 'Goutham Test'}; asyncio.get_event_loop().run_until_complete(db.users.insert_one(user)); print('Database seeded with test user!')"
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
