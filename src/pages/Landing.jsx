@@ -7,7 +7,8 @@ export default function Landing() {
   const [userCount, setUserCount] = useState(0);
   const [recentUsers, setRecentUsers] = useState([]);
 
-  const apiBase = import.meta.env.VITE_API_URL || '';
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const apiBase = import.meta.env.VITE_API_URL || (isLocal ? '' : 'https://unihealth-api-2hcy.onrender.com');
 
   useEffect(() => {
     fetch(`${apiBase}/public/stats`)

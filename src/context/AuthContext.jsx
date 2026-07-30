@@ -8,9 +8,11 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [loading, setLoading] = useState(true);
 
-  // Always use the explicit API URL if provided (crucial for mobile/Capacitor), 
-  // otherwise fallback to relative path (Vite proxy/production).
-  axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+  // Always use explicit VITE_API_URL if provided, or fallback to live Render API on production hosts (Vercel)
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const API_URL = import.meta.env.VITE_API_URL || (isLocal ? '' : 'https://unihealth-api-2hcy.onrender.com');
+  axios.defaults.baseURL = API_URL;
+
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
