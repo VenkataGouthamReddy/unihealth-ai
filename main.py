@@ -64,26 +64,6 @@ async def init_db_and_cleanup_sample_data():
             await db.db["prescriptions"].delete_many({"doctor_id": {"$in": sample_ids}})
             print(f"Purged {len(sample_docs)} sample doctors and associated data.")
 
-        # Ensure all existing users have complete profile details
-        student_users = await db.db["users"].find({"role": {"$ne": "doctor"}}).to_list(500)
-        for idx, s in enumerate(student_users):
-            defaults = {
-                "department": s.get("department") or "Computer Science & Engineering",
-                "roll_number": s.get("roll_number") or f"21CSE{101 + idx}",
-                "age": s.get("age") or 21,
-                "gender": s.get("gender") or "Male",
-                "dob": s.get("dob") or "2003-05-15",
-                "phone": s.get("phone") or f"+91 98765 {43210 + idx}",
-                "blood_group": s.get("blood_group") or "O+",
-                "emergency_contact": s.get("emergency_contact") or "+91 98765 00000",
-                "course": s.get("course") or "B.Tech",
-                "branch": s.get("branch") or "CSE",
-                "university_name": s.get("university_name") or "UniHealth University",
-                "university_register_number": s.get("university_register_number") or f"UNI2026{101 + idx}",
-                "address": s.get("address") or "Hostel Block A, Campus Green, University Rd"
-            }
-            await db.db["users"].update_one({"_id": s["_id"]}, {"$set": defaults})
-
         await db.db["system_config"].update_one(
             {"key": "sample_doctors_removed"},
             {"$set": {"value": True, "updated_at": datetime.utcnow()}},

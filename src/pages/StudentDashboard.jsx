@@ -36,18 +36,60 @@ export default function StudentDashboard() {
   const [notifications, setNotifications] = useState([]);
   const baseURL = ''; // Vite proxy (dev) and FastAPI (prod) both serve /static/*
 
+  // Mandatory Profile Completion State
+  const [profileIncomplete, setProfileIncomplete] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    department: '',
+    roll_number: '',
+    phone: '',
+    age: '',
+    gender: 'Male',
+    dob: '',
+    course: '',
+    branch: '',
+    university_register_number: '',
+    university_name: '',
+    blood_group: '',
+    emergency_contact: '',
+    address: ''
+  });
+  const [savingProfile, setSavingProfile] = useState(false);
+
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Good Morning');
     else if (hour < 18) setGreeting('Good Afternoon');
     else setGreeting('Good Evening');
 
-    const fetchLatestAppointment = async () => {
+    const checkStudentProfileAndData = async () => {
       if (user?.email) {
         try {
+          // Check profile completeness
+          const meRes = await axios.get('/auth/me');
+          const d = meRes.data;
+          setProfileForm({
+            department: d.department || '',
+            roll_number: d.roll_number || '',
+            phone: d.phone || '',
+            age: d.age || '',
+            gender: d.gender || 'Male',
+            dob: d.dob || '',
+            course: d.course || '',
+            branch: d.branch || '',
+            university_register_number: d.university_register_number || '',
+            university_name: d.university_name || '',
+            blood_group: d.blood_group || '',
+            emergency_contact: d.emergency_contact || '',
+            address: d.address || ''
+          });
+
+          // Trigger mandatory prompt if key details are missing
+          if (!d.department || !d.roll_number || !d.phone || !d.dob || !d.blood_group || !d.emergency_contact) {
+            setProfileIncomplete(true);
+          }
+
           const res = await axios.get(`/appointments/student/${user.email}`);
           const today = new Date().toISOString().split('T')[0];
-          // Only show genuinely upcoming (not expired/past) scheduled appointments
           const scheduled = res.data.find(
             apt => apt.status === 'scheduled' && apt.date >= today
           );
@@ -66,16 +108,31 @@ export default function StudentDashboard() {
             setCompletedApt(completed[0]);
           }
 
-          // Fetch notifications for alerts and prescriptions
           const notifRes = await axios.get(`/notifications/student/${user.email}`);
-          setNotifications(notifRes.data.slice(0, 4)); // Get top 4 recent notifications
+          setNotifications(notifRes.data.slice(0, 4));
         } catch (err) {
-          console.error("Error fetching latest appointment:", err);
+          console.error("Error checking student profile/dashboard:", err);
         }
       }
     };
-    fetchLatestAppointment();
+    checkStudentProfileAndData();
   }, [user]);
+
+  const handleSaveMandatoryProfile = async (e) => {
+    e.preventDefault();
+    setSavingProfile(true);
+    try {
+      await axios.put('/auth/update-profile', {
+        ...profileForm,
+        age: profileForm.age ? parseInt(profileForm.age) : null
+      });
+      setProfileIncomplete(false);
+    } catch (err) {
+      console.error("Failed to save profile:", err);
+    } finally {
+      setSavingProfile(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
@@ -299,6 +356,165 @@ export default function StudentDashboard() {
       >
         <Sparkles className="w-7 h-7" />
       </button>
+      {/* MANDATORY STUDENT PROFILE COMPLETION MODAL */}
+      {profileIncomplete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white rounded-[2.5rem] p-6 sm:p-8 w-full max-w-2xl shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="bg-teal-500 p-2.5 rounded-2xl text-white">
+                <ShieldAlert className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-slate-900 leading-tight">Complete Your Student Profile</h3>
+                <p className="text-slate-500 text-xs font-semibold">Please provide your official university details so campus doctors can identify your health records accurately.</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveMandatoryProfile} className="space-y-4 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Department / Major *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Computer Science & Engineering"
+                    value={profileForm.department}
+                    onChange={(e) => setProfileForm({ ...profileForm, department: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Roll Number / Student ID *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. 21CSE101"
+                    value={profileForm.roll_number}
+                    onChange={(e) => setProfileForm({ ...profileForm, roll_number: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Phone / Contact *</label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="e.g. +91 98765 43210"
+                    value={profileForm.phone}
+                    onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Date of Birth (DOB) *</label>
+                  <input
+                    type="date"
+                    required
+                    value={profileForm.dob}
+                    onChange={(e) => setProfileForm({ ...profileForm, dob: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Age *</label>
+                  <input
+                    type="number"
+                    required
+                    placeholder="e.g. 21"
+                    value={profileForm.age}
+                    onChange={(e) => setProfileForm({ ...profileForm, age: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Gender *</label>
+                  <select
+                    value={profileForm.gender}
+                    onChange={(e) => setProfileForm({ ...profileForm, gender: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Blood Group *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. O+, A+, B+"
+                    value={profileForm.blood_group}
+                    onChange={(e) => setProfileForm({ ...profileForm, blood_group: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Emergency Contact *</label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="e.g. +91 98765 00000 (Parent)"
+                    value={profileForm.emergency_contact}
+                    onChange={(e) => setProfileForm({ ...profileForm, emergency_contact: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Course / Degree</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. B.Tech"
+                    value={profileForm.course}
+                    onChange={(e) => setProfileForm({ ...profileForm, course: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">University Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. UniHealth University"
+                    value={profileForm.university_name}
+                    onChange={(e) => setProfileForm({ ...profileForm, university_name: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">Address</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Hostel Block A, Room 304, Campus Grounds"
+                  value={profileForm.address}
+                  onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500"
+                />
+              </div>
+
+              <div className="pt-4 flex justify-end">
+                <button
+                  type="submit"
+                  disabled={savingProfile}
+                  className="w-full sm:w-auto px-8 py-4 bg-teal-600 text-white font-black text-sm rounded-2xl hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/30 active:scale-95 disabled:opacity-50"
+                >
+                  {savingProfile ? 'Saving Details...' : 'Save & Complete Profile'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

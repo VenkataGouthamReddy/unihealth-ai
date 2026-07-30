@@ -1308,39 +1308,45 @@ export default function DoctorDashboard() {
                 <div className="grid grid-cols-2 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-100">
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Department / Major</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.department || "Computer Science & Engineering"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.department || "Not Provided"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Roll Number</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.roll_number || "21CSE101"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.roll_number || "Not Provided"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Age / Gender / DOB</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.age || 21} yrs / {selectedPatient.gender || "Male"} / {selectedPatient.dob || "2003-05-15"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">
+                      {selectedPatient.age ? `${selectedPatient.age} yrs` : "N/A"} / {selectedPatient.gender || "N/A"} / {selectedPatient.dob || "N/A"}
+                    </div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Contact</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.phone || "+91 98765 43210"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.phone || "Not Provided"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Blood Group</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.blood_group || "O+"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.blood_group || "Not Provided"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Emergency Contact</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.emergency_contact || "+91 98765 00000"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.emergency_contact || "Not Provided"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Course / Branch</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.course || "B.Tech"} / {selectedPatient.branch || "CSE"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">
+                      {selectedPatient.course ? `${selectedPatient.course}${selectedPatient.branch ? ` / ${selectedPatient.branch}` : ''}` : "Not Provided"}
+                    </div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">University / Reg No</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.university_name || "UniHealth University"} - {selectedPatient.university_register_number || "UNI202688"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">
+                      {selectedPatient.university_name ? `${selectedPatient.university_name}${selectedPatient.university_register_number ? ` - ${selectedPatient.university_register_number}` : ''}` : "Not Provided"}
+                    </div>
                   </div>
                   <div className="col-span-2">
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Address</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.address || "Hostel Block A, Campus Green, University Rd"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.address || "Not Provided"}</div>
                   </div>
                 </div>
 
