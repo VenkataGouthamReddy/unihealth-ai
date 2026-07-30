@@ -8,7 +8,7 @@ const assert = require('assert');
 
 async function runLoginTests() {
     // Replace with your local or production frontend URL
-    const TARGET_URL = 'http://localhost:5173/login'; // Pointing specifically to the login route
+    const TARGET_URL = 'http://127.0.0.1:5173/login'; // Pointing specifically to the login route
 
     // Initialize Chrome Driver
     let options = new chrome.Options();
