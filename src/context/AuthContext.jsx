@@ -8,11 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [loading, setLoading] = useState(true);
 
-  // Always use explicit VITE_API_URL if provided, or fallback to live Render API on production hosts (Vercel)
-  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const API_URL = import.meta.env.VITE_API_URL || (isLocal ? '' : 'https://unihealth-api-2hcy.onrender.com');
-  axios.defaults.baseURL = API_URL;
-
+  // Always use the explicit API URL if provided (crucial for mobile/Capacitor), 
+  // otherwise fallback to relative path (Vite proxy/production).
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
@@ -31,17 +29,23 @@ export const AuthProvider = ({ children }) => {
         return Promise.reject(error);
       }
 
-      const maxRetries = config?.retry ?? axios.defaults.retry ?? 3;
-      const retryDelay = config?.retryDelay ?? axios.defaults.retryDelay ?? 1500;
-      
-      if (!config || (config.__retryCount || 0) >= maxRetries) {
+      // If config doesn't exist or retry isn't set, reject
+      if (!config || !config.retry) {
         return Promise.reject(error);
       }
       
-      config.__retryCount = (config.__retryCount || 0) + 1;
+      // Initialize retry count tracker
+      config.__retryCount = config.__retryCount || 0;
+      
+      // If maximum retries exceeded, reject
+      if (config.__retryCount >= config.retry) {
+        return Promise.reject(error);
+      }
+      
+      config.__retryCount += 1;
       
       // Wait for backoff delay
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      await new Promise((resolve) => setTimeout(resolve, config.retryDelay));
       
       // Trigger new request
       return axios(config);
@@ -49,9 +53,7 @@ export const AuthProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    // Background warmup ping to wake up Render backend if it was sleeping
-    axios.get('/public/stats').catch(() => {});
-
+    // A real app would verify the token with the backend here.
     const initAuth = async () => {
         const token = localStorage.getItem('token');
         if (token && token.split('.').length === 3) {

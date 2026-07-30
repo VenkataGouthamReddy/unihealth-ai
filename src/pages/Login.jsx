@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, LogIn, HeartPulse, ShieldCheck, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, LogIn, HeartPulse, ShieldCheck, ArrowRight } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -17,13 +16,13 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      const user = await login(email, password);
+      const user = await login(email.trim(), password);
       if (user.role === 'student') navigate('/student');
       else if (user.role === 'doctor') navigate('/doctor');
       else navigate('/admin');
     } catch (err) {
       if (err.message && (err.message.includes('Network Error') || err.message.includes('Failed to fetch'))) {
-        setError('Server is spinning up or connection issue. Please wait 10-15 seconds and try clicking Log In again.');
+        setError('Network Error: Cannot connect to the server. Check your connection or API URL.');
       } else if (err.response && err.response.data && err.response.data.detail) {
         setError(err.response.data.detail);
       } else {
@@ -66,20 +65,13 @@ export default function Login() {
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
             <input
-              type={showPassword ? "text" : "password"}
+              type="password"
               placeholder="Password"
-              className="premium-input pl-12 pr-12"
+              className="premium-input pl-12"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
           </div>
 
           <button

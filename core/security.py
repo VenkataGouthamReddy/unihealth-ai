@@ -4,11 +4,24 @@ from jose import jwt
 from core.config import settings
 from typing import Optional
 
-def verify_password(plain_password, hashed_password):
-    return bcrypt.checkpw(
-        plain_password.encode('utf-8'), 
-        hashed_password.encode('utf-8')
-    )
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    if not plain_password or not hashed_password:
+        return False
+    try:
+        if isinstance(hashed_password, str):
+            # Fallback for plain text or legacy password strings in DB
+            if not (hashed_password.startswith("$2b$") or hashed_password.startswith("$2a$")):
+                return plain_password == hashed_password
+            hashed_bytes = hashed_password.encode('utf-8')
+        elif isinstance(hashed_password, bytes):
+            hashed_bytes = hashed_password
+        else:
+            return False
+
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_bytes)
+    except Exception as e:
+        print(f"Password verification fallback check: {e}")
+        return plain_password == str(hashed_password)
 
 def get_password_hash(password):
     # bcrypt salt includes the cost factor and the salt itself

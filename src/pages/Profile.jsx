@@ -66,71 +66,6 @@ export default function Profile() {
   const [passError, setPassError] = useState('');
   const [passSuccess, setPassSuccess] = useState('');
 
-  // Live Camera Stream State
-  const [showCameraModal, setShowCameraModal] = useState(false);
-  const [cameraPurpose, setCameraPurpose] = useState('profile');
-  const videoRef = React.useRef(null);
-  const mediaStreamRef = React.useRef(null);
-
-  const startCamera = async (purpose = 'profile') => {
-    setCameraPurpose(purpose);
-    setShowCameraModal(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }
-      });
-      mediaStreamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error("Camera access error:", err);
-      alert("Unable to access camera. Please make sure your camera is connected and permissions are allowed.");
-      setShowCameraModal(false);
-    }
-  };
-
-  const stopCamera = () => {
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach(track => track.stop());
-      mediaStreamRef.current = null;
-    }
-    setShowCameraModal(false);
-  };
-
-  const capturePhoto = () => {
-    if (!videoRef.current) return;
-    const canvas = document.createElement('canvas');
-    canvas.width = videoRef.current.videoWidth || 640;
-    canvas.height = videoRef.current.videoHeight || 480;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-    
-    canvas.toBlob(async (blob) => {
-      if (!blob) return;
-      const file = new File([blob], `captured_photo_${Date.now()}.jpg`, { type: 'image/jpeg' });
-      stopCamera();
-
-      if (cameraPurpose === 'profile') {
-        setIsUploading(true);
-        setPassError('');
-        setPassSuccess('');
-        try {
-          const res = await uploadProfilePicture(file);
-          setProfileData(prev => ({ ...prev, profile_picture: res.profile_picture }));
-          setPassSuccess("Profile picture updated using camera!");
-        } catch (err) {
-          setPassError("Failed to upload camera photo.");
-        } finally {
-          setIsUploading(false);
-        }
-      } else if (cameraPurpose === 'idScan') {
-        const fakeEvent = { target: { files: [file] } };
-        handleIdScan(fakeEvent);
-      }
-    }, 'image/jpeg', 0.9);
-  };
-
   const baseURL = ''; // Vite proxy (dev) and FastAPI (prod) both serve /static/*
 
   useEffect(() => {
@@ -340,31 +275,14 @@ export default function Profile() {
                      </div>
                   </div>
                   
-                  {/* Explicit Profile Picture Controls */}
-                  <div className="flex flex-wrap justify-center gap-2 mb-6 w-full">
-                     <label className="px-3.5 py-2 bg-slate-900 text-white text-[11px] font-bold rounded-xl hover:bg-teal-600 cursor-pointer flex items-center gap-1.5 transition-all shadow-md active:scale-95">
-                        <Camera className="w-3.5 h-3.5" /> Upload Photo
-                        <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
-                     </label>
-
+                  {profileData?.profile_picture && (
                      <button
-                        type="button"
-                        onClick={() => startCamera('profile')}
-                        className="px-3.5 py-2 bg-teal-600 text-white text-[11px] font-bold rounded-xl hover:bg-teal-700 cursor-pointer flex items-center gap-1.5 transition-all shadow-md active:scale-95"
+                       onClick={handleRemoveImage}
+                       className="mb-4 text-xs font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1.5 bg-rose-50 px-4 py-2 rounded-xl border border-rose-100 transition-all hover:bg-rose-100 shadow-sm cursor-pointer"
                      >
-                        <Camera className="w-3.5 h-3.5" /> Take Photo
+                       <Trash2 className="w-3.5 h-3.5" /> Remove Profile Photo
                      </button>
-
-                     {profileData?.profile_picture && (
-                        <button
-                          type="button"
-                          onClick={handleRemoveImage}
-                          className="px-3.5 py-2 bg-rose-50 text-rose-600 text-[11px] font-bold rounded-xl hover:bg-rose-100 border border-rose-100 flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" /> Remove
-                        </button>
-                     )}
-                  </div>
+                   )}
 
                   <h2 className="text-3xl font-black text-slate-900 mb-1 tracking-tight">{profileData?.name}</h2>
                   <p className="text-slate-500 font-medium mb-6">{profileData?.email}</p>
@@ -446,34 +364,24 @@ export default function Profile() {
                            <p className="text-sm font-medium text-slate-400">Complete your details for accurate clinical history.</p>
                         </div>
                      </div>
-                      <div className="flex flex-col sm:flex-row items-center gap-3">
-                         <label className={`px-5 py-3.5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.1em] transition-all flex items-center gap-2 cursor-pointer ${
-                            isScanning ? 'bg-slate-100 text-slate-500' : 'bg-slate-900 text-white shadow-xl hover:scale-105 active:scale-95'
-                         }`}>
-                            {isScanning ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
-                            {isScanning ? 'Scanning...' : 'Upload ID'}
-                            <input type="file" className="hidden" accept="image/*" onChange={handleIdScan} disabled={isScanning} />
-                         </label>
-
-                         <button
-                            type="button"
-                            onClick={() => startCamera('idScan')}
-                            disabled={isScanning}
-                            className="px-5 py-3.5 bg-teal-600 text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.1em] transition-all flex items-center gap-2 shadow-xl hover:bg-teal-700 hover:scale-105 active:scale-95 disabled:opacity-50"
-                         >
-                            <Camera className="w-4 h-4" /> Camera Scan
-                         </button>
-
-                         <button 
-                            onClick={(e) => { e.preventDefault(); setIsEditing(!isEditing); }}
-                            className={`px-6 py-3.5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${
-                               isEditing ? 'bg-slate-100 text-slate-500' : 'bg-primary text-white shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95'
-                            }`}
-                         >
-                            {isEditing ? <X className="w-4 h-4" /> : <Settings className="w-4 h-4" />}
-                            {isEditing ? 'Cancel' : 'Edit Info'}
-                         </button>
-                      </div>
+                     <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <label className={`px-6 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.1em] transition-all flex items-center gap-2 cursor-pointer ${
+                           isScanning ? 'bg-slate-100 text-slate-500' : 'bg-slate-900 text-white shadow-xl hover:scale-105 active:scale-95'
+                        }`}>
+                           {isScanning ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
+                           {isScanning ? 'Scanning...' : 'Smart ID Scan'}
+                           <input type="file" className="hidden" accept="image/*" onChange={handleIdScan} disabled={isScanning} />
+                        </label>
+                        <button 
+                           onClick={(e) => { e.preventDefault(); setIsEditing(!isEditing); }}
+                           className={`px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${
+                              isEditing ? 'bg-slate-100 text-slate-500' : 'bg-primary text-white shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95'
+                           }`}
+                        >
+                           {isEditing ? <X className="w-4 h-4" /> : <Settings className="w-4 h-4" />}
+                           {isEditing ? 'Cancel' : 'Edit Information'}
+                        </button>
+                     </div>
                   </div>
 
                   <form onSubmit={handleUpdateInfo} className="space-y-10">
@@ -675,61 +583,7 @@ export default function Profile() {
                </div>
             </div>
          </div>
-       </main>
-
-      {/* LIVE CAMERA STREAM CAPTURE MODAL */}
-      {showCameraModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-white rounded-[2.5rem] p-6 max-w-lg w-full text-center shadow-2xl space-y-4 border border-slate-100">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-100">
-              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <Camera className="w-5 h-5 text-teal-600" /> 
-                {cameraPurpose === 'profile' ? 'Capture Profile Picture' : 'Scan ID Card with Camera'}
-              </h3>
-              <button 
-                type="button"
-                onClick={stopCamera} 
-                className="p-2 hover:bg-slate-100 rounded-xl text-slate-500 hover:text-slate-900 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-video flex items-center justify-center border-2 border-slate-800 shadow-inner">
-              <video 
-                ref={(ref) => {
-                  videoRef.current = ref;
-                  if (ref && mediaStreamRef.current) ref.srcObject = mediaStreamRef.current;
-                }} 
-                autoPlay 
-                playsInline 
-                className="w-full h-full object-cover" 
-              />
-            </div>
-
-            <p className="text-xs font-semibold text-slate-500">
-              Position yourself or your document in front of the camera and click capture.
-            </p>
-
-            <div className="flex justify-center gap-4 pt-2">
-              <button 
-                type="button"
-                onClick={stopCamera}
-                className="px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-2xl text-xs hover:bg-slate-200 transition-all"
-              >
-                Cancel
-              </button>
-              <button 
-                type="button"
-                onClick={capturePhoto}
-                className="px-8 py-3 bg-teal-600 text-white font-black rounded-2xl text-xs flex items-center gap-2 hover:bg-teal-700 shadow-xl shadow-teal-600/30 transition-all active:scale-95"
-              >
-                <Camera className="w-4 h-4" /> Capture & Use Photo
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </main>
     </div>
   );
 }
