@@ -130,7 +130,15 @@ _API_PREFIXES = (
 async def get_public_stats():
     from database.mongodb import db
     total_users = await db.db["users"].count_documents({})
-    return {"total_users": total_users}
+    cursor = db.db["users"].find({}, {"name": 1, "full_name": 1, "profile_picture": 1}).sort("_id", -1).limit(4)
+    raw_users = await cursor.to_list(length=4)
+    users_data = []
+    for u in raw_users:
+        users_data.append({
+            "name": u.get("name") or u.get("full_name") or "User",
+            "profile_picture": u.get("profile_picture")
+        })
+    return {"total_users": total_users, "recent_users": users_data}
 
 @app.get("/{catchall:path}", include_in_schema=False)
 async def serve_spa(request: Request, catchall: str):

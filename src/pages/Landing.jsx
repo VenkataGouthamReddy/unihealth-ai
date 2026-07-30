@@ -5,13 +5,19 @@ import { Activity, Shield, Zap, Heart, ArrowRight, Star, CheckCircle2 } from 'lu
 export default function Landing() {
   const navigate = useNavigate();
   const [userCount, setUserCount] = useState(0);
+  const [recentUsers, setRecentUsers] = useState([]);
+
+  const apiBase = import.meta.env.VITE_API_URL || '';
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL || ''}/public/stats`)
+    fetch(`${apiBase}/public/stats`)
       .then(res => res.json())
-      .then(data => setUserCount(data.total_users || 0))
+      .then(data => {
+        setUserCount(data.total_users || 0);
+        setRecentUsers(data.recent_users || []);
+      })
       .catch(err => console.error("Failed to fetch stats", err));
-  }, []);
+  }, [apiBase]);
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
@@ -57,15 +63,24 @@ export default function Landing() {
                 <span>Start Free Trial</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="user" />
-                  </div>
-                ))}
-                {userCount > 0 && (
-                  <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white">
-                    +{userCount}
+              <div className="flex -space-x-3 items-center">
+                {recentUsers.map((u, idx) => {
+                  const avatarSrc = u.profile_picture 
+                    ? (u.profile_picture.startsWith?.('http') ? u.profile_picture : `${apiBase}${u.profile_picture}`)
+                    : null;
+                  return (
+                    <div key={idx} className="w-10 h-10 rounded-full border-2 border-white bg-slate-800 text-white font-bold flex items-center justify-center overflow-hidden text-sm shadow-sm" title={u.name}>
+                      {avatarSrc ? (
+                        <img src={avatarSrc} alt={u.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span>{(u.name || 'U').charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                  );
+                })}
+                {userCount > recentUsers.length && (
+                  <div className="w-10 h-10 rounded-full border-2 border-white bg-teal-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                    +{userCount - recentUsers.length}
                   </div>
                 )}
               </div>
