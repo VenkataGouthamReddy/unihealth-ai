@@ -31,23 +31,17 @@ export const AuthProvider = ({ children }) => {
         return Promise.reject(error);
       }
 
-      // If config doesn't exist or retry isn't set, reject
-      if (!config || !config.retry) {
+      const maxRetries = config?.retry ?? axios.defaults.retry ?? 3;
+      const retryDelay = config?.retryDelay ?? axios.defaults.retryDelay ?? 1500;
+      
+      if (!config || (config.__retryCount || 0) >= maxRetries) {
         return Promise.reject(error);
       }
       
-      // Initialize retry count tracker
-      config.__retryCount = config.__retryCount || 0;
-      
-      // If maximum retries exceeded, reject
-      if (config.__retryCount >= config.retry) {
-        return Promise.reject(error);
-      }
-      
-      config.__retryCount += 1;
+      config.__retryCount = (config.__retryCount || 0) + 1;
       
       // Wait for backoff delay
-      await new Promise((resolve) => setTimeout(resolve, config.retryDelay));
+      await new Promise((resolve) => setTimeout(resolve, retryDelay));
       
       // Trigger new request
       return axios(config);
@@ -55,7 +49,9 @@ export const AuthProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    // A real app would verify the token with the backend here.
+    // Background warmup ping to wake up Render backend if it was sleeping
+    axios.get('/public/stats').catch(() => {});
+
     const initAuth = async () => {
         const token = localStorage.getItem('token');
         if (token && token.split('.').length === 3) {
