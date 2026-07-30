@@ -22,7 +22,7 @@ export default function Login() {
       else navigate('/admin');
     } catch (err) {
       if (err.message && (err.message.includes('Network Error') || err.message.includes('Failed to fetch'))) {
-        setError('Network Error: Cannot connect to the server. Check your connection or API URL.');
+        setError('Server is spinning up or connection issue. Please wait 10-15 seconds and try clicking Log In again.');
       } else if (err.response && err.response.data && err.response.data.detail) {
         setError(err.response.data.detail);
       } else {
