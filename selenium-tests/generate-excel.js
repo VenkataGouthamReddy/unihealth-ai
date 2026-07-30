@@ -1,3 +1,4 @@
+
 const ExcelJS = require('exceljs');
 
 async function generateTestCasesExcel() {
@@ -56,7 +57,7 @@ async function generateTestCasesExcel() {
             sheet.addRow({
                 id: `TC-${String(currentId).padStart(3, '0')}`,
                 module: 'Authentication',
-                description: `Verify login fails with ${invalid} (Variation ${i+1})`,
+                description: `Verify login fails with ${invalid} (Variation ${i + 1})`,
                 preconditions: 'App is loaded on login screen',
                 steps: `1. Navigate to login page\n2. Input data simulating ${invalid}\n3. Click Login`,
                 expected: 'Login fails, appropriate error message is displayed',
@@ -81,13 +82,13 @@ async function generateTestCasesExcel() {
             'Verify UI responsiveness on mobile viewport during login',
             'Verify API response time under load during login'
         ];
-        
+
         const scenario = scenarios[currentId % scenarios.length];
-        
+
         sheet.addRow({
             id: `TC-${String(currentId).padStart(3, '0')}`,
             module: 'Authentication / Security',
-            description: `${scenario} (Iteration ${Math.floor(currentId/10)})`,
+            description: `${scenario} (Iteration ${Math.floor(currentId / 10)})`,
             preconditions: 'System configured for test scenario',
             steps: '1. Execute specific scenario steps...',
             expected: 'System behaves securely and per requirements',
