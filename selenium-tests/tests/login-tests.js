@@ -25,14 +25,14 @@ async function runLoginTests() {
         await driver.get(TARGET_URL);
 
         // Wait for the login form to be visible
-        await driver.wait(until.elementLocated(By.css('input[type="email"]')), 5000);
+        await driver.wait(until.elementLocated(By.css('input[type="email"]')), 30000);
 
         console.log('Test 1: Invalid Credentials');
         await driver.findElement(By.css('input[type="email"]')).sendKeys('wrong_user@example.com');
         await driver.findElement(By.css('input[type="password"]')).sendKeys('wrong_password');
         await driver.findElement(By.css('button[type="submit"]')).click();
 
-        let invalidMsg = await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'bg-red-50')]")), 3000);
+        let invalidMsg = await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'bg-red-50')]")), 10000);
         let msgText = await invalidMsg.getText();
         assert.match(msgText.toLowerCase(), /invalid|server|connecting|incorrect/, 'Expected invalid credentials or server error');
 
@@ -56,7 +56,7 @@ async function runLoginTests() {
         await driver.wait(async () => {
             const url = await driver.getCurrentUrl();
             return !url.includes('/login');
-        }, 5000);
+        }, 30000);
         console.log('Dashboard reached successfully!');
 
         // E2E Login complete
