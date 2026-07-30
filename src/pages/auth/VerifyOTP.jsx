@@ -57,7 +57,7 @@ export default function VerifyOTP() {
   const handleVerify = async (e) => {
     e.preventDefault();
     setError('');
-    const otpValue = otp.join('');
+    const otpValue = otp.join('').trim();
     
     if (otpValue.length !== 6) {
       setError('Please enter the full 6-digit code.');
@@ -66,19 +66,18 @@ export default function VerifyOTP() {
 
     setIsVerifying(true);
     try {
-      // Simulate verification for premium feel
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      const user = await verifyOtp(email, otpValue);
+      const cleanEmail = (email || '').trim().toLowerCase();
+      const user = await verifyOtp(cleanEmail, otpValue);
       setIsSuccess(true);
       setTimeout(() => {
         if (location.state?.isReset) {
-          navigate('/reset-password', { state: { email, otp: otpValue } });
+          navigate('/reset-password', { state: { email: cleanEmail, otp: otpValue } });
         } else {
           if (user.role === 'student') navigate('/student');
           else if (user.role === 'doctor') navigate('/doctor');
           else navigate('/admin');
         }
-      }, 2000);
+      }, 1500);
     } catch (err) {
       setError(err.response?.data?.detail || 'Verification failed. Please check the code.');
     } finally {
@@ -174,8 +173,8 @@ export default function VerifyOTP() {
 
                <button 
                  type="submit" 
-                 disabled={isVerifying || timeLeft === 0}
-                 className="btn-premium bg-slate-900 text-white w-full py-5 flex items-center justify-center gap-2 group hover:bg-primary shadow-2xl transition-all disabled:opacity-50 disabled:hover:bg-slate-900"
+                 disabled={isVerifying}
+                 className="btn-premium bg-slate-900 text-white w-full py-5 flex items-center justify-center gap-2 group hover:bg-primary shadow-2xl transition-all disabled:opacity-50 disabled:hover:bg-slate-900 cursor-pointer"
                >
                    {isVerifying ? (
                      <Loader2 className="animate-spin w-5 h-5" />

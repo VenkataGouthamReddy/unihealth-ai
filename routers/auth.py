@@ -49,25 +49,29 @@ conf = ConnectionConfig(
 
 @router.post("/send-otp")
 async def send_otp(user_data: UserCreate):
+    import re
     if user_data.role == "admin":
         raise HTTPException(status_code=400, detail="Admin accounts cannot be created via registration.")
     
+    clean_email = (user_data.email or "").strip().lower()
+
     # Check if user already exists
-    existing_user = await db.db["users"].find_one({"email": user_data.email})
+    existing_user = await db.db["users"].find_one({"email": {"$regex": f"^{re.escape(clean_email)}$", "$options": "i"}})
     if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="An account with this email address already exists. Please log in.")
     
     # Generate 6-digit OTP
     otp = str(random.randint(100000, 999999))
     
     # Store temporary user data and OTP
     await db.db["temp_users"].update_one(
-        {"email": user_data.email},
+        {"email": clean_email},
         {"$set": {
-            "name": user_data.name,
+            "email": clean_email,
+            "name": user_data.name.strip(),
             "role": user_data.role,
             "password": user_data.password, # Plain password temporarily, will hash on verification
-            "otp": otp,
+            "otp": str(otp).strip(),
             "created_at": datetime.utcnow()
         }},
         upsert=True
@@ -91,14 +95,14 @@ async def send_otp(user_data: UserCreate):
         
         message = MessageSchema(
             subject="UniHealth AI - Account Verification OTP",
-            recipients=[user_data.email],
+            recipients=[clean_email],
             body=html,
             subtype=MessageType.html
         )
         
         fm = FastMail(conf)
         await fm.send_message(message)
-        print(f"OTP email sent successfully to {user_data.email}")
+        print(f"OTP email sent successfully to {clean_email}")
         
     except Exception as e:
         print(f"\n{'='*50}")
@@ -112,15 +116,36 @@ async def send_otp(user_data: UserCreate):
 
 @router.post("/verify-otp", response_model=Token)
 async def verify_otp(verify_data: OTPVerify):
-    temp_user = await db.db["temp_users"].find_one({"email": verify_data.email})
+    import re
+    clean_email = (verify_data.email or "").strip().lower()
+    clean_otp = (verify_data.otp or "").strip()
+
+    temp_user = await db.db["temp_users"].find_one({"email": {"$regex": f"^{re.escape(clean_email)}$", "$options": "i"}})
     
-    if not temp_user or temp_user["otp"] != verify_data.otp:
-        raise HTTPException(status_code=400, detail="Invalid or expired OTP")
+    if not temp_user:
+        raise HTTPException(status_code=400, detail="Registration session not found or expired. Please register again.")
     
+    stored_otp = str(temp_user.get("otp", "")).strip()
+    if stored_otp != clean_otp:
+        raise HTTPException(status_code=400, detail="Invalid OTP code. Please double-check the 6-digit code sent to your email.")
+    
+    # Check if user was already inserted in main collection
+    existing_user = await db.db["users"].find_one({"email": {"$regex": f"^{re.escape(clean_email)}$", "$options": "i"}})
+    if existing_user:
+        await db.db["temp_users"].delete_one({"_id": temp_user["_id"]})
+        access_token = create_access_token(data={
+            "sub": existing_user["email"], 
+            "id": str(existing_user["_id"]),
+            "role": existing_user.get("role"),
+            "name": existing_user.get("name"),
+            "profile_picture": existing_user.get("profile_picture")
+        })
+        return {"access_token": access_token, "token_type": "bearer"}
+
     # Move to main users collection
     user_in_db = UserInDB(
         name=temp_user["name"],
-        email=temp_user["email"],
+        email=clean_email,
         role=temp_user["role"],
         hashed_password=get_password_hash(temp_user["password"])
     )
@@ -129,7 +154,7 @@ async def verify_otp(verify_data: OTPVerify):
     created_user = await db.db["users"].find_one({"_id": new_user.inserted_id})
     
     # Clean up temp collection
-    await db.db["temp_users"].delete_one({"email": verify_data.email})
+    await db.db["temp_users"].delete_one({"_id": temp_user["_id"]})
     
     access_token = create_access_token(data={
         "sub": created_user["email"], 
