@@ -28,7 +28,8 @@ import {
   Eye,
   BookOpen,
   DollarSign,
-  Download
+  Download,
+  Loader2
 } from 'lucide-react';
 
 export default function DoctorDashboard() {
@@ -45,16 +46,20 @@ export default function DoctorDashboard() {
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   
-  // Selected Patient Details Modal State
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [selectedPatientHistory, setSelectedPatientHistory] = useState([]);
+  const [selectedPatientReports, setSelectedPatientReports] = useState([]);
   const [loadingPatient, setLoadingPatient] = useState(false);
+  const [uploadingReport, setUploadingReport] = useState(false);
   
   // Prescription Creator Modal State
   const [activeAptForPrescription, setActiveAptForPrescription] = useState(null);
   const [medsList, setMedsList] = useState([{ name: '', dosage: '', frequency: '', duration: '' }]);
   const [prescriptionNotes, setPrescriptionNotes] = useState('');
   const [submittingPres, setSubmittingPres] = useState(false);
+
+  // Wallet State
+  const [walletFiles, setWalletFiles] = useState([]);
 
   // Schedule & Settings State
   const [schedule, setSchedule] = useState({
@@ -183,7 +188,6 @@ export default function DoctorDashboard() {
     }
   };
 
-  // View Patient Details Drawer
   const handleViewPatientDetails = async (patientEmail) => {
     setLoadingPatient(true);
     try {
@@ -192,12 +196,43 @@ export default function DoctorDashboard() {
       
       const historyRes = await axios.get(`/prescriptions/student/${patientEmail}`);
       setSelectedPatientHistory(historyRes.data);
+
+      const reportsRes = await axios.get(`/reports/student/${patientEmail}`);
+      setSelectedPatientReports(reportsRes.data);
     } catch (err) {
       console.error("Error fetching patient details:", err);
       showToast('error', "Failed to retrieve patient medical profile.");
     } finally {
       setLoadingPatient(false);
     }
+  };
+
+  const handleUploadPatientScan = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64String = reader.result.split(',')[1];
+      setUploadingReport(true);
+      try {
+        await axios.post('/reports', {
+          student_id: selectedPatient.email,
+          doctor_id: user.id,
+          report_type: 'Scan/Document',
+          file_name: file.name,
+          file_data: base64String
+        });
+        showToast('success', 'Scan uploaded successfully!');
+        const reportsRes = await axios.get(`/reports/student/${selectedPatient.email}`);
+        setSelectedPatientReports(reportsRes.data);
+      } catch (err) {
+        showToast('error', 'Failed to upload scan');
+      } finally {
+        setUploadingReport(false);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   // Save Schedule Settings
@@ -479,6 +514,14 @@ export default function DoctorDashboard() {
             }`}
           >
             Prescriptions
+          </button>
+          <button 
+            onClick={() => setActiveTab('wallet')}
+            className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+              activeTab === 'wallet' ? 'bg-teal-600 text-white shadow-md' : 'text-slate-500 hover:text-teal-600'
+            }`}
+          >
+            Wallet
           </button>
           <button 
             onClick={() => setActiveTab('profile')}
@@ -994,6 +1037,54 @@ export default function DoctorDashboard() {
               </div>
             )}
 
+            {/* TAB CONTENT: WALLET */}
+            {activeTab === 'wallet' && (
+              <div className="bg-white p-8 sm:p-12 rounded-[3.5rem] border border-slate-100 shadow-sm max-w-4xl mx-auto space-y-8">
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                    <FileText className="text-teal-600" /> Document Wallet
+                  </h2>
+                  <p className="text-slate-400 text-xs font-semibold mt-1">Upload and securely manage your medical licenses, certificates, and ID copies.</p>
+                </div>
+                
+                <div className="relative border-2 border-dashed border-slate-200 rounded-[2rem] p-10 flex flex-col items-center justify-center bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer group">
+                  <div className="w-16 h-16 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Download className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-slate-700 font-bold text-lg">Click to upload document</h3>
+                  <p className="text-slate-400 text-xs mt-2">Support for PDF, JPG, PNG (Max 5MB)</p>
+                  <input type="file" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={(e) => {
+                    if (e.target.files.length > 0) {
+                      setWalletFiles([...walletFiles, { name: e.target.files[0].name, date: new Date().toLocaleDateString(), size: (e.target.files[0].size / 1024 / 1024).toFixed(2) + ' MB' }]);
+                      showToast('success', 'Document uploaded to wallet successfully!');
+                    }
+                  }} />
+                </div>
+                
+                {walletFiles.length > 0 && (
+                  <div className="space-y-4 mt-8">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-slate-400">Uploaded Documents</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {walletFiles.map((file, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                          <div className="flex items-center gap-3">
+                            <FileText className="text-teal-600 w-8 h-8" />
+                            <div>
+                              <p className="text-sm font-bold text-slate-800">{file.name}</p>
+                              <p className="text-[10px] text-slate-400 font-semibold">{file.date} • {file.size}</p>
+                            </div>
+                          </div>
+                          <button onClick={() => setWalletFiles(walletFiles.filter((_, i) => i !== idx))} className="text-rose-400 hover:text-rose-600">
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* TAB CONTENT: PROFILE */}
             {activeTab === 'profile' && (
               <div className="bg-white p-8 sm:p-12 rounded-[3.5rem] border border-slate-100 shadow-sm max-w-2xl mx-auto space-y-8">
@@ -1217,19 +1308,39 @@ export default function DoctorDashboard() {
                 <div className="grid grid-cols-2 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-100">
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Department / Major</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.department || "General Studies"}</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.department || "N/A"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Roll Number</div>
                     <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.roll_number || "N/A"}</div>
                   </div>
                   <div>
-                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Age / Gender</div>
-                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.age || "N/A"} yrs / {selectedPatient.gender || "N/A"}</div>
+                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Age / Gender / DOB</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.age || "N/A"} yrs / {selectedPatient.gender || "N/A"} / {selectedPatient.dob || "N/A"}</div>
                   </div>
                   <div>
                     <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Contact</div>
                     <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.phone || "N/A"}</div>
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Blood Group</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.blood_group || "N/A"}</div>
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Emergency Contact</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.emergency_contact || "N/A"}</div>
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Course / Branch</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.course || "N/A"} {selectedPatient.branch ? `/ ${selectedPatient.branch}` : ""}</div>
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">University / Reg No</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.university_name || "N/A"} {selectedPatient.university_register_number ? `- ${selectedPatient.university_register_number}` : ""}</div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Address</div>
+                    <div className="text-sm font-bold text-slate-700 mt-1">{selectedPatient.address || "N/A"}</div>
                   </div>
                 </div>
 
@@ -1255,6 +1366,40 @@ export default function DoctorDashboard() {
                             ))}
                           </div>
                           {pres.notes && <p className="text-[10px] text-slate-400 font-semibold mt-1">Notes: {pres.notes}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-4 pt-6 border-t border-slate-100">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-1">
+                      <FileText className="w-4 h-4 text-teal-600" /> Uploaded Scans & Reports
+                    </h4>
+                    <label className="btn-premium bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white px-3 py-1.5 text-[10px] shadow-sm flex items-center gap-1.5 cursor-pointer rounded-xl transition-colors">
+                      {uploadingReport ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+                      Upload Scan
+                      <input type="file" className="hidden" onChange={handleUploadPatientScan} disabled={uploadingReport} />
+                    </label>
+                  </div>
+                  {selectedPatientReports.length === 0 ? (
+                    <p className="text-slate-400 text-xs font-semibold italic">No scans or reports uploaded for this student.</p>
+                  ) : (
+                    <div className="space-y-3 max-h-40 overflow-y-auto pr-2">
+                      {selectedPatientReports.map((rep) => (
+                        <div key={rep._id} className="p-4 bg-white border border-slate-200 rounded-xl flex justify-between items-center">
+                          <div>
+                            <p className="text-xs font-bold text-slate-800">{rep.file_name}</p>
+                            <p className="text-[10px] font-semibold text-slate-400">Uploaded: {new Date(rep.uploaded_at).toLocaleDateString()} by {rep.doctor_name}</p>
+                          </div>
+                          <a 
+                            href={`data:application/octet-stream;base64,${rep.file_data}`} 
+                            download={rep.file_name}
+                            className="p-2 bg-slate-50 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                          >
+                            <Download className="w-4 h-4" />
+                          </a>
                         </div>
                       ))}
                     </div>

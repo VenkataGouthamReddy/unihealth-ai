@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from typing import List, Optional
 import random
@@ -114,3 +114,22 @@ async def symptom_check(request: SymptomRequest):
         recommendation="Please consult with a campus doctor.",
         disclaimer="Disclaimer: Educational information only."
     )
+
+@router.post("/extract-id")
+async def extract_id_scan(file: UploadFile = File(...)):
+    # Mock AI extraction for student ID scan
+    return {
+        "name": "Jane Student",
+        "department": "Computer Science",
+        "roll_number": "CS2023001",
+        "age": 21,
+        "gender": "Female",
+        "dob": "2002-05-14",
+        "course": "B.Tech",
+        "branch": "Software Engineering",
+        "university_name": "UniHealth University",
+        "university_register_number": "UH-99882211",
+        "blood_group": "O+",
+        "address": "Campus Hostel Room 402, North Wing",
+        "phone": "+1-555-0199"
+    }

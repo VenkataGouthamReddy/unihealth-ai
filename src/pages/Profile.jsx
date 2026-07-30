@@ -22,7 +22,8 @@ import {
   Calendar,
   Users,
   FileText,
-  Settings
+  Settings,
+  Scan
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -53,6 +54,7 @@ export default function Profile() {
 
   const [isUpdatingInfo, setIsUpdatingInfo] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
   
   // Password States
   const [oldPassword, setOldPassword] = useState('');
@@ -128,6 +130,35 @@ export default function Profile() {
       setPassError("Failed to upload image.");
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleIdScan = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsScanning(true);
+    setPassError('');
+    setPassSuccess('');
+    
+    const formDataObj = new FormData();
+    formDataObj.append('file', file);
+
+    try {
+      const res = await axios.post('/ai/extract-id', formDataObj, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setFormData(prev => ({
+        ...prev,
+        ...res.data
+      }));
+      setPassSuccess("ID successfully scanned and details autofilled!");
+      setIsEditing(true); // Open edit mode to review changes
+    } catch (err) {
+      console.error("ID Scan error:", err);
+      setPassError("Failed to scan ID. Please try again or fill manually.");
+    } finally {
+      setIsScanning(false);
     }
   };
 
@@ -297,15 +328,24 @@ export default function Profile() {
                            <p className="text-sm font-medium text-slate-400">Complete your details for accurate clinical history.</p>
                         </div>
                      </div>
-                     <button 
-                        onClick={() => setIsEditing(!isEditing)}
-                        className={`px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${
-                           isEditing ? 'bg-slate-100 text-slate-500' : 'bg-primary text-white shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95'
-                        }`}
-                     >
-                        {isEditing ? <X className="w-4 h-4" /> : <Settings className="w-4 h-4" />}
-                        {isEditing ? 'Cancel' : 'Edit Information'}
-                     </button>
+                     <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <label className={`px-6 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.1em] transition-all flex items-center gap-2 cursor-pointer ${
+                           isScanning ? 'bg-slate-100 text-slate-500' : 'bg-slate-900 text-white shadow-xl hover:scale-105 active:scale-95'
+                        }`}>
+                           {isScanning ? <Loader2 className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
+                           {isScanning ? 'Scanning...' : 'Smart ID Scan'}
+                           <input type="file" className="hidden" accept="image/*" onChange={handleIdScan} disabled={isScanning} />
+                        </label>
+                        <button 
+                           onClick={(e) => { e.preventDefault(); setIsEditing(!isEditing); }}
+                           className={`px-8 py-4 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2 ${
+                              isEditing ? 'bg-slate-100 text-slate-500' : 'bg-primary text-white shadow-2xl shadow-blue-500/30 hover:scale-105 active:scale-95'
+                           }`}
+                        >
+                           {isEditing ? <X className="w-4 h-4" /> : <Settings className="w-4 h-4" />}
+                           {isEditing ? 'Cancel' : 'Edit Information'}
+                        </button>
+                     </div>
                   </div>
 
                   <form onSubmit={handleUpdateInfo} className="space-y-10">
