@@ -2,7 +2,6 @@ import random
 from datetime import datetime
 import shutil
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from core.config import settings
 from core.security import get_password_hash, verify_password, create_access_token
@@ -50,6 +49,8 @@ conf = ConnectionConfig(
 @router.post("/send-otp")
 async def send_otp(user_data: UserCreate):
     import re
+    import asyncio
+    
     if user_data.role == "admin":
         raise HTTPException(status_code=400, detail="Admin accounts cannot be created via registration.")
     
@@ -64,45 +65,48 @@ async def send_otp(user_data: UserCreate):
     import secrets
     otp = str(secrets.randbelow(900000) + 100000)
     
-    # Store temporary user data and OTP
-    await db.db["temp_users"].update_one(
-        {"email": clean_email},
-        {"$set": {
-            "email": clean_email,
-            "name": user_data.name.strip(),
-            "role": user_data.role,
-            "password": user_data.password, # Plain password temporarily, will hash on verification
-            "otp": str(otp).strip(),
-            "created_at": datetime.utcnow()
-        }},
-        upsert=True
+    # Prepare HTML message
+    html = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+        <h2 style="color: #2563eb; text-align: center;">Welcome to UniHealth AI!</h2>
+        <p style="font-size: 16px; color: #333;">Hello {user_data.name},</p>
+        <p style="font-size: 16px; color: #333;">Thank you for registering. Please use the following One-Time Password (OTP) to verify your account:</p>
+        <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
+            <span style="font-size: 24px; font-weight: bold; color: #1f2937; letter-spacing: 5px;">{otp}</span>
+        </div>
+        <p style="font-size: 14px; color: #666;">This OTP is valid for a limited time. Please do not share it with anyone.</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="font-size: 12px; color: #999; text-align: center;">If you did not request this verification, please ignore this email.</p>
+    </div>
+    """
+    
+    message = MessageSchema(
+        subject="UniHealth AI - Account Verification OTP",
+        recipients=[clean_email],
+        body=html,
+        subtype=MessageType.html
     )
     
-    # Send email with OTP
+    # Run DB write and Email send concurrently for maximum speed on Serverless
     try:
-        html = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-            <h2 style="color: #2563eb; text-align: center;">Welcome to UniHealth AI!</h2>
-            <p style="font-size: 16px; color: #333;">Hello {user_data.name},</p>
-            <p style="font-size: 16px; color: #333;">Thank you for registering. Please use the following One-Time Password (OTP) to verify your account:</p>
-            <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
-                <span style="font-size: 24px; font-weight: bold; color: #1f2937; letter-spacing: 5px;">{otp}</span>
-            </div>
-            <p style="font-size: 14px; color: #666;">This OTP is valid for a limited time. Please do not share it with anyone.</p>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 12px; color: #999; text-align: center;">If you did not request this verification, please ignore this email.</p>
-        </div>
-        """
+        fm = FastMail(conf)
         
-        message = MessageSchema(
-            subject="UniHealth AI - Account Verification OTP",
-            recipients=[clean_email],
-            body=html,
-            subtype=MessageType.html
+        db_task = db.db["temp_users"].update_one(
+            {"email": clean_email},
+            {"$set": {
+                "email": clean_email,
+                "name": user_data.name.strip(),
+                "role": user_data.role,
+                "password": user_data.password, 
+                "otp": str(otp).strip(),
+                "created_at": datetime.utcnow()
+            }},
+            upsert=True
         )
         
-        fm = FastMail(conf)
-        await fm.send_message(message)
+        email_task = fm.send_message(message)
+        
+        await asyncio.gather(db_task, email_task)
         print(f"OTP email sent successfully to {clean_email}")
         
     except Exception as e:
@@ -202,6 +206,7 @@ async def change_password(data: PasswordChange, current_user: dict = Depends(get
 
 @router.post("/forgot-password")
 async def forgot_password(data: dict):
+    import asyncio
     email = data.get("email")
     user = await db.db["users"].find_one({"email": email})
     if not user:
@@ -210,41 +215,43 @@ async def forgot_password(data: dict):
     # Generate 6-digit OTP for reset
     otp = str(random.randint(100000, 999999))
     
-    # Store OTP in a temporary collection for reset
-    await db.db["password_resets"].update_one(
-        {"email": email},
-        {"$set": {
-            "otp": otp,
-            "created_at": datetime.utcnow()
-        }},
-        upsert=True
+    # Prepare HTML message
+    html = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+        <h2 style="color: #2563eb; text-align: center;">UniHealth AI - Password Reset</h2>
+        <p style="font-size: 16px; color: #333;">Hello {user.get('name', 'User')},</p>
+        <p style="font-size: 16px; color: #333;">You requested to reset your password. Please use the following One-Time Password (OTP) to proceed:</p>
+        <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
+            <span style="font-size: 24px; font-weight: bold; color: #1f2937; letter-spacing: 5px;">{otp}</span>
+        </div>
+        <p style="font-size: 14px; color: #666;">This OTP is valid for 10 minutes. If you did not request a password reset, please ignore this email or contact support if you have concerns.</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="font-size: 12px; color: #999; text-align: center;">UniHealth AI Security Team</p>
+    </div>
+    """
+    
+    message = MessageSchema(
+        subject="UniHealth AI - Password Reset OTP",
+        recipients=[email],
+        body=html,
+        subtype=MessageType.html
     )
     
-    # Send email with OTP
     try:
-        html = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-            <h2 style="color: #2563eb; text-align: center;">UniHealth AI - Password Reset</h2>
-            <p style="font-size: 16px; color: #333;">Hello {user.get('name', 'User')},</p>
-            <p style="font-size: 16px; color: #333;">You requested to reset your password. Please use the following One-Time Password (OTP) to proceed:</p>
-            <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
-                <span style="font-size: 24px; font-weight: bold; color: #1f2937; letter-spacing: 5px;">{otp}</span>
-            </div>
-            <p style="font-size: 14px; color: #666;">This OTP is valid for 10 minutes. If you did not request a password reset, please ignore this email or contact support if you have concerns.</p>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 12px; color: #999; text-align: center;">UniHealth AI Security Team</p>
-        </div>
-        """
+        fm = FastMail(conf)
         
-        message = MessageSchema(
-            subject="UniHealth AI - Password Reset OTP",
-            recipients=[email],
-            body=html,
-            subtype=MessageType.html
+        db_task = db.db["password_resets"].update_one(
+            {"email": email},
+            {"$set": {
+                "otp": otp,
+                "created_at": datetime.utcnow()
+            }},
+            upsert=True
         )
         
-        fm = FastMail(conf)
-        await fm.send_message(message)
+        email_task = fm.send_message(message)
+        
+        await asyncio.gather(db_task, email_task)
         print(f"Password reset OTP email sent successfully to {email}")
         
     except Exception as e:
