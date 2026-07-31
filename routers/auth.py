@@ -128,7 +128,9 @@ async def send_otp(user_data: UserCreate):
         raise
     except Exception as e:
         print(f"DB FAILED: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to register. Please try again later.")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to register. Error: {str(e)}")
         
     return {"message": "OTP sent successfully. Please check your email."}
 
