@@ -2,6 +2,7 @@ import random
 from datetime import datetime
 import shutil
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from core.config import settings
 from core.security import get_password_hash, verify_password, create_access_token
