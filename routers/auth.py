@@ -109,15 +109,22 @@ async def send_otp(user_data: UserCreate):
         await db_task
         
         try:
-            await asyncio.wait_for(email_task, timeout=4.0)
+            await asyncio.wait_for(email_task, timeout=15.0)
             print(f"OTP email sent successfully to {clean_email}")
         except Exception as email_err:
             print(f"SMTP FAILED or TIMED OUT: {str(email_err)}")
             print(f"\n=========================================")
             print(f"[DEV FALLBACK] Your network blocks SMTP. Your OTP is: {otp}")
             print(f"=========================================\n")
-            return {"message": "Email blocked by firewall. Check your backend terminal for the OTP."}
+            # We still want to let the user proceed if we are returning 200, 
+            # but maybe we should return a 500 error so the frontend shows it?
+            # If we return 500, the user can't register. Since this is an OTP issue, let's keep it but maybe return the demo_otp in the response if it fails so the frontend can auto-fill for testing, OR just fail properly. 
+            # The instruction says "otp is not sending to user mail". This was likely due to the 4.0s timeout. Let's just increase the timeout. If it still fails, it's a real SMTP error.
+            # Let's also pass the OTP in the exception if we want, or just fail.
+            raise HTTPException(status_code=500, detail="Failed to send OTP email. Please check your mail settings or network.")
         
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"DB FAILED: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to register. Please try again later.")
@@ -263,14 +270,17 @@ async def forgot_password(data: dict):
         await db_task
         
         try:
-            await asyncio.wait_for(email_task, timeout=4.0)
+            await asyncio.wait_for(email_task, timeout=15.0)
             print(f"Password reset OTP email sent successfully to {email}")
         except Exception as email_err:
             print(f"SMTP FAILED or TIMED OUT: {str(email_err)}")
             print(f"\n=========================================")
             print(f"[DEV FALLBACK] Your network blocks SMTP. Your Reset OTP is: {otp}")
             print(f"=========================================\n")
-            return {"message": "Email blocked by firewall. Check your backend terminal for the OTP.", "otp_sent": True}
+            raise HTTPException(status_code=500, detail="Failed to send OTP email. Please check your mail settings or network.")
+        
+    except HTTPException:
+        raise
         
     except Exception as e:
         print(f"DB FAILED: {str(e)}")
