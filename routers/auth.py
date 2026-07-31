@@ -92,7 +92,7 @@ async def send_otp(user_data: UserCreate):
     try:
         fm = FastMail(conf)
         
-        db_task = asyncio.create_task(db.db["temp_users"].update_one(
+        db_task = db.db["temp_users"].update_one(
             {"email": clean_email},
             {"$set": {
                 "email": clean_email,
@@ -103,7 +103,7 @@ async def send_otp(user_data: UserCreate):
                 "created_at": datetime.utcnow()
             }},
             upsert=True
-        ))
+        )
         
         email_task = asyncio.create_task(fm.send_message(message))
         
@@ -259,14 +259,14 @@ async def forgot_password(data: dict):
     try:
         fm = FastMail(conf)
         
-        db_task = asyncio.create_task(db.db["password_resets"].update_one(
+        db_task = db.db["password_resets"].update_one(
             {"email": email},
             {"$set": {
                 "otp": otp,
                 "created_at": datetime.utcnow()
             }},
             upsert=True
-        ))
+        )
         
         email_task = asyncio.create_task(fm.send_message(message))
         
