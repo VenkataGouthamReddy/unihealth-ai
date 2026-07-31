@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
@@ -36,7 +36,7 @@ jobs:
           cp trivy-report.txt test-reports/ 2>/dev/null || true
 
       - name: Upload Security Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Security-Reports
           path: test-reports/
@@ -51,10 +51,10 @@ jobs:
           - 27017:27017
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -74,7 +74,7 @@ jobs:
           python scripts/load_test.py > test-reports/load-test-results.txt
 
       - name: Upload Load Test Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Load-Test-Reports
           path: test-reports/
@@ -84,10 +84,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -103,20 +103,20 @@ jobs:
           cp *.xlsx ../test-reports/ 2>/dev/null || true
 
       - name: Upload Selenium Excel Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Selenium-Web-Reports
           path: test-reports/
 
   appium-tests:
     name: 4. Appium Mobile E2E Tests
-    runs-on: macos-latest # Required for hardware acceleration for Android emulators on GitHub Actions
+    runs-on: macos-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -127,13 +127,12 @@ jobs:
       - name: Run Appium Tests (Mocked/Scripted execution)
         working-directory: ./appium-tests
         run: |
-          # Since running a full Android emulator is very slow, we run the script that generates the CSV report
           python generate_test_cases.py || true
           mkdir -p ../test-reports
           cp *.csv ../test-reports/ 2>/dev/null || true
 
       - name: Upload Appium Excel/CSV Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Appium-Mobile-Reports
           path: test-reports/
