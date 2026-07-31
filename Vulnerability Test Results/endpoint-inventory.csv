@@ -1,0 +1,54 @@
+Endpoint,HTTP Method,Authentication Required,Expected Roles,Controller/File Path
+/public/stats,GET,No,None,main.py
+/auth/send-otp,POST,No,None,routers/auth.py
+/auth/verify-otp,POST,No,None,routers/auth.py
+/auth/register,POST,No,None,routers/auth.py
+/auth/login,POST,No,None,routers/auth.py
+/auth/change-password,POST,Yes,Any,routers/auth.py
+/auth/forgot-password,POST,No,None,routers/auth.py
+/auth/reset-password,POST,No,None,routers/auth.py
+/auth/me,GET,Yes,Any,routers/auth.py
+/auth/update-profile,PUT,Yes,Any,routers/auth.py
+/auth/upload-profile-picture,POST,Yes,Any,routers/auth.py
+/auth/profile-picture,DELETE,Yes,Any,routers/auth.py
+/auth/user-profile/{email_or_id},GET,No,None,routers/auth.py
+/admin/stats,GET,Yes,Admin,routers/admin.py
+/admin/users,GET,Yes,Admin,routers/admin.py
+/admin/users/{user_id}/role,PATCH,Yes,Admin,routers/admin.py
+/admin/users/{user_id},DELETE,Yes,Admin,routers/admin.py
+/admin/users/{user_id}/status,PATCH,Yes,Admin,routers/admin.py
+/admin/appointments,GET,Yes,Admin,routers/admin.py
+/admin/appointments/{appointment_id}/status,PATCH,Yes,Admin,routers/admin.py
+/admin/notify-all,POST,Yes,Admin,routers/admin.py
+/ai/chat,POST,No,None,routers/ai.py
+/ai/symptom-check,POST,No,None,routers/ai.py
+/ai/extract-id,POST,No,None,routers/ai.py
+/alerts,POST,No (Vulnerable),Student,routers/alerts.py
+/alerts/student/{student_email},GET,No (Vulnerable),Student,routers/alerts.py
+/alerts/{alert_id},PUT,No (Vulnerable),Student,routers/alerts.py
+/alerts/{alert_id},DELETE,No (Vulnerable),Student,routers/alerts.py
+/appointments,POST,No (Vulnerable),Student,routers/appointments.py
+/appointments/student/{student_email},GET,No (Vulnerable),Student,routers/appointments.py
+/appointments/doctor/{doctor_id},GET,No (Vulnerable),Doctor,routers/appointments.py
+/appointments/{appointment_id}/cancel,PUT,No (Vulnerable),Any,routers/appointments.py
+/appointments/{appointment_id},DELETE,No (Vulnerable),Any,routers/appointments.py
+/doctors,GET,No,None,routers/doctors.py
+/doctors/{doctor_id},GET,No,None,routers/doctors.py
+/doctors/{doctor_id}/schedule,GET,No,None,routers/doctors.py
+/doctors/{doctor_id}/schedule,PUT,No (Vulnerable),Doctor,routers/doctors.py
+/doctors/{doctor_id}/slots,GET,No,None,routers/doctors.py
+/doctors/seed,POST,No,None,routers/doctors.py
+/doctors/{doctor_id}/patients,GET,No (Vulnerable),Doctor,routers/doctors.py
+/notifications/student/{student_email},GET,No (Vulnerable),Student,routers/notifications.py
+/notifications/{notification_id}/read,PUT,No (Vulnerable),Student,routers/notifications.py
+/notifications/mark-all-read/{student_email},PUT,No (Vulnerable),Student,routers/notifications.py
+/notifications/{notification_id},DELETE,No (Vulnerable),Student,routers/notifications.py
+/prescriptions,POST,No (Vulnerable),Doctor,routers/prescriptions.py
+/prescriptions/student/{student_email},GET,No (Vulnerable),Student,routers/prescriptions.py
+/prescriptions/doctor/{doctor_id},GET,No (Vulnerable),Doctor,routers/prescriptions.py
+/prescriptions/{prescription_id},GET,No (Vulnerable),Any,routers/prescriptions.py
+/prescriptions/{prescription_id},PUT,No (Vulnerable),Doctor,routers/prescriptions.py
+/prescriptions/{prescription_id},DELETE,No (Vulnerable),Doctor,routers/prescriptions.py
+/reports,POST,No (Vulnerable),Doctor,routers/reports.py
+/reports/student/{student_email},GET,No (Vulnerable),Student,routers/reports.py
+/reports/{report_id},DELETE,No (Vulnerable),Doctor,routers/reports.py

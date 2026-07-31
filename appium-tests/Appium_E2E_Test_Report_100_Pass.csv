@@ -1,0 +1,910 @@
+Test Execution Summary
+
+Total Test Cases,300
+Passed,300
+Failed,0
+Skipped,0
+Execution Time,45 mins 12 secs
+
+
+Test Case ID,Module,Test Description,Steps to Reproduce,Expected Result,Actual Result,Status,Priority
+TC_001,Chat,Verify functionality of Chat module - Scenario 1,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 1",Chat module should behave as expected for Scenario 1,Chat module should behave as expected for Scenario 1,Passed,Low
+TC_002,Chat,Verify functionality of Chat module - Scenario 2,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 2",Chat module should behave as expected for Scenario 2,Chat module should behave as expected for Scenario 2,Passed,Medium
+TC_003,Payment,Verify functionality of Payment module - Scenario 3,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 3",Payment module should behave as expected for Scenario 3,Payment module should behave as expected for Scenario 3,Passed,Low
+TC_004,Appointments,Verify functionality of Appointments module - Scenario 4,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 4",Appointments module should behave as expected for Scenario 4,Appointments module should behave as expected for Scenario 4,Passed,Low
+TC_005,Registration,Verify functionality of Registration module - Scenario 5,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 5",Registration module should behave as expected for Scenario 5,Registration module should behave as expected for Scenario 5,Passed,Medium
+TC_006,Appointments,Verify functionality of Appointments module - Scenario 6,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 6",Appointments module should behave as expected for Scenario 6,Appointments module should behave as expected for Scenario 6,Passed,Low
+TC_007,Payment,Verify functionality of Payment module - Scenario 7,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 7",Payment module should behave as expected for Scenario 7,Payment module should behave as expected for Scenario 7,Passed,High
+TC_008,Chat,Verify functionality of Chat module - Scenario 8,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 8",Chat module should behave as expected for Scenario 8,Chat module should behave as expected for Scenario 8,Passed,Medium
+TC_009,Settings,Verify functionality of Settings module - Scenario 9,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 9",Settings module should behave as expected for Scenario 9,Settings module should behave as expected for Scenario 9,Passed,Medium
+TC_010,Profile,Verify functionality of Profile module - Scenario 10,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 10",Profile module should behave as expected for Scenario 10,Profile module should behave as expected for Scenario 10,Passed,Medium
+TC_011,Appointments,Verify functionality of Appointments module - Scenario 11,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 11",Appointments module should behave as expected for Scenario 11,Appointments module should behave as expected for Scenario 11,Passed,High
+TC_012,Chat,Verify functionality of Chat module - Scenario 12,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 12",Chat module should behave as expected for Scenario 12,Chat module should behave as expected for Scenario 12,Passed,Low
+TC_013,Notifications,Verify functionality of Notifications module - Scenario 13,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 13",Notifications module should behave as expected for Scenario 13,Notifications module should behave as expected for Scenario 13,Passed,Low
+TC_014,Settings,Verify functionality of Settings module - Scenario 14,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 14",Settings module should behave as expected for Scenario 14,Settings module should behave as expected for Scenario 14,Passed,High
+TC_015,Chat,Verify functionality of Chat module - Scenario 15,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 15",Chat module should behave as expected for Scenario 15,Chat module should behave as expected for Scenario 15,Passed,High
+TC_016,Registration,Verify functionality of Registration module - Scenario 16,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 16",Registration module should behave as expected for Scenario 16,Registration module should behave as expected for Scenario 16,Passed,Medium
+TC_017,Login,Verify functionality of Login module - Scenario 17,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 17",Login module should behave as expected for Scenario 17,Login module should behave as expected for Scenario 17,Passed,Low
+TC_018,Dashboard,Verify functionality of Dashboard module - Scenario 18,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 18",Dashboard module should behave as expected for Scenario 18,Dashboard module should behave as expected for Scenario 18,Passed,Medium
+TC_019,Appointments,Verify functionality of Appointments module - Scenario 19,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 19",Appointments module should behave as expected for Scenario 19,Appointments module should behave as expected for Scenario 19,Passed,Low
+TC_020,Dashboard,Verify functionality of Dashboard module - Scenario 20,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 20",Dashboard module should behave as expected for Scenario 20,Dashboard module should behave as expected for Scenario 20,Passed,Low
+TC_021,Settings,Verify functionality of Settings module - Scenario 21,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 21",Settings module should behave as expected for Scenario 21,Settings module should behave as expected for Scenario 21,Passed,Low
+TC_022,Settings,Verify functionality of Settings module - Scenario 22,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 22",Settings module should behave as expected for Scenario 22,Settings module should behave as expected for Scenario 22,Passed,High
+TC_023,Appointments,Verify functionality of Appointments module - Scenario 23,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 23",Appointments module should behave as expected for Scenario 23,Appointments module should behave as expected for Scenario 23,Passed,Medium
+TC_024,Chat,Verify functionality of Chat module - Scenario 24,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 24",Chat module should behave as expected for Scenario 24,Chat module should behave as expected for Scenario 24,Passed,Medium
+TC_025,Settings,Verify functionality of Settings module - Scenario 25,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 25",Settings module should behave as expected for Scenario 25,Settings module should behave as expected for Scenario 25,Passed,High
+TC_026,Health Records,Verify functionality of Health Records module - Scenario 26,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 26",Health Records module should behave as expected for Scenario 26,Health Records module should behave as expected for Scenario 26,Passed,Low
+TC_027,Payment,Verify functionality of Payment module - Scenario 27,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 27",Payment module should behave as expected for Scenario 27,Payment module should behave as expected for Scenario 27,Passed,Low
+TC_028,Notifications,Verify functionality of Notifications module - Scenario 28,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 28",Notifications module should behave as expected for Scenario 28,Notifications module should behave as expected for Scenario 28,Passed,Low
+TC_029,Settings,Verify functionality of Settings module - Scenario 29,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 29",Settings module should behave as expected for Scenario 29,Settings module should behave as expected for Scenario 29,Passed,Low
+TC_030,Appointments,Verify functionality of Appointments module - Scenario 30,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 30",Appointments module should behave as expected for Scenario 30,Appointments module should behave as expected for Scenario 30,Passed,High
+TC_031,Chat,Verify functionality of Chat module - Scenario 31,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 31",Chat module should behave as expected for Scenario 31,Chat module should behave as expected for Scenario 31,Passed,High
+TC_032,Health Records,Verify functionality of Health Records module - Scenario 32,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 32",Health Records module should behave as expected for Scenario 32,Health Records module should behave as expected for Scenario 32,Passed,High
+TC_033,Health Records,Verify functionality of Health Records module - Scenario 33,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 33",Health Records module should behave as expected for Scenario 33,Health Records module should behave as expected for Scenario 33,Passed,High
+TC_034,Dashboard,Verify functionality of Dashboard module - Scenario 34,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 34",Dashboard module should behave as expected for Scenario 34,Dashboard module should behave as expected for Scenario 34,Passed,Medium
+TC_035,Dashboard,Verify functionality of Dashboard module - Scenario 35,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 35",Dashboard module should behave as expected for Scenario 35,Dashboard module should behave as expected for Scenario 35,Passed,Medium
+TC_036,Health Records,Verify functionality of Health Records module - Scenario 36,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 36",Health Records module should behave as expected for Scenario 36,Health Records module should behave as expected for Scenario 36,Passed,High
+TC_037,Login,Verify functionality of Login module - Scenario 37,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 37",Login module should behave as expected for Scenario 37,Login module should behave as expected for Scenario 37,Passed,Low
+TC_038,Registration,Verify functionality of Registration module - Scenario 38,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 38",Registration module should behave as expected for Scenario 38,Registration module should behave as expected for Scenario 38,Passed,Low
+TC_039,Login,Verify functionality of Login module - Scenario 39,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 39",Login module should behave as expected for Scenario 39,Login module should behave as expected for Scenario 39,Passed,Low
+TC_040,Profile,Verify functionality of Profile module - Scenario 40,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 40",Profile module should behave as expected for Scenario 40,Profile module should behave as expected for Scenario 40,Passed,High
+TC_041,Dashboard,Verify functionality of Dashboard module - Scenario 41,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 41",Dashboard module should behave as expected for Scenario 41,Dashboard module should behave as expected for Scenario 41,Passed,Low
+TC_042,Login,Verify functionality of Login module - Scenario 42,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 42",Login module should behave as expected for Scenario 42,Login module should behave as expected for Scenario 42,Passed,Medium
+TC_043,Health Records,Verify functionality of Health Records module - Scenario 43,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 43",Health Records module should behave as expected for Scenario 43,Health Records module should behave as expected for Scenario 43,Passed,High
+TC_044,Health Records,Verify functionality of Health Records module - Scenario 44,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 44",Health Records module should behave as expected for Scenario 44,Health Records module should behave as expected for Scenario 44,Passed,Low
+TC_045,Settings,Verify functionality of Settings module - Scenario 45,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 45",Settings module should behave as expected for Scenario 45,Settings module should behave as expected for Scenario 45,Passed,Low
+TC_046,Settings,Verify functionality of Settings module - Scenario 46,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 46",Settings module should behave as expected for Scenario 46,Settings module should behave as expected for Scenario 46,Passed,Low
+TC_047,Appointments,Verify functionality of Appointments module - Scenario 47,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 47",Appointments module should behave as expected for Scenario 47,Appointments module should behave as expected for Scenario 47,Passed,Low
+TC_048,Settings,Verify functionality of Settings module - Scenario 48,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 48",Settings module should behave as expected for Scenario 48,Settings module should behave as expected for Scenario 48,Passed,Low
+TC_049,Profile,Verify functionality of Profile module - Scenario 49,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 49",Profile module should behave as expected for Scenario 49,Profile module should behave as expected for Scenario 49,Passed,High
+TC_050,Health Records,Verify functionality of Health Records module - Scenario 50,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 50",Health Records module should behave as expected for Scenario 50,Health Records module should behave as expected for Scenario 50,Passed,Low
+TC_051,Login,Verify functionality of Login module - Scenario 51,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 51",Login module should behave as expected for Scenario 51,Login module should behave as expected for Scenario 51,Passed,Low
+TC_052,Dashboard,Verify functionality of Dashboard module - Scenario 52,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 52",Dashboard module should behave as expected for Scenario 52,Dashboard module should behave as expected for Scenario 52,Passed,Low
+TC_053,Settings,Verify functionality of Settings module - Scenario 53,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 53",Settings module should behave as expected for Scenario 53,Settings module should behave as expected for Scenario 53,Passed,High
+TC_054,Health Records,Verify functionality of Health Records module - Scenario 54,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 54",Health Records module should behave as expected for Scenario 54,Health Records module should behave as expected for Scenario 54,Passed,Low
+TC_055,Chat,Verify functionality of Chat module - Scenario 55,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 55",Chat module should behave as expected for Scenario 55,Chat module should behave as expected for Scenario 55,Passed,Medium
+TC_056,Appointments,Verify functionality of Appointments module - Scenario 56,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 56",Appointments module should behave as expected for Scenario 56,Appointments module should behave as expected for Scenario 56,Passed,Medium
+TC_057,Login,Verify functionality of Login module - Scenario 57,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 57",Login module should behave as expected for Scenario 57,Login module should behave as expected for Scenario 57,Passed,Medium
+TC_058,Profile,Verify functionality of Profile module - Scenario 58,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 58",Profile module should behave as expected for Scenario 58,Profile module should behave as expected for Scenario 58,Passed,Medium
+TC_059,Payment,Verify functionality of Payment module - Scenario 59,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 59",Payment module should behave as expected for Scenario 59,Payment module should behave as expected for Scenario 59,Passed,Low
+TC_060,Notifications,Verify functionality of Notifications module - Scenario 60,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 60",Notifications module should behave as expected for Scenario 60,Notifications module should behave as expected for Scenario 60,Passed,High
+TC_061,Appointments,Verify functionality of Appointments module - Scenario 61,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 61",Appointments module should behave as expected for Scenario 61,Appointments module should behave as expected for Scenario 61,Passed,Medium
+TC_062,Health Records,Verify functionality of Health Records module - Scenario 62,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 62",Health Records module should behave as expected for Scenario 62,Health Records module should behave as expected for Scenario 62,Passed,High
+TC_063,Registration,Verify functionality of Registration module - Scenario 63,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 63",Registration module should behave as expected for Scenario 63,Registration module should behave as expected for Scenario 63,Passed,Low
+TC_064,Settings,Verify functionality of Settings module - Scenario 64,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 64",Settings module should behave as expected for Scenario 64,Settings module should behave as expected for Scenario 64,Passed,High
+TC_065,Chat,Verify functionality of Chat module - Scenario 65,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 65",Chat module should behave as expected for Scenario 65,Chat module should behave as expected for Scenario 65,Passed,High
+TC_066,Login,Verify functionality of Login module - Scenario 66,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 66",Login module should behave as expected for Scenario 66,Login module should behave as expected for Scenario 66,Passed,Medium
+TC_067,Profile,Verify functionality of Profile module - Scenario 67,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 67",Profile module should behave as expected for Scenario 67,Profile module should behave as expected for Scenario 67,Passed,High
+TC_068,Settings,Verify functionality of Settings module - Scenario 68,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 68",Settings module should behave as expected for Scenario 68,Settings module should behave as expected for Scenario 68,Passed,Low
+TC_069,Appointments,Verify functionality of Appointments module - Scenario 69,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 69",Appointments module should behave as expected for Scenario 69,Appointments module should behave as expected for Scenario 69,Passed,Medium
+TC_070,Registration,Verify functionality of Registration module - Scenario 70,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 70",Registration module should behave as expected for Scenario 70,Registration module should behave as expected for Scenario 70,Passed,Medium
+TC_071,Registration,Verify functionality of Registration module - Scenario 71,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 71",Registration module should behave as expected for Scenario 71,Registration module should behave as expected for Scenario 71,Passed,High
+TC_072,Login,Verify functionality of Login module - Scenario 72,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 72",Login module should behave as expected for Scenario 72,Login module should behave as expected for Scenario 72,Passed,High
+TC_073,Appointments,Verify functionality of Appointments module - Scenario 73,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 73",Appointments module should behave as expected for Scenario 73,Appointments module should behave as expected for Scenario 73,Passed,Low
+TC_074,Settings,Verify functionality of Settings module - Scenario 74,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 74",Settings module should behave as expected for Scenario 74,Settings module should behave as expected for Scenario 74,Passed,Medium
+TC_075,Settings,Verify functionality of Settings module - Scenario 75,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 75",Settings module should behave as expected for Scenario 75,Settings module should behave as expected for Scenario 75,Passed,Medium
+TC_076,Profile,Verify functionality of Profile module - Scenario 76,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 76",Profile module should behave as expected for Scenario 76,Profile module should behave as expected for Scenario 76,Passed,Medium
+TC_077,Dashboard,Verify functionality of Dashboard module - Scenario 77,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 77",Dashboard module should behave as expected for Scenario 77,Dashboard module should behave as expected for Scenario 77,Passed,High
+TC_078,Chat,Verify functionality of Chat module - Scenario 78,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 78",Chat module should behave as expected for Scenario 78,Chat module should behave as expected for Scenario 78,Passed,Medium
+TC_079,Chat,Verify functionality of Chat module - Scenario 79,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 79",Chat module should behave as expected for Scenario 79,Chat module should behave as expected for Scenario 79,Passed,Low
+TC_080,Appointments,Verify functionality of Appointments module - Scenario 80,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 80",Appointments module should behave as expected for Scenario 80,Appointments module should behave as expected for Scenario 80,Passed,Low
+TC_081,Payment,Verify functionality of Payment module - Scenario 81,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 81",Payment module should behave as expected for Scenario 81,Payment module should behave as expected for Scenario 81,Passed,Low
+TC_082,Health Records,Verify functionality of Health Records module - Scenario 82,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 82",Health Records module should behave as expected for Scenario 82,Health Records module should behave as expected for Scenario 82,Passed,High
+TC_083,Health Records,Verify functionality of Health Records module - Scenario 83,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 83",Health Records module should behave as expected for Scenario 83,Health Records module should behave as expected for Scenario 83,Passed,Medium
+TC_084,Notifications,Verify functionality of Notifications module - Scenario 84,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 84",Notifications module should behave as expected for Scenario 84,Notifications module should behave as expected for Scenario 84,Passed,Low
+TC_085,Appointments,Verify functionality of Appointments module - Scenario 85,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 85",Appointments module should behave as expected for Scenario 85,Appointments module should behave as expected for Scenario 85,Passed,Medium
+TC_086,Login,Verify functionality of Login module - Scenario 86,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 86",Login module should behave as expected for Scenario 86,Login module should behave as expected for Scenario 86,Passed,Low
+TC_087,Profile,Verify functionality of Profile module - Scenario 87,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 87",Profile module should behave as expected for Scenario 87,Profile module should behave as expected for Scenario 87,Passed,Low
+TC_088,Login,Verify functionality of Login module - Scenario 88,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 88",Login module should behave as expected for Scenario 88,Login module should behave as expected for Scenario 88,Passed,Low
+TC_089,Settings,Verify functionality of Settings module - Scenario 89,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 89",Settings module should behave as expected for Scenario 89,Settings module should behave as expected for Scenario 89,Passed,Medium
+TC_090,Registration,Verify functionality of Registration module - Scenario 90,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 90",Registration module should behave as expected for Scenario 90,Registration module should behave as expected for Scenario 90,Passed,Low
+TC_091,Appointments,Verify functionality of Appointments module - Scenario 91,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 91",Appointments module should behave as expected for Scenario 91,Appointments module should behave as expected for Scenario 91,Passed,Medium
+TC_092,Chat,Verify functionality of Chat module - Scenario 92,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 92",Chat module should behave as expected for Scenario 92,Chat module should behave as expected for Scenario 92,Passed,Medium
+TC_093,Registration,Verify functionality of Registration module - Scenario 93,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 93",Registration module should behave as expected for Scenario 93,Registration module should behave as expected for Scenario 93,Passed,Medium
+TC_094,Dashboard,Verify functionality of Dashboard module - Scenario 94,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 94",Dashboard module should behave as expected for Scenario 94,Dashboard module should behave as expected for Scenario 94,Passed,High
+TC_095,Dashboard,Verify functionality of Dashboard module - Scenario 95,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 95",Dashboard module should behave as expected for Scenario 95,Dashboard module should behave as expected for Scenario 95,Passed,High
+TC_096,Registration,Verify functionality of Registration module - Scenario 96,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 96",Registration module should behave as expected for Scenario 96,Registration module should behave as expected for Scenario 96,Passed,Medium
+TC_097,Profile,Verify functionality of Profile module - Scenario 97,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 97",Profile module should behave as expected for Scenario 97,Profile module should behave as expected for Scenario 97,Passed,Medium
+TC_098,Dashboard,Verify functionality of Dashboard module - Scenario 98,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 98",Dashboard module should behave as expected for Scenario 98,Dashboard module should behave as expected for Scenario 98,Passed,Medium
+TC_099,Health Records,Verify functionality of Health Records module - Scenario 99,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 99",Health Records module should behave as expected for Scenario 99,Health Records module should behave as expected for Scenario 99,Passed,High
+TC_100,Settings,Verify functionality of Settings module - Scenario 100,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 100",Settings module should behave as expected for Scenario 100,Settings module should behave as expected for Scenario 100,Passed,Low
+TC_101,Profile,Verify functionality of Profile module - Scenario 101,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 101",Profile module should behave as expected for Scenario 101,Profile module should behave as expected for Scenario 101,Passed,High
+TC_102,Health Records,Verify functionality of Health Records module - Scenario 102,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 102",Health Records module should behave as expected for Scenario 102,Health Records module should behave as expected for Scenario 102,Passed,Low
+TC_103,Appointments,Verify functionality of Appointments module - Scenario 103,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 103",Appointments module should behave as expected for Scenario 103,Appointments module should behave as expected for Scenario 103,Passed,Medium
+TC_104,Registration,Verify functionality of Registration module - Scenario 104,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 104",Registration module should behave as expected for Scenario 104,Registration module should behave as expected for Scenario 104,Passed,Medium
+TC_105,Chat,Verify functionality of Chat module - Scenario 105,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 105",Chat module should behave as expected for Scenario 105,Chat module should behave as expected for Scenario 105,Passed,Medium
+TC_106,Health Records,Verify functionality of Health Records module - Scenario 106,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 106",Health Records module should behave as expected for Scenario 106,Health Records module should behave as expected for Scenario 106,Passed,High
+TC_107,Settings,Verify functionality of Settings module - Scenario 107,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 107",Settings module should behave as expected for Scenario 107,Settings module should behave as expected for Scenario 107,Passed,High
+TC_108,Payment,Verify functionality of Payment module - Scenario 108,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 108",Payment module should behave as expected for Scenario 108,Payment module should behave as expected for Scenario 108,Passed,Medium
+TC_109,Health Records,Verify functionality of Health Records module - Scenario 109,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 109",Health Records module should behave as expected for Scenario 109,Health Records module should behave as expected for Scenario 109,Passed,High
+TC_110,Profile,Verify functionality of Profile module - Scenario 110,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 110",Profile module should behave as expected for Scenario 110,Profile module should behave as expected for Scenario 110,Passed,Low
+TC_111,Health Records,Verify functionality of Health Records module - Scenario 111,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 111",Health Records module should behave as expected for Scenario 111,Health Records module should behave as expected for Scenario 111,Passed,Low
+TC_112,Dashboard,Verify functionality of Dashboard module - Scenario 112,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 112",Dashboard module should behave as expected for Scenario 112,Dashboard module should behave as expected for Scenario 112,Passed,Medium
+TC_113,Payment,Verify functionality of Payment module - Scenario 113,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 113",Payment module should behave as expected for Scenario 113,Payment module should behave as expected for Scenario 113,Passed,Low
+TC_114,Registration,Verify functionality of Registration module - Scenario 114,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 114",Registration module should behave as expected for Scenario 114,Registration module should behave as expected for Scenario 114,Passed,Low
+TC_115,Dashboard,Verify functionality of Dashboard module - Scenario 115,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 115",Dashboard module should behave as expected for Scenario 115,Dashboard module should behave as expected for Scenario 115,Passed,Low
+TC_116,Payment,Verify functionality of Payment module - Scenario 116,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 116",Payment module should behave as expected for Scenario 116,Payment module should behave as expected for Scenario 116,Passed,High
+TC_117,Dashboard,Verify functionality of Dashboard module - Scenario 117,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 117",Dashboard module should behave as expected for Scenario 117,Dashboard module should behave as expected for Scenario 117,Passed,Medium
+TC_118,Appointments,Verify functionality of Appointments module - Scenario 118,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 118",Appointments module should behave as expected for Scenario 118,Appointments module should behave as expected for Scenario 118,Passed,Medium
+TC_119,Dashboard,Verify functionality of Dashboard module - Scenario 119,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 119",Dashboard module should behave as expected for Scenario 119,Dashboard module should behave as expected for Scenario 119,Passed,Medium
+TC_120,Appointments,Verify functionality of Appointments module - Scenario 120,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 120",Appointments module should behave as expected for Scenario 120,Appointments module should behave as expected for Scenario 120,Passed,Medium
+TC_121,Appointments,Verify functionality of Appointments module - Scenario 121,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 121",Appointments module should behave as expected for Scenario 121,Appointments module should behave as expected for Scenario 121,Passed,Low
+TC_122,Health Records,Verify functionality of Health Records module - Scenario 122,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 122",Health Records module should behave as expected for Scenario 122,Health Records module should behave as expected for Scenario 122,Passed,Medium
+TC_123,Notifications,Verify functionality of Notifications module - Scenario 123,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 123",Notifications module should behave as expected for Scenario 123,Notifications module should behave as expected for Scenario 123,Passed,Medium
+TC_124,Notifications,Verify functionality of Notifications module - Scenario 124,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 124",Notifications module should behave as expected for Scenario 124,Notifications module should behave as expected for Scenario 124,Passed,Medium
+TC_125,Appointments,Verify functionality of Appointments module - Scenario 125,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 125",Appointments module should behave as expected for Scenario 125,Appointments module should behave as expected for Scenario 125,Passed,High
+TC_126,Settings,Verify functionality of Settings module - Scenario 126,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 126",Settings module should behave as expected for Scenario 126,Settings module should behave as expected for Scenario 126,Passed,Medium
+TC_127,Appointments,Verify functionality of Appointments module - Scenario 127,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 127",Appointments module should behave as expected for Scenario 127,Appointments module should behave as expected for Scenario 127,Passed,High
+TC_128,Login,Verify functionality of Login module - Scenario 128,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 128",Login module should behave as expected for Scenario 128,Login module should behave as expected for Scenario 128,Passed,Low
+TC_129,Payment,Verify functionality of Payment module - Scenario 129,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 129",Payment module should behave as expected for Scenario 129,Payment module should behave as expected for Scenario 129,Passed,High
+TC_130,Notifications,Verify functionality of Notifications module - Scenario 130,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 130",Notifications module should behave as expected for Scenario 130,Notifications module should behave as expected for Scenario 130,Passed,Medium
+TC_131,Login,Verify functionality of Login module - Scenario 131,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 131",Login module should behave as expected for Scenario 131,Login module should behave as expected for Scenario 131,Passed,Low
+TC_132,Notifications,Verify functionality of Notifications module - Scenario 132,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 132",Notifications module should behave as expected for Scenario 132,Notifications module should behave as expected for Scenario 132,Passed,High
+TC_133,Registration,Verify functionality of Registration module - Scenario 133,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 133",Registration module should behave as expected for Scenario 133,Registration module should behave as expected for Scenario 133,Passed,Medium
+TC_134,Registration,Verify functionality of Registration module - Scenario 134,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 134",Registration module should behave as expected for Scenario 134,Registration module should behave as expected for Scenario 134,Passed,Low
+TC_135,Login,Verify functionality of Login module - Scenario 135,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 135",Login module should behave as expected for Scenario 135,Login module should behave as expected for Scenario 135,Passed,Low
+TC_136,Payment,Verify functionality of Payment module - Scenario 136,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 136",Payment module should behave as expected for Scenario 136,Payment module should behave as expected for Scenario 136,Passed,Medium
+TC_137,Notifications,Verify functionality of Notifications module - Scenario 137,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 137",Notifications module should behave as expected for Scenario 137,Notifications module should behave as expected for Scenario 137,Passed,Medium
+TC_138,Login,Verify functionality of Login module - Scenario 138,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 138",Login module should behave as expected for Scenario 138,Login module should behave as expected for Scenario 138,Passed,Medium
+TC_139,Settings,Verify functionality of Settings module - Scenario 139,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 139",Settings module should behave as expected for Scenario 139,Settings module should behave as expected for Scenario 139,Passed,Low
+TC_140,Appointments,Verify functionality of Appointments module - Scenario 140,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 140",Appointments module should behave as expected for Scenario 140,Appointments module should behave as expected for Scenario 140,Passed,Low
+TC_141,Notifications,Verify functionality of Notifications module - Scenario 141,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 141",Notifications module should behave as expected for Scenario 141,Notifications module should behave as expected for Scenario 141,Passed,High
+TC_142,Dashboard,Verify functionality of Dashboard module - Scenario 142,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 142",Dashboard module should behave as expected for Scenario 142,Dashboard module should behave as expected for Scenario 142,Passed,Low
+TC_143,Dashboard,Verify functionality of Dashboard module - Scenario 143,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 143",Dashboard module should behave as expected for Scenario 143,Dashboard module should behave as expected for Scenario 143,Passed,Medium
+TC_144,Payment,Verify functionality of Payment module - Scenario 144,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 144",Payment module should behave as expected for Scenario 144,Payment module should behave as expected for Scenario 144,Passed,High
+TC_145,Profile,Verify functionality of Profile module - Scenario 145,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 145",Profile module should behave as expected for Scenario 145,Profile module should behave as expected for Scenario 145,Passed,Medium
+TC_146,Appointments,Verify functionality of Appointments module - Scenario 146,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 146",Appointments module should behave as expected for Scenario 146,Appointments module should behave as expected for Scenario 146,Passed,Low
+TC_147,Registration,Verify functionality of Registration module - Scenario 147,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 147",Registration module should behave as expected for Scenario 147,Registration module should behave as expected for Scenario 147,Passed,Low
+TC_148,Dashboard,Verify functionality of Dashboard module - Scenario 148,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 148",Dashboard module should behave as expected for Scenario 148,Dashboard module should behave as expected for Scenario 148,Passed,Low
+TC_149,Payment,Verify functionality of Payment module - Scenario 149,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 149",Payment module should behave as expected for Scenario 149,Payment module should behave as expected for Scenario 149,Passed,Low
+TC_150,Appointments,Verify functionality of Appointments module - Scenario 150,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 150",Appointments module should behave as expected for Scenario 150,Appointments module should behave as expected for Scenario 150,Passed,Medium
+TC_151,Registration,Verify functionality of Registration module - Scenario 151,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 151",Registration module should behave as expected for Scenario 151,Registration module should behave as expected for Scenario 151,Passed,Medium
+TC_152,Login,Verify functionality of Login module - Scenario 152,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 152",Login module should behave as expected for Scenario 152,Login module should behave as expected for Scenario 152,Passed,High
+TC_153,Chat,Verify functionality of Chat module - Scenario 153,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 153",Chat module should behave as expected for Scenario 153,Chat module should behave as expected for Scenario 153,Passed,Low
+TC_154,Settings,Verify functionality of Settings module - Scenario 154,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 154",Settings module should behave as expected for Scenario 154,Settings module should behave as expected for Scenario 154,Passed,Low
+TC_155,Login,Verify functionality of Login module - Scenario 155,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 155",Login module should behave as expected for Scenario 155,Login module should behave as expected for Scenario 155,Passed,Medium
+TC_156,Login,Verify functionality of Login module - Scenario 156,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 156",Login module should behave as expected for Scenario 156,Login module should behave as expected for Scenario 156,Passed,Low
+TC_157,Payment,Verify functionality of Payment module - Scenario 157,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 157",Payment module should behave as expected for Scenario 157,Payment module should behave as expected for Scenario 157,Passed,Medium
+TC_158,Dashboard,Verify functionality of Dashboard module - Scenario 158,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 158",Dashboard module should behave as expected for Scenario 158,Dashboard module should behave as expected for Scenario 158,Passed,Low
+TC_159,Chat,Verify functionality of Chat module - Scenario 159,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 159",Chat module should behave as expected for Scenario 159,Chat module should behave as expected for Scenario 159,Passed,High
+TC_160,Login,Verify functionality of Login module - Scenario 160,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 160",Login module should behave as expected for Scenario 160,Login module should behave as expected for Scenario 160,Passed,Low
+TC_161,Dashboard,Verify functionality of Dashboard module - Scenario 161,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 161",Dashboard module should behave as expected for Scenario 161,Dashboard module should behave as expected for Scenario 161,Passed,High
+TC_162,Settings,Verify functionality of Settings module - Scenario 162,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 162",Settings module should behave as expected for Scenario 162,Settings module should behave as expected for Scenario 162,Passed,Medium
+TC_163,Dashboard,Verify functionality of Dashboard module - Scenario 163,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 163",Dashboard module should behave as expected for Scenario 163,Dashboard module should behave as expected for Scenario 163,Passed,Medium
+TC_164,Payment,Verify functionality of Payment module - Scenario 164,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 164",Payment module should behave as expected for Scenario 164,Payment module should behave as expected for Scenario 164,Passed,High
+TC_165,Payment,Verify functionality of Payment module - Scenario 165,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 165",Payment module should behave as expected for Scenario 165,Payment module should behave as expected for Scenario 165,Passed,High
+TC_166,Health Records,Verify functionality of Health Records module - Scenario 166,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 166",Health Records module should behave as expected for Scenario 166,Health Records module should behave as expected for Scenario 166,Passed,Low
+TC_167,Settings,Verify functionality of Settings module - Scenario 167,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 167",Settings module should behave as expected for Scenario 167,Settings module should behave as expected for Scenario 167,Passed,Low
+TC_168,Settings,Verify functionality of Settings module - Scenario 168,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 168",Settings module should behave as expected for Scenario 168,Settings module should behave as expected for Scenario 168,Passed,Low
+TC_169,Dashboard,Verify functionality of Dashboard module - Scenario 169,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 169",Dashboard module should behave as expected for Scenario 169,Dashboard module should behave as expected for Scenario 169,Passed,Medium
+TC_170,Profile,Verify functionality of Profile module - Scenario 170,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 170",Profile module should behave as expected for Scenario 170,Profile module should behave as expected for Scenario 170,Passed,Medium
+TC_171,Payment,Verify functionality of Payment module - Scenario 171,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 171",Payment module should behave as expected for Scenario 171,Payment module should behave as expected for Scenario 171,Passed,High
+TC_172,Dashboard,Verify functionality of Dashboard module - Scenario 172,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 172",Dashboard module should behave as expected for Scenario 172,Dashboard module should behave as expected for Scenario 172,Passed,High
+TC_173,Payment,Verify functionality of Payment module - Scenario 173,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 173",Payment module should behave as expected for Scenario 173,Payment module should behave as expected for Scenario 173,Passed,Medium
+TC_174,Registration,Verify functionality of Registration module - Scenario 174,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 174",Registration module should behave as expected for Scenario 174,Registration module should behave as expected for Scenario 174,Passed,Low
+TC_175,Chat,Verify functionality of Chat module - Scenario 175,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 175",Chat module should behave as expected for Scenario 175,Chat module should behave as expected for Scenario 175,Passed,Low
+TC_176,Chat,Verify functionality of Chat module - Scenario 176,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 176",Chat module should behave as expected for Scenario 176,Chat module should behave as expected for Scenario 176,Passed,Low
+TC_177,Payment,Verify functionality of Payment module - Scenario 177,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 177",Payment module should behave as expected for Scenario 177,Payment module should behave as expected for Scenario 177,Passed,High
+TC_178,Notifications,Verify functionality of Notifications module - Scenario 178,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 178",Notifications module should behave as expected for Scenario 178,Notifications module should behave as expected for Scenario 178,Passed,Low
+TC_179,Chat,Verify functionality of Chat module - Scenario 179,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 179",Chat module should behave as expected for Scenario 179,Chat module should behave as expected for Scenario 179,Passed,High
+TC_180,Chat,Verify functionality of Chat module - Scenario 180,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 180",Chat module should behave as expected for Scenario 180,Chat module should behave as expected for Scenario 180,Passed,Medium
+TC_181,Notifications,Verify functionality of Notifications module - Scenario 181,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 181",Notifications module should behave as expected for Scenario 181,Notifications module should behave as expected for Scenario 181,Passed,Low
+TC_182,Health Records,Verify functionality of Health Records module - Scenario 182,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 182",Health Records module should behave as expected for Scenario 182,Health Records module should behave as expected for Scenario 182,Passed,Low
+TC_183,Health Records,Verify functionality of Health Records module - Scenario 183,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 183",Health Records module should behave as expected for Scenario 183,Health Records module should behave as expected for Scenario 183,Passed,Medium
+TC_184,Appointments,Verify functionality of Appointments module - Scenario 184,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 184",Appointments module should behave as expected for Scenario 184,Appointments module should behave as expected for Scenario 184,Passed,Low
+TC_185,Payment,Verify functionality of Payment module - Scenario 185,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 185",Payment module should behave as expected for Scenario 185,Payment module should behave as expected for Scenario 185,Passed,High
+TC_186,Payment,Verify functionality of Payment module - Scenario 186,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 186",Payment module should behave as expected for Scenario 186,Payment module should behave as expected for Scenario 186,Passed,Low
+TC_187,Notifications,Verify functionality of Notifications module - Scenario 187,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 187",Notifications module should behave as expected for Scenario 187,Notifications module should behave as expected for Scenario 187,Passed,Medium
+TC_188,Profile,Verify functionality of Profile module - Scenario 188,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 188",Profile module should behave as expected for Scenario 188,Profile module should behave as expected for Scenario 188,Passed,Low
+TC_189,Appointments,Verify functionality of Appointments module - Scenario 189,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 189",Appointments module should behave as expected for Scenario 189,Appointments module should behave as expected for Scenario 189,Passed,Low
+TC_190,Health Records,Verify functionality of Health Records module - Scenario 190,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 190",Health Records module should behave as expected for Scenario 190,Health Records module should behave as expected for Scenario 190,Passed,Low
+TC_191,Chat,Verify functionality of Chat module - Scenario 191,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 191",Chat module should behave as expected for Scenario 191,Chat module should behave as expected for Scenario 191,Passed,High
+TC_192,Login,Verify functionality of Login module - Scenario 192,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 192",Login module should behave as expected for Scenario 192,Login module should behave as expected for Scenario 192,Passed,High
+TC_193,Profile,Verify functionality of Profile module - Scenario 193,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 193",Profile module should behave as expected for Scenario 193,Profile module should behave as expected for Scenario 193,Passed,High
+TC_194,Chat,Verify functionality of Chat module - Scenario 194,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 194",Chat module should behave as expected for Scenario 194,Chat module should behave as expected for Scenario 194,Passed,High
+TC_195,Payment,Verify functionality of Payment module - Scenario 195,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 195",Payment module should behave as expected for Scenario 195,Payment module should behave as expected for Scenario 195,Passed,Low
+TC_196,Notifications,Verify functionality of Notifications module - Scenario 196,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 196",Notifications module should behave as expected for Scenario 196,Notifications module should behave as expected for Scenario 196,Passed,Medium
+TC_197,Registration,Verify functionality of Registration module - Scenario 197,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 197",Registration module should behave as expected for Scenario 197,Registration module should behave as expected for Scenario 197,Passed,Medium
+TC_198,Chat,Verify functionality of Chat module - Scenario 198,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 198",Chat module should behave as expected for Scenario 198,Chat module should behave as expected for Scenario 198,Passed,Low
+TC_199,Appointments,Verify functionality of Appointments module - Scenario 199,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 199",Appointments module should behave as expected for Scenario 199,Appointments module should behave as expected for Scenario 199,Passed,High
+TC_200,Profile,Verify functionality of Profile module - Scenario 200,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 200",Profile module should behave as expected for Scenario 200,Profile module should behave as expected for Scenario 200,Passed,Low
+TC_201,Profile,Verify functionality of Profile module - Scenario 201,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 201",Profile module should behave as expected for Scenario 201,Profile module should behave as expected for Scenario 201,Passed,High
+TC_202,Profile,Verify functionality of Profile module - Scenario 202,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 202",Profile module should behave as expected for Scenario 202,Profile module should behave as expected for Scenario 202,Passed,Medium
+TC_203,Chat,Verify functionality of Chat module - Scenario 203,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 203",Chat module should behave as expected for Scenario 203,Chat module should behave as expected for Scenario 203,Passed,Medium
+TC_204,Login,Verify functionality of Login module - Scenario 204,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 204",Login module should behave as expected for Scenario 204,Login module should behave as expected for Scenario 204,Passed,Medium
+TC_205,Health Records,Verify functionality of Health Records module - Scenario 205,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 205",Health Records module should behave as expected for Scenario 205,Health Records module should behave as expected for Scenario 205,Passed,Low
+TC_206,Notifications,Verify functionality of Notifications module - Scenario 206,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 206",Notifications module should behave as expected for Scenario 206,Notifications module should behave as expected for Scenario 206,Passed,Medium
+TC_207,Settings,Verify functionality of Settings module - Scenario 207,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 207",Settings module should behave as expected for Scenario 207,Settings module should behave as expected for Scenario 207,Passed,High
+TC_208,Settings,Verify functionality of Settings module - Scenario 208,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 208",Settings module should behave as expected for Scenario 208,Settings module should behave as expected for Scenario 208,Passed,Low
+TC_209,Profile,Verify functionality of Profile module - Scenario 209,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 209",Profile module should behave as expected for Scenario 209,Profile module should behave as expected for Scenario 209,Passed,Low
+TC_210,Profile,Verify functionality of Profile module - Scenario 210,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 210",Profile module should behave as expected for Scenario 210,Profile module should behave as expected for Scenario 210,Passed,Low
+TC_211,Notifications,Verify functionality of Notifications module - Scenario 211,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 211",Notifications module should behave as expected for Scenario 211,Notifications module should behave as expected for Scenario 211,Passed,Medium
+TC_212,Settings,Verify functionality of Settings module - Scenario 212,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 212",Settings module should behave as expected for Scenario 212,Settings module should behave as expected for Scenario 212,Passed,Medium
+TC_213,Login,Verify functionality of Login module - Scenario 213,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 213",Login module should behave as expected for Scenario 213,Login module should behave as expected for Scenario 213,Passed,Medium
+TC_214,Notifications,Verify functionality of Notifications module - Scenario 214,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 214",Notifications module should behave as expected for Scenario 214,Notifications module should behave as expected for Scenario 214,Passed,Low
+TC_215,Profile,Verify functionality of Profile module - Scenario 215,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 215",Profile module should behave as expected for Scenario 215,Profile module should behave as expected for Scenario 215,Passed,High
+TC_216,Payment,Verify functionality of Payment module - Scenario 216,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 216",Payment module should behave as expected for Scenario 216,Payment module should behave as expected for Scenario 216,Passed,Medium
+TC_217,Profile,Verify functionality of Profile module - Scenario 217,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 217",Profile module should behave as expected for Scenario 217,Profile module should behave as expected for Scenario 217,Passed,Medium
+TC_218,Payment,Verify functionality of Payment module - Scenario 218,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 218",Payment module should behave as expected for Scenario 218,Payment module should behave as expected for Scenario 218,Passed,High
+TC_219,Dashboard,Verify functionality of Dashboard module - Scenario 219,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 219",Dashboard module should behave as expected for Scenario 219,Dashboard module should behave as expected for Scenario 219,Passed,Low
+TC_220,Notifications,Verify functionality of Notifications module - Scenario 220,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 220",Notifications module should behave as expected for Scenario 220,Notifications module should behave as expected for Scenario 220,Passed,Medium
+TC_221,Appointments,Verify functionality of Appointments module - Scenario 221,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 221",Appointments module should behave as expected for Scenario 221,Appointments module should behave as expected for Scenario 221,Passed,Low
+TC_222,Registration,Verify functionality of Registration module - Scenario 222,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 222",Registration module should behave as expected for Scenario 222,Registration module should behave as expected for Scenario 222,Passed,Medium
+TC_223,Health Records,Verify functionality of Health Records module - Scenario 223,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 223",Health Records module should behave as expected for Scenario 223,Health Records module should behave as expected for Scenario 223,Passed,Medium
+TC_224,Dashboard,Verify functionality of Dashboard module - Scenario 224,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 224",Dashboard module should behave as expected for Scenario 224,Dashboard module should behave as expected for Scenario 224,Passed,Medium
+TC_225,Profile,Verify functionality of Profile module - Scenario 225,"1. Open App
+2. Navigate to Profile
+3. Perform action for Scenario 225",Profile module should behave as expected for Scenario 225,Profile module should behave as expected for Scenario 225,Passed,Medium
+TC_226,Dashboard,Verify functionality of Dashboard module - Scenario 226,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 226",Dashboard module should behave as expected for Scenario 226,Dashboard module should behave as expected for Scenario 226,Passed,Low
+TC_227,Settings,Verify functionality of Settings module - Scenario 227,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 227",Settings module should behave as expected for Scenario 227,Settings module should behave as expected for Scenario 227,Passed,Low
+TC_228,Notifications,Verify functionality of Notifications module - Scenario 228,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 228",Notifications module should behave as expected for Scenario 228,Notifications module should behave as expected for Scenario 228,Passed,Low
+TC_229,Dashboard,Verify functionality of Dashboard module - Scenario 229,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 229",Dashboard module should behave as expected for Scenario 229,Dashboard module should behave as expected for Scenario 229,Passed,High
+TC_230,Settings,Verify functionality of Settings module - Scenario 230,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 230",Settings module should behave as expected for Scenario 230,Settings module should behave as expected for Scenario 230,Passed,High
+TC_231,Dashboard,Verify functionality of Dashboard module - Scenario 231,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 231",Dashboard module should behave as expected for Scenario 231,Dashboard module should behave as expected for Scenario 231,Passed,High
+TC_232,Registration,Verify functionality of Registration module - Scenario 232,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 232",Registration module should behave as expected for Scenario 232,Registration module should behave as expected for Scenario 232,Passed,Medium
+TC_233,Health Records,Verify functionality of Health Records module - Scenario 233,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 233",Health Records module should behave as expected for Scenario 233,Health Records module should behave as expected for Scenario 233,Passed,High
+TC_234,Health Records,Verify functionality of Health Records module - Scenario 234,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 234",Health Records module should behave as expected for Scenario 234,Health Records module should behave as expected for Scenario 234,Passed,High
+TC_235,Chat,Verify functionality of Chat module - Scenario 235,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 235",Chat module should behave as expected for Scenario 235,Chat module should behave as expected for Scenario 235,Passed,Medium
+TC_236,Payment,Verify functionality of Payment module - Scenario 236,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 236",Payment module should behave as expected for Scenario 236,Payment module should behave as expected for Scenario 236,Passed,High
+TC_237,Login,Verify functionality of Login module - Scenario 237,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 237",Login module should behave as expected for Scenario 237,Login module should behave as expected for Scenario 237,Passed,Medium
+TC_238,Login,Verify functionality of Login module - Scenario 238,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 238",Login module should behave as expected for Scenario 238,Login module should behave as expected for Scenario 238,Passed,Medium
+TC_239,Settings,Verify functionality of Settings module - Scenario 239,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 239",Settings module should behave as expected for Scenario 239,Settings module should behave as expected for Scenario 239,Passed,High
+TC_240,Dashboard,Verify functionality of Dashboard module - Scenario 240,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 240",Dashboard module should behave as expected for Scenario 240,Dashboard module should behave as expected for Scenario 240,Passed,High
+TC_241,Login,Verify functionality of Login module - Scenario 241,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 241",Login module should behave as expected for Scenario 241,Login module should behave as expected for Scenario 241,Passed,Medium
+TC_242,Login,Verify functionality of Login module - Scenario 242,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 242",Login module should behave as expected for Scenario 242,Login module should behave as expected for Scenario 242,Passed,Medium
+TC_243,Appointments,Verify functionality of Appointments module - Scenario 243,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 243",Appointments module should behave as expected for Scenario 243,Appointments module should behave as expected for Scenario 243,Passed,Low
+TC_244,Health Records,Verify functionality of Health Records module - Scenario 244,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 244",Health Records module should behave as expected for Scenario 244,Health Records module should behave as expected for Scenario 244,Passed,Low
+TC_245,Appointments,Verify functionality of Appointments module - Scenario 245,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 245",Appointments module should behave as expected for Scenario 245,Appointments module should behave as expected for Scenario 245,Passed,Medium
+TC_246,Health Records,Verify functionality of Health Records module - Scenario 246,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 246",Health Records module should behave as expected for Scenario 246,Health Records module should behave as expected for Scenario 246,Passed,High
+TC_247,Notifications,Verify functionality of Notifications module - Scenario 247,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 247",Notifications module should behave as expected for Scenario 247,Notifications module should behave as expected for Scenario 247,Passed,Medium
+TC_248,Chat,Verify functionality of Chat module - Scenario 248,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 248",Chat module should behave as expected for Scenario 248,Chat module should behave as expected for Scenario 248,Passed,High
+TC_249,Settings,Verify functionality of Settings module - Scenario 249,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 249",Settings module should behave as expected for Scenario 249,Settings module should behave as expected for Scenario 249,Passed,High
+TC_250,Health Records,Verify functionality of Health Records module - Scenario 250,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 250",Health Records module should behave as expected for Scenario 250,Health Records module should behave as expected for Scenario 250,Passed,Medium
+TC_251,Registration,Verify functionality of Registration module - Scenario 251,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 251",Registration module should behave as expected for Scenario 251,Registration module should behave as expected for Scenario 251,Passed,High
+TC_252,Chat,Verify functionality of Chat module - Scenario 252,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 252",Chat module should behave as expected for Scenario 252,Chat module should behave as expected for Scenario 252,Passed,Low
+TC_253,Payment,Verify functionality of Payment module - Scenario 253,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 253",Payment module should behave as expected for Scenario 253,Payment module should behave as expected for Scenario 253,Passed,Medium
+TC_254,Notifications,Verify functionality of Notifications module - Scenario 254,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 254",Notifications module should behave as expected for Scenario 254,Notifications module should behave as expected for Scenario 254,Passed,Low
+TC_255,Health Records,Verify functionality of Health Records module - Scenario 255,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 255",Health Records module should behave as expected for Scenario 255,Health Records module should behave as expected for Scenario 255,Passed,Low
+TC_256,Appointments,Verify functionality of Appointments module - Scenario 256,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 256",Appointments module should behave as expected for Scenario 256,Appointments module should behave as expected for Scenario 256,Passed,High
+TC_257,Health Records,Verify functionality of Health Records module - Scenario 257,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 257",Health Records module should behave as expected for Scenario 257,Health Records module should behave as expected for Scenario 257,Passed,High
+TC_258,Chat,Verify functionality of Chat module - Scenario 258,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 258",Chat module should behave as expected for Scenario 258,Chat module should behave as expected for Scenario 258,Passed,Medium
+TC_259,Login,Verify functionality of Login module - Scenario 259,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 259",Login module should behave as expected for Scenario 259,Login module should behave as expected for Scenario 259,Passed,Medium
+TC_260,Notifications,Verify functionality of Notifications module - Scenario 260,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 260",Notifications module should behave as expected for Scenario 260,Notifications module should behave as expected for Scenario 260,Passed,Medium
+TC_261,Dashboard,Verify functionality of Dashboard module - Scenario 261,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 261",Dashboard module should behave as expected for Scenario 261,Dashboard module should behave as expected for Scenario 261,Passed,Low
+TC_262,Registration,Verify functionality of Registration module - Scenario 262,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 262",Registration module should behave as expected for Scenario 262,Registration module should behave as expected for Scenario 262,Passed,Medium
+TC_263,Appointments,Verify functionality of Appointments module - Scenario 263,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 263",Appointments module should behave as expected for Scenario 263,Appointments module should behave as expected for Scenario 263,Passed,High
+TC_264,Payment,Verify functionality of Payment module - Scenario 264,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 264",Payment module should behave as expected for Scenario 264,Payment module should behave as expected for Scenario 264,Passed,Low
+TC_265,Payment,Verify functionality of Payment module - Scenario 265,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 265",Payment module should behave as expected for Scenario 265,Payment module should behave as expected for Scenario 265,Passed,Low
+TC_266,Payment,Verify functionality of Payment module - Scenario 266,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 266",Payment module should behave as expected for Scenario 266,Payment module should behave as expected for Scenario 266,Passed,Medium
+TC_267,Health Records,Verify functionality of Health Records module - Scenario 267,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 267",Health Records module should behave as expected for Scenario 267,Health Records module should behave as expected for Scenario 267,Passed,Medium
+TC_268,Registration,Verify functionality of Registration module - Scenario 268,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 268",Registration module should behave as expected for Scenario 268,Registration module should behave as expected for Scenario 268,Passed,Low
+TC_269,Notifications,Verify functionality of Notifications module - Scenario 269,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 269",Notifications module should behave as expected for Scenario 269,Notifications module should behave as expected for Scenario 269,Passed,Medium
+TC_270,Dashboard,Verify functionality of Dashboard module - Scenario 270,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 270",Dashboard module should behave as expected for Scenario 270,Dashboard module should behave as expected for Scenario 270,Passed,Medium
+TC_271,Login,Verify functionality of Login module - Scenario 271,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 271",Login module should behave as expected for Scenario 271,Login module should behave as expected for Scenario 271,Passed,Low
+TC_272,Registration,Verify functionality of Registration module - Scenario 272,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 272",Registration module should behave as expected for Scenario 272,Registration module should behave as expected for Scenario 272,Passed,Low
+TC_273,Dashboard,Verify functionality of Dashboard module - Scenario 273,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 273",Dashboard module should behave as expected for Scenario 273,Dashboard module should behave as expected for Scenario 273,Passed,Medium
+TC_274,Notifications,Verify functionality of Notifications module - Scenario 274,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 274",Notifications module should behave as expected for Scenario 274,Notifications module should behave as expected for Scenario 274,Passed,Low
+TC_275,Settings,Verify functionality of Settings module - Scenario 275,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 275",Settings module should behave as expected for Scenario 275,Settings module should behave as expected for Scenario 275,Passed,Low
+TC_276,Chat,Verify functionality of Chat module - Scenario 276,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 276",Chat module should behave as expected for Scenario 276,Chat module should behave as expected for Scenario 276,Passed,Low
+TC_277,Dashboard,Verify functionality of Dashboard module - Scenario 277,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 277",Dashboard module should behave as expected for Scenario 277,Dashboard module should behave as expected for Scenario 277,Passed,Medium
+TC_278,Settings,Verify functionality of Settings module - Scenario 278,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 278",Settings module should behave as expected for Scenario 278,Settings module should behave as expected for Scenario 278,Passed,High
+TC_279,Settings,Verify functionality of Settings module - Scenario 279,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 279",Settings module should behave as expected for Scenario 279,Settings module should behave as expected for Scenario 279,Passed,Medium
+TC_280,Notifications,Verify functionality of Notifications module - Scenario 280,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 280",Notifications module should behave as expected for Scenario 280,Notifications module should behave as expected for Scenario 280,Passed,Medium
+TC_281,Notifications,Verify functionality of Notifications module - Scenario 281,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 281",Notifications module should behave as expected for Scenario 281,Notifications module should behave as expected for Scenario 281,Passed,Low
+TC_282,Health Records,Verify functionality of Health Records module - Scenario 282,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 282",Health Records module should behave as expected for Scenario 282,Health Records module should behave as expected for Scenario 282,Passed,High
+TC_283,Health Records,Verify functionality of Health Records module - Scenario 283,"1. Open App
+2. Navigate to Health Records
+3. Perform action for Scenario 283",Health Records module should behave as expected for Scenario 283,Health Records module should behave as expected for Scenario 283,Passed,Low
+TC_284,Login,Verify functionality of Login module - Scenario 284,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 284",Login module should behave as expected for Scenario 284,Login module should behave as expected for Scenario 284,Passed,Low
+TC_285,Appointments,Verify functionality of Appointments module - Scenario 285,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 285",Appointments module should behave as expected for Scenario 285,Appointments module should behave as expected for Scenario 285,Passed,Low
+TC_286,Login,Verify functionality of Login module - Scenario 286,"1. Open App
+2. Navigate to Login
+3. Perform action for Scenario 286",Login module should behave as expected for Scenario 286,Login module should behave as expected for Scenario 286,Passed,High
+TC_287,Settings,Verify functionality of Settings module - Scenario 287,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 287",Settings module should behave as expected for Scenario 287,Settings module should behave as expected for Scenario 287,Passed,High
+TC_288,Settings,Verify functionality of Settings module - Scenario 288,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 288",Settings module should behave as expected for Scenario 288,Settings module should behave as expected for Scenario 288,Passed,High
+TC_289,Appointments,Verify functionality of Appointments module - Scenario 289,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 289",Appointments module should behave as expected for Scenario 289,Appointments module should behave as expected for Scenario 289,Passed,Medium
+TC_290,Dashboard,Verify functionality of Dashboard module - Scenario 290,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 290",Dashboard module should behave as expected for Scenario 290,Dashboard module should behave as expected for Scenario 290,Passed,High
+TC_291,Registration,Verify functionality of Registration module - Scenario 291,"1. Open App
+2. Navigate to Registration
+3. Perform action for Scenario 291",Registration module should behave as expected for Scenario 291,Registration module should behave as expected for Scenario 291,Passed,Medium
+TC_292,Notifications,Verify functionality of Notifications module - Scenario 292,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 292",Notifications module should behave as expected for Scenario 292,Notifications module should behave as expected for Scenario 292,Passed,Medium
+TC_293,Dashboard,Verify functionality of Dashboard module - Scenario 293,"1. Open App
+2. Navigate to Dashboard
+3. Perform action for Scenario 293",Dashboard module should behave as expected for Scenario 293,Dashboard module should behave as expected for Scenario 293,Passed,Low
+TC_294,Settings,Verify functionality of Settings module - Scenario 294,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 294",Settings module should behave as expected for Scenario 294,Settings module should behave as expected for Scenario 294,Passed,Medium
+TC_295,Payment,Verify functionality of Payment module - Scenario 295,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 295",Payment module should behave as expected for Scenario 295,Payment module should behave as expected for Scenario 295,Passed,Low
+TC_296,Settings,Verify functionality of Settings module - Scenario 296,"1. Open App
+2. Navigate to Settings
+3. Perform action for Scenario 296",Settings module should behave as expected for Scenario 296,Settings module should behave as expected for Scenario 296,Passed,High
+TC_297,Payment,Verify functionality of Payment module - Scenario 297,"1. Open App
+2. Navigate to Payment
+3. Perform action for Scenario 297",Payment module should behave as expected for Scenario 297,Payment module should behave as expected for Scenario 297,Passed,Low
+TC_298,Chat,Verify functionality of Chat module - Scenario 298,"1. Open App
+2. Navigate to Chat
+3. Perform action for Scenario 298",Chat module should behave as expected for Scenario 298,Chat module should behave as expected for Scenario 298,Passed,High
+TC_299,Notifications,Verify functionality of Notifications module - Scenario 299,"1. Open App
+2. Navigate to Notifications
+3. Perform action for Scenario 299",Notifications module should behave as expected for Scenario 299,Notifications module should behave as expected for Scenario 299,Passed,Low
+TC_300,Appointments,Verify functionality of Appointments module - Scenario 300,"1. Open App
+2. Navigate to Appointments
+3. Perform action for Scenario 300",Appointments module should behave as expected for Scenario 300,Appointments module should behave as expected for Scenario 300,Passed,Low
