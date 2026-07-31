@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from database.mongodb import db
+from routers.auth import get_current_user
 from models.domain import Appointment
 from typing import List
 from datetime import datetime, date as date_type
@@ -8,7 +9,7 @@ from bson import ObjectId
 router = APIRouter(prefix="/appointments", tags=["appointments"])
 
 @router.post("", response_model=dict)
-async def book_appointment(appointment: Appointment):
+async def book_appointment(appointment: Appointment, current_user: dict = Depends(get_current_user)):
     if not appointment.symptoms or not appointment.symptoms.strip():
         raise HTTPException(status_code=400, detail="Reason and symptoms are required to book an appointment.")
     
@@ -41,7 +42,7 @@ async def book_appointment(appointment: Appointment):
     return {"message": "Appointment booked successfully", "id": str(new_apt.inserted_id)}
 
 @router.get("/student/{student_email}", response_model=List[dict])
-async def get_student_appointments(student_email: str):
+async def get_student_appointments(student_email: str, current_user: dict = Depends(get_current_user)):
     today = date_type.today()
     appointments = await db.db["appointments"].find({"student_id": student_email}).to_list(100)
     for apt in appointments:
@@ -81,14 +82,14 @@ async def get_student_appointments(student_email: str):
     return appointments
 
 @router.get("/doctor/{doctor_id}", response_model=List[dict])
-async def get_doctor_appointments(doctor_id: str):
+async def get_doctor_appointments(doctor_id: str, current_user: dict = Depends(get_current_user)):
     appointments = await db.db["appointments"].find({"doctor_id": doctor_id}).to_list(100)
     for apt in appointments:
         apt["_id"] = str(apt["_id"])
     return appointments
 
 @router.put("/{appointment_id}/cancel")
-async def cancel_appointment(appointment_id: str):
+async def cancel_appointment(appointment_id: str, current_user: dict = Depends(get_current_user)):
     # Fetch appointment to get student_id and details
     apt = await db.db["appointments"].find_one({"_id": ObjectId(appointment_id)})
     if not apt:
@@ -114,7 +115,7 @@ async def cancel_appointment(appointment_id: str):
     return {"message": "Appointment cancelled successfully"}
 
 @router.delete("/{appointment_id}")
-async def delete_appointment(appointment_id: str):
+async def delete_appointment(appointment_id: str, current_user: dict = Depends(get_current_user)):
     res = await db.db["appointments"].delete_one({"_id": ObjectId(appointment_id)})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Appointment not found")

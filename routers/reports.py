@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from database.mongodb import db
+from routers.auth import get_current_user
 from models.domain import MedicalReport
 from typing import List
 from datetime import datetime
@@ -8,7 +9,7 @@ from bson import ObjectId
 router = APIRouter(prefix="/reports", tags=["reports"])
 
 @router.post("", response_model=dict)
-async def upload_report(report: MedicalReport):
+async def upload_report(report: MedicalReport, current_user: dict = Depends(get_current_user)):
     report_dict = report.dict(exclude={"id"})
     report_dict["uploaded_at"] = datetime.utcnow()
     
@@ -31,7 +32,7 @@ async def upload_report(report: MedicalReport):
     return {"message": "Report uploaded successfully", "id": str(new_report.inserted_id)}
 
 @router.get("/student/{student_email}", response_model=List[dict])
-async def get_student_reports(student_email: str):
+async def get_student_reports(student_email: str, current_user: dict = Depends(get_current_user)):
     reports = await db.db["reports"].find({"student_id": student_email}).sort("uploaded_at", -1).to_list(100)
     for rep in reports:
         rep["_id"] = str(rep["_id"])
@@ -48,7 +49,7 @@ async def get_student_reports(student_email: str):
     return reports
 
 @router.delete("/{report_id}")
-async def delete_report(report_id: str):
+async def delete_report(report_id: str, current_user: dict = Depends(get_current_user)):
     res = await db.db["reports"].delete_one({"_id": ObjectId(report_id)})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Report not found")

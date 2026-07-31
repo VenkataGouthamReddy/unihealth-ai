@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from database.mongodb import db
+from routers.auth import get_current_user
 from models.domain import Prescription, Notification
 from typing import List
 from datetime import datetime
@@ -11,7 +12,7 @@ class PrescriptionCreateSchema(Prescription):
     pass
 
 @router.post("", response_model=dict)
-async def create_prescription(prescription: PrescriptionCreateSchema):
+async def create_prescription(prescription: PrescriptionCreateSchema, current_user: dict = Depends(get_current_user)):
     prescription_dict = prescription.dict(exclude={"id"})
     prescription_dict["created_at"] = datetime.utcnow()
     
@@ -47,7 +48,7 @@ async def create_prescription(prescription: PrescriptionCreateSchema):
     return {"message": "Prescription created successfully", "id": pres_id}
 
 @router.get("/student/{student_email}", response_model=List[dict])
-async def get_student_prescriptions(student_email: str):
+async def get_student_prescriptions(student_email: str, current_user: dict = Depends(get_current_user)):
     prescriptions = await db.db["prescriptions"].find({"student_id": student_email}).sort("created_at", -1).to_list(100)
     for pres in prescriptions:
         pres["_id"] = str(pres["_id"])
@@ -68,7 +69,7 @@ async def get_student_prescriptions(student_email: str):
     return prescriptions
 
 @router.get("/doctor/{doctor_id}", response_model=List[dict])
-async def get_doctor_prescriptions(doctor_id: str):
+async def get_doctor_prescriptions(doctor_id: str, current_user: dict = Depends(get_current_user)):
     prescriptions = await db.db["prescriptions"].find({"doctor_id": doctor_id}).sort("created_at", -1).to_list(100)
     for pres in prescriptions:
         pres["_id"] = str(pres["_id"])
@@ -83,7 +84,7 @@ async def get_doctor_prescriptions(doctor_id: str):
     return prescriptions
 
 @router.get("/{prescription_id}", response_model=dict)
-async def get_prescription(prescription_id: str):
+async def get_prescription(prescription_id: str, current_user: dict = Depends(get_current_user)):
     pres = await db.db["prescriptions"].find_one({"_id": ObjectId(prescription_id)})
     if not pres:
         raise HTTPException(status_code=404, detail="Prescription not found")
@@ -91,7 +92,7 @@ async def get_prescription(prescription_id: str):
     return pres
 
 @router.put("/{prescription_id}", response_model=dict)
-async def update_prescription(prescription_id: str, prescription: PrescriptionCreateSchema):
+async def update_prescription(prescription_id: str, prescription: PrescriptionCreateSchema, current_user: dict = Depends(get_current_user)):
     update_data = prescription.dict(exclude={"id"})
     update_data["updated_at"] = datetime.utcnow()
     
@@ -104,7 +105,7 @@ async def update_prescription(prescription_id: str, prescription: PrescriptionCr
     return {"message": "Prescription updated successfully"}
 
 @router.delete("/{prescription_id}", response_model=dict)
-async def delete_prescription(prescription_id: str):
+async def delete_prescription(prescription_id: str, current_user: dict = Depends(get_current_user)):
     res = await db.db["prescriptions"].delete_one({"_id": ObjectId(prescription_id)})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Prescription not found")

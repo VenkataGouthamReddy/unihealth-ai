@@ -60,8 +60,9 @@ async def send_otp(user_data: UserCreate):
     if existing_user:
         raise HTTPException(status_code=400, detail="An account with this email address already exists. Please log in.")
     
-    # Generate 6-digit OTP
-    otp = str(random.randint(100000, 999999))
+    # Generate 6-digit OTP securely
+    import secrets
+    otp = str(secrets.randbelow(900000) + 100000)
     
     # Store temporary user data and OTP
     await db.db["temp_users"].update_one(
@@ -105,12 +106,8 @@ async def send_otp(user_data: UserCreate):
         print(f"OTP email sent successfully to {clean_email}")
         
     except Exception as e:
-        print(f"\n{'='*50}")
-        print(f"⚠️ SMTP FAILED (Likely blocked by network/firewall)")
-        print(f"Error details: {str(e)}")
-        print(f"⚠️ DEVELOPMENT FALLBACK - USE THIS OTP: {otp}")
-        print(f"{'='*50}\n")
-        return {"message": "Email blocked by Gmail firewall. Using Demo Mode.", "demo_otp": otp}
+        print(f"SMTP FAILED: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please try again later.")
         
     return {"message": "OTP sent successfully. Please check your email."}
 
@@ -167,9 +164,7 @@ async def verify_otp(verify_data: OTPVerify):
 
 @router.post("/register", response_model=UserResponse)
 async def register_user(user: UserCreate):
-    # This endpoint is now a fallback or simplified registration
-    # For a professional app, we use the OTP flow above
-    return await verify_otp(OTPVerify(email=user.email, otp="123456")) # Mocked for direct use if needed
+    raise HTTPException(status_code=400, detail="Please use /send-otp and /verify-otp for registration.")
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -253,12 +248,8 @@ async def forgot_password(data: dict):
         print(f"Password reset OTP email sent successfully to {email}")
         
     except Exception as e:
-        print(f"\n{'='*50}")
-        print(f"⚠️ SMTP FAILED (Likely blocked by network/firewall)")
-        print(f"⚠️ DEVELOPMENT FALLBACK - USE THIS OTP FOR {email}: {otp}")
-        print(f"{'='*50}\n")
-        # Do not raise 500 error so that development/APK testing can continue
-        # raise HTTPException(status_code=500, detail="Failed to send OTP email. Please ensure email settings are configured on the server.")
+        print(f"SMTP FAILED: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please try again later.")
         
     return {"message": "OTP sent successfully. Please check your email.", "otp_sent": True}
 
@@ -313,14 +304,22 @@ async def update_profile(data: ProfileUpdate, current_user: dict = Depends(get_c
 @router.post("/upload-profile-picture")
 async def upload_profile_picture(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     import base64
+    allowed_mimes = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+    mime_type = file.content_type
+    if mime_type not in allowed_mimes:
+        raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG, PNG, GIF, and WEBP are allowed.")
+
+    file_extension = file.filename.split(".")[-1].lower() if "." in file.filename else "jpg"
+    if file_extension not in ["jpg", "jpeg", "png", "gif", "webp"]:
+        raise HTTPException(status_code=400, detail="Invalid file extension.")
+
     contents = await file.read()
-    mime_type = file.content_type or "image/jpeg"
     base64_encoded = base64.b64encode(contents).decode('utf-8')
     data_url = f"data:{mime_type};base64,{base64_encoded}"
 
     # Best-effort disk save for local static serving if available
     try:
-        file_extension = file.filename.split(".")[-1] if "." in file.filename else "jpg"
+        # Sanitize filename by using current_user['_id'] which is an ObjectId
         file_name = f"{current_user['_id']}.{file_extension}"
         file_path = f"static/profiles/{file_name}"
         with open(file_path, "wb") as buffer:
