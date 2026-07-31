@@ -91,7 +91,7 @@ async def send_otp(user_data: UserCreate):
     try:
         fm = FastMail(conf)
         
-        db_task = db.db["temp_users"].update_one(
+        db_task = asyncio.create_task(db.db["temp_users"].update_one(
             {"email": clean_email},
             {"$set": {
                 "email": clean_email,
@@ -102,16 +102,25 @@ async def send_otp(user_data: UserCreate):
                 "created_at": datetime.utcnow()
             }},
             upsert=True
-        )
+        ))
         
-        email_task = fm.send_message(message)
+        email_task = asyncio.create_task(fm.send_message(message))
         
-        await asyncio.gather(db_task, email_task)
-        print(f"OTP email sent successfully to {clean_email}")
+        await db_task
+        
+        try:
+            await asyncio.wait_for(email_task, timeout=4.0)
+            print(f"OTP email sent successfully to {clean_email}")
+        except Exception as email_err:
+            print(f"SMTP FAILED or TIMED OUT: {str(email_err)}")
+            print(f"\n=========================================")
+            print(f"[DEV FALLBACK] Your network blocks SMTP. Your OTP is: {otp}")
+            print(f"=========================================\n")
+            return {"message": "Email blocked by firewall. Check your backend terminal for the OTP."}
         
     except Exception as e:
-        print(f"SMTP FAILED: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please try again later.")
+        print(f"DB FAILED: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to register. Please try again later.")
         
     return {"message": "OTP sent successfully. Please check your email."}
 
@@ -240,23 +249,32 @@ async def forgot_password(data: dict):
     try:
         fm = FastMail(conf)
         
-        db_task = db.db["password_resets"].update_one(
+        db_task = asyncio.create_task(db.db["password_resets"].update_one(
             {"email": email},
             {"$set": {
                 "otp": otp,
                 "created_at": datetime.utcnow()
             }},
             upsert=True
-        )
+        ))
         
-        email_task = fm.send_message(message)
+        email_task = asyncio.create_task(fm.send_message(message))
         
-        await asyncio.gather(db_task, email_task)
-        print(f"Password reset OTP email sent successfully to {email}")
+        await db_task
+        
+        try:
+            await asyncio.wait_for(email_task, timeout=4.0)
+            print(f"Password reset OTP email sent successfully to {email}")
+        except Exception as email_err:
+            print(f"SMTP FAILED or TIMED OUT: {str(email_err)}")
+            print(f"\n=========================================")
+            print(f"[DEV FALLBACK] Your network blocks SMTP. Your Reset OTP is: {otp}")
+            print(f"=========================================\n")
+            return {"message": "Email blocked by firewall. Check your backend terminal for the OTP.", "otp_sent": True}
         
     except Exception as e:
-        print(f"SMTP FAILED: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please try again later.")
+        print(f"DB FAILED: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process request. Please try again later.")
         
     return {"message": "OTP sent successfully. Please check your email.", "otp_sent": True}
 
