@@ -1,16 +1,17 @@
 {
   "name": "selenium-tests",
   "version": "1.0.0",
-  "description": "",
+  "description": "Selenium E2E Test Suite and Test Report Generator for UniHealth AI",
   "main": "generate-excel.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/login-tests.js",
+    "generate-excel": "node generate-excel.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "UniHealth AI Team",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
