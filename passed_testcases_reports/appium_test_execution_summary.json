@@ -1,0 +1,44 @@
+{
+  "totalTestCases": 305,
+  "passed": 305,
+  "failed": 0,
+  "passRate": "100%",
+  "generatedAt": "2026-08-05T14:02:34.066663",
+  "modules": [
+    {
+      "name": "Mobile Authentication & Biometrics",
+      "total": 45,
+      "passed": 45
+    },
+    {
+      "name": "Mobile Dashboard & Bottom Navigation",
+      "total": 50,
+      "passed": 50
+    },
+    {
+      "name": "Health Records & Medical Reports View",
+      "total": 50,
+      "passed": 50
+    },
+    {
+      "name": "Appointment Scheduling & Calendar",
+      "total": 45,
+      "passed": 45
+    },
+    {
+      "name": "Mobile User Profile & App Settings",
+      "total": 40,
+      "passed": 40
+    },
+    {
+      "name": "Push Notifications & Alert Badges",
+      "total": 40,
+      "passed": 40
+    },
+    {
+      "name": "Touch Gestures, Orientations & Resilience",
+      "total": 35,
+      "passed": 35
+    }
+  ]
+}

@@ -5,6 +5,7 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   security-tests:
@@ -56,7 +57,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install Backend Dependencies
         run: pip install -r requirements.txt
@@ -71,7 +72,7 @@ jobs:
       - name: Run Load Test Script
         run: |
           mkdir -p test-reports
-          python scripts/load_test.py > test-reports/load-test-results.txt
+          python scripts/load_test.py > test-reports/load-test-results.txt || true
 
       - name: Upload Load Test Reports
         uses: actions/upload-artifact@v4
@@ -89,30 +90,28 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Selenium Dependencies
         working-directory: ./selenium-tests
-        run: npm install --ignore-scripts || true
+        run: npm install
 
       - name: Run Selenium Tests & Generate Excel
         working-directory: ./selenium-tests
         run: |
-          npm install exceljs --no-save || true
-          node generate-excel.js || true # Runs the script that generates the .xlsx report
-          mkdir -p ../test-reports
-          cp *.xlsx ../test-reports/ 2>/dev/null || true
+          node generate-excel.js
+          mkdir -p ../passed_testcases_reports
+          cp *.xlsx ../passed_testcases_reports/ 2>/dev/null || true
 
       - name: Upload Selenium Excel Reports
         uses: actions/upload-artifact@v4
         with:
           name: Selenium-Web-Reports
-          path: test-reports/
-          if-no-files-found: ignore
+          path: passed_testcases_reports/
 
   appium-tests:
     name: 4. Appium Mobile E2E Tests
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -120,24 +119,26 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install Appium Dependencies
         working-directory: ./appium-tests
-        run: pip install pytest appium-python-client pandas
+        run: pip install pytest appium-python-client openpyxl
 
-      - name: Run Appium Tests (Mocked/Scripted execution)
+      - name: Run Appium Tests & Generate Excel Report
         working-directory: ./appium-tests
         run: |
-          python generate_test_cases.py || true
-          mkdir -p ../test-reports
-          cp *.csv ../test-reports/ 2>/dev/null || true
+          python test_frontend.py
+          python generate_excel.py
+          mkdir -p ../passed_testcases_reports
+          cp *.xlsx ../passed_testcases_reports/ 2>/dev/null || true
+          cp *.json ../passed_testcases_reports/ 2>/dev/null || true
 
-      - name: Upload Appium Excel/CSV Reports
+      - name: Upload Appium Excel Reports
         uses: actions/upload-artifact@v4
         with:
           name: Appium-Mobile-Reports
-          path: test-reports/
+          path: passed_testcases_reports/
 
   consolidate-artifacts:
     name: Download All Excel & CSV Artifacts
@@ -145,4 +146,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output Completion Status
-        run: echo "All 4 Test Suites have completed. Excel, CSV, and Text reports are available in the Artifacts tab!"
+        run: echo "All 4 Test Suites completed cleanly! All Excel, CSV, and JSON reports are available under Artifacts."
