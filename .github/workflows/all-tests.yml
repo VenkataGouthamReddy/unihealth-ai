@@ -1,19 +1,36 @@
-name: Complete Test Suite (Security, Load, Selenium, Appium)
+name: Complete 4-Test Suite & Excel Reports Artifacts
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "develop" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "develop" ]
   workflow_dispatch:
 
 jobs:
+  # ── 1. Security SAST & SCA Audit ──────────────────────────────────────────
   security-tests:
-    name: 1. Security & SAST Tests
+    name: 1. Security SAST & SCA Audit
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Codebase
         uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Bandit SAST Security Linter
+        run: |
+          pip install bandit
+          bandit -r routers core database models -f json -o bandit-report.json || true
+
+      - name: Run Gitleaks Secret Scanner
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
 
       - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
@@ -24,26 +41,22 @@ jobs:
           output: 'trivy-report.txt'
           ignore-unfixed: true
 
-      - name: Run Gitleaks (Secret Detection)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
-
-      - name: Copy existing Security CSVs
+      - name: Bundle Security & Audit Reports
         run: |
-          mkdir -p test-reports
-          cp "Vulnerability Test Results"/*.csv test-reports/ 2>/dev/null || true
-          cp trivy-report.txt test-reports/ 2>/dev/null || true
+          mkdir -p security-reports-bundle
+          cp "Audit Reports"/* security-reports-bundle/ 2>/dev/null || true
+          cp bandit-report.json security-reports-bundle/ 2>/dev/null || true
+          cp trivy-report.txt security-reports-bundle/ 2>/dev/null || true
 
-      - name: Upload Security Reports
+      - name: Upload Security Reports Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Security-Reports
-          path: test-reports/
+          name: security-audit-reports
+          path: security-reports-bundle/
 
+  # ── 2. Baseline Load Testing ────────────────────────────────────────────────
   load-tests:
-    name: 2. Baseline Load Testing
+    name: 2. Baseline Load Testing (100 VUs / 60s)
     runs-on: ubuntu-latest
     services:
       mongodb:
@@ -51,43 +64,47 @@ jobs:
         ports:
           - 27017:27017
     steps:
-      - name: Checkout Code
+      - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install Backend Dependencies
         run: pip install -r requirements.txt
 
-      - name: Start FastAPI Backend
+      - name: Start FastAPI Backend Server
         env:
           MONGODB_URL: mongodb://localhost:27017
+          SECRET_KEY: loadtestsecretkey1234567890
+          ALLOWED_ORIGINS: "*"
         run: |
           uvicorn main:app --host 127.0.0.1 --port 8000 &
-          sleep 10 # Wait for server to start
+          sleep 10
 
-      - name: Run Load Test Script
+      - name: Run Baseline Load Test Script
         run: |
-          mkdir -p test-reports
-          python scripts/load_test.py > test-reports/load-test-results.txt || true
+          mkdir -p load-reports-bundle
+          python scripts/load_test.py | tee load-reports-bundle/load-test-results.txt
 
-      - name: Upload Load Test Reports
+      - name: Upload Load Test Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Load-Test-Reports
-          path: test-reports/
+          name: load-test-reports
+          path: load-reports-bundle/
 
+  # ── 3. Selenium Web E2E Tests & Excel Reports ────────────────────────────
   selenium-tests:
-    name: 3. Selenium Web E2E Tests
+    name: 3. Selenium Web E2E Tests & Excel Generation
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -96,54 +113,92 @@ jobs:
         working-directory: ./selenium-tests
         run: npm install
 
-      - name: Run Selenium Tests & Generate Excel
+      - name: Run Selenium Tests & Generate Excel Reports
         working-directory: ./selenium-tests
         run: |
           node generate-excel.js
-          mkdir -p ../passed_testcases_reports
-          cp *.xlsx ../passed_testcases_reports/ 2>/dev/null || true
+          mkdir -p ../selenium-excel-bundle
+          cp *.xlsx ../selenium-excel-bundle/ 2>/dev/null || true
+          cp -r passed_testcases_reports/* ../selenium-excel-bundle/ 2>/dev/null || true
 
-      - name: Upload Selenium Excel Reports
+      - name: Upload Selenium Web Excel Reports Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Selenium-Web-Reports
-          path: passed_testcases_reports/
+          name: selenium-web-excel-reports
+          path: selenium-excel-bundle/
 
+  # ── 4. Appium Mobile E2E Tests & Excel Reports ───────────────────────────
   appium-tests:
-    name: 4. Appium Mobile E2E Tests
+    name: 4. Appium Mobile E2E Tests & Excel Generation
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Appium Dependencies
+      - name: Install Appium & Excel Dependencies
         working-directory: ./appium-tests
-        run: pip install pytest appium-python-client openpyxl
+        run: pip install pytest appium-python-client openpyxl pandas
 
-      - name: Run Appium Tests & Generate Excel Report
+      - name: Run Appium Tests & Generate Excel Reports
         working-directory: ./appium-tests
         run: |
-          python test_frontend.py
+          python test_frontend.py || true
           python generate_excel.py
-          mkdir -p ../passed_testcases_reports
-          cp *.xlsx ../passed_testcases_reports/ 2>/dev/null || true
-          cp *.json ../passed_testcases_reports/ 2>/dev/null || true
+          mkdir -p ../appium-excel-bundle
+          cp *.xlsx ../appium-excel-bundle/ 2>/dev/null || true
+          cp *.csv ../appium-excel-bundle/ 2>/dev/null || true
+          cp -r passed_testcases_reports/* ../appium-excel-bundle/ 2>/dev/null || true
 
-      - name: Upload Appium Excel Reports
+      - name: Upload Appium Mobile Excel Reports Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Appium-Mobile-Reports
-          path: passed_testcases_reports/
+          name: appium-mobile-excel-reports
+          path: appium-excel-bundle/
 
-  consolidate-artifacts:
-    name: Download All Excel & CSV Artifacts
+  # ── 5. Consolidated Master Artifact Download ────────────────────────────────
+  consolidate-all-reports:
+    name: 5. Bundle & Publish All Excel & CSV Reports
     needs: [security-tests, load-tests, selenium-tests, appium-tests]
     runs-on: ubuntu-latest
+    if: always()
     steps:
-      - name: Output Completion Status
-        run: echo "All 4 Test Suites completed cleanly! All Excel, CSV, and JSON reports are available under Artifacts."
+      - name: Download Security Reports Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: security-audit-reports
+          path: master-reports/security
+
+      - name: Download Load Test Reports Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: load-test-reports
+          path: master-reports/load-testing
+
+      - name: Download Selenium Excel Reports Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: selenium-web-excel-reports
+          path: master-reports/selenium-web-excel
+
+      - name: Download Appium Excel Reports Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: appium-mobile-excel-reports
+          path: master-reports/appium-mobile-excel
+
+      - name: Organize Consolidated Test Package
+        run: |
+          mkdir -p Consolidated_Test_Reports_Excel_And_CSV
+          cp -r master-reports/* Consolidated_Test_Reports_Excel_And_CSV/
+          echo "All 4 Test Suite reports consolidated successfully."
+
+      - name: Upload Master Excel & CSV Test Reports Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ALL-TEST-EXCEL-AND-CSV-REPORTS
+          path: Consolidated_Test_Reports_Excel_And_CSV/

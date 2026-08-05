@@ -1,0 +1,19 @@
+Starting Baseline Load Test...
+Target URL: http://127.0.0.1:8000/public/stats
+Virtual Users: 100
+Duration: 60 seconds
+----------------------------------------
+Stopping test and calculating results...
+
+=== Load Test Results ===
+Total Requests Completed: 3611
+Total Errors: 11
+Actual Duration: 61.63 seconds
+----------------------------------------
+What you will see
+Requests per second (RPS): 58.60 req/sec
+----------------------------------------
+Response Time
+Average: 1672.06ms
+Min: 700.74ms
+Max: 4944.91ms

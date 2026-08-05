@@ -1,0 +1,55 @@
+Endpoint Path,HTTP Method,Access Control Requirements,Expected Roles/Permissions,Source File Path,Handler Function
+/public/stats,GET,Public,None,main.py,get_public_stats
+/{catchall:path},GET,Public,None,main.py,serve_spa
+/auth/send-otp,POST,Public,None,routers/auth.py,send_otp
+/auth/verify-otp,POST,Public,None,routers/auth.py,verify_otp
+/auth/register,POST,Public,None,routers/auth.py,register_user
+/auth/login,POST,Public,None,routers/auth.py,login_for_access_token
+/auth/change-password,POST,Auth Required,student / doctor / admin,routers/auth.py,change_password
+/auth/forgot-password,POST,Public,None,routers/auth.py,forgot_password
+/auth/reset-password,POST,Public,None,routers/auth.py,reset_password
+/auth/me,GET,Auth Required,student / doctor / admin,routers/auth.py,get_me
+/auth/update-profile,PUT,Auth Required,student / doctor / admin,routers/auth.py,update_profile
+/auth/upload-profile-picture,POST,Auth Required,student / doctor / admin,routers/auth.py,upload_profile_picture
+/auth/profile-picture,DELETE,Auth Required,student / doctor / admin,routers/auth.py,remove_profile_picture
+/auth/user-profile/{email_or_id},GET,Public (Missing Auth),None,routers/auth.py,get_user_profile
+/admin/stats,GET,Auth Required,admin,routers/admin.py,get_admin_stats
+/admin/users,GET,Auth Required,admin,routers/admin.py,get_all_users
+/admin/users/{user_id}/role,PATCH,Auth Required,admin,routers/admin.py,update_user_role
+/admin/users/{user_id},DELETE,Auth Required,admin,routers/admin.py,delete_user
+/admin/users/{user_id}/status,PATCH,Auth Required,admin,routers/admin.py,update_user_status
+/admin/appointments,GET,Auth Required,admin,routers/admin.py,get_all_appointments
+/admin/appointments/{appointment_id}/status,PATCH,Auth Required,admin,routers/admin.py,update_appointment_status
+/admin/notify-all,POST,Auth Required,admin,routers/admin.py,send_global_notification
+/ai/chat,POST,Public,None,routers/ai.py,ai_chat
+/ai/symptom-check,POST,Public,None,routers/ai.py,symptom_check
+/ai/extract-id,POST,Public,None,routers/ai.py,extract_id_scan
+/alerts,POST,Auth Required,student / doctor / admin,routers/alerts.py,create_alert
+/alerts/student/{student_email},GET,Auth Required,student / doctor / admin (BOLA Risk),routers/alerts.py,get_student_alerts
+/alerts/{alert_id},PUT,Auth Required,student / doctor / admin,routers/alerts.py,update_alert
+/alerts/{alert_id},DELETE,Auth Required,student / doctor / admin,routers/alerts.py,delete_alert
+/appointments,POST,Auth Required,student / doctor / admin,routers/appointments.py,book_appointment
+/appointments/student/{student_email},GET,Auth Required,student / doctor / admin (BOLA Risk),routers/appointments.py,get_student_appointments
+/appointments/doctor/{doctor_id},GET,Auth Required,student / doctor / admin (BOLA Risk),routers/appointments.py,get_doctor_appointments
+/appointments/{appointment_id}/cancel,PUT,Auth Required,student / doctor / admin,routers/appointments.py,cancel_appointment
+/appointments/{appointment_id},DELETE,Auth Required,student / doctor / admin,routers/appointments.py,delete_appointment
+/doctors,GET,Public,None,routers/doctors.py,get_doctors
+/doctors/{doctor_id},GET,Public,None,routers/doctors.py,get_doctor
+/doctors/{doctor_id}/schedule,GET,Public,None,routers/doctors.py,get_doctor_schedule
+/doctors/{doctor_id}/schedule,PUT,Public (Missing Auth),None,routers/doctors.py,update_doctor_schedule
+/doctors/{doctor_id}/slots,GET,Public,None,routers/doctors.py,get_doctor_slots
+/doctors/seed,POST,Public,None,routers/doctors.py,seed_doctors
+/doctors/{doctor_id}/patients,GET,Public (Missing Auth),None,routers/doctors.py,get_doctor_patients
+/notifications/student/{student_email},GET,Public (Missing Auth),None,routers/notifications.py,get_student_notifications
+/notifications/{notification_id}/read,PUT,Public (Missing Auth),None,routers/notifications.py,mark_notification_read
+/notifications/mark-all-read/{student_email},PUT,Public (Missing Auth),None,routers/notifications.py,mark_all_read
+/notifications/{notification_id},DELETE,Public (Missing Auth),None,routers/notifications.py,delete_notification
+/prescriptions,POST,Auth Required,student / doctor / admin (Role Risk),routers/prescriptions.py,create_prescription
+/prescriptions/student/{student_email},GET,Auth Required,student / doctor / admin (BOLA Risk),routers/prescriptions.py,get_student_prescriptions
+/prescriptions/doctor/{doctor_id},GET,Auth Required,student / doctor / admin (BOLA Risk),routers/prescriptions.py,get_doctor_prescriptions
+/prescriptions/{prescription_id},GET,Auth Required,student / doctor / admin,routers/prescriptions.py,get_prescription
+/prescriptions/{prescription_id},PUT,Auth Required,student / doctor / admin,routers/prescriptions.py,update_prescription
+/prescriptions/{prescription_id},DELETE,Auth Required,student / doctor / admin,routers/prescriptions.py,delete_prescription
+/reports,POST,Auth Required,student / doctor / admin (Role Risk),routers/reports.py,upload_report
+/reports/student/{student_email},GET,Auth Required,student / doctor / admin (BOLA Risk),routers/reports.py,get_student_reports
+/reports/{report_id},DELETE,Auth Required,student / doctor / admin,routers/reports.py,delete_report

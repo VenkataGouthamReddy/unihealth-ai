@@ -1,0 +1,70 @@
+name: DevSecOps Quality & Security Gate
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  security-and-quality-audit:
+    name: SAST, SCA, and Secret Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11 Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # ── 1. SAST Analysis with Semgrep ─────────────────────────────────────
+      - name: Run Semgrep SAST Scanner
+        uses: semgrep/actions@v1
+        with:
+          config: p/python p/owasp-top-10
+        continue-on-error: true
+
+      - name: Run Custom Python SAST Linting (Flake8 / Bandit)
+        run: |
+          pip install bandit flake8
+          bandit -r routers core database models -f json -o bandit-report.json || true
+          bandit -r routers core database models || true
+
+      # ── 2. Automated Secret Detection with Gitleaks ────────────────────────
+      - name: Run Gitleaks Secret Scanner
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      # ── 3. Software Composition Analysis (SCA) with Trivy ──────────────────
+      - name: Run Trivy Filesystem & Dependency Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL'
+
+      # ── 4. Upload Audit Artifacts ──────────────────────────────────────────
+      - name: Upload Security Reports Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: devsecops-audit-reports
+          path: |
+            Audit Reports/
+            bandit-report.json

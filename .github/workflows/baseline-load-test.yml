@@ -1,0 +1,61 @@
+name: Baseline Load Testing Workflow
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master", "develop" ]
+  workflow_dispatch:
+
+jobs:
+  baseline-load-test:
+    name: Execute 100 Virtual Users Baseline Load Test
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start FastAPI Local Server
+        env:
+          MONGODB_URL: mongodb://localhost:27017
+          SECRET_KEY: loadtestsecretkey1234567890
+          ALLOWED_ORIGINS: "*"
+        run: |
+          uvicorn main:app --host 127.0.0.1 --port 8000 &
+          sleep 10
+
+      - name: Verify Backend Server Reachability
+        run: |
+          curl -s http://127.0.0.1:8000/public/stats || exit 1
+
+      - name: Run Baseline Load Test Script (100 VUs / 60s)
+        run: |
+          mkdir -p "Audit Reports"
+          python scripts/load_test.py | tee "Audit Reports/load-test-results.txt"
+
+      - name: Upload Baseline Load Test Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: baseline-load-test-reports
+          path: |
+            load-test-results.txt
+            Audit Reports/load-test-results.txt
