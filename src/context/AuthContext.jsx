@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [loading, setLoading] = useState(true);
 
-  // Always use the explicit API URL if provided (crucial for mobile/Capacitor), 
+  // Always use the explicit API URL if provided (crucial for mobile web/PWA deployments), 
   // otherwise fallback to relative path (Vite proxy/production).
   axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
   axios.defaults.timeout = 60000; // 60s timeout to accommodate cloud server spin-up

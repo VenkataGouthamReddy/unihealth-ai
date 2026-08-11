@@ -1,9 +1,0 @@
-{
-  "appId": "com.unihealth.ai",
-  "appName": "UniHealth AI",
-  "webDir": "dist",
-  "server": {
-    "url": "https://unihealth-ai-gteb.vercel.app",
-    "cleartext": true
-  }
-}

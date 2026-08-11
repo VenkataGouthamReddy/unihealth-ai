@@ -1,0 +1,28 @@
+{
+  "packageId": "com.unihealth.ai.twa",
+  "host": "unihealth-ai-gteb.vercel.app",
+  "name": "UniHealth AI",
+  "launcherName": "UniHealth AI",
+  "display": "standalone",
+  "themeColor": "#0f172a",
+  "navigationColor": "#0f172a",
+  "navigationColorDark": "#0f172a",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#0f172a",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://unihealth-ai-gteb.vercel.app/icon-512.png",
+  "maskableIconUrl": "https://unihealth-ai-gteb.vercel.app/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "fallbackType": "customtabs",
+  "features": {}
+}

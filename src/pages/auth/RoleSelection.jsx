@@ -6,30 +6,35 @@ export default function RoleSelection() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-8">
-      <div className="max-w-2xl w-full text-center">
-        <h1 className="text-5xl font-black text-slate-900 mb-4 tracking-tight">Choose Your Portal</h1>
-        <p className="text-slate-500 font-medium leading-relaxed mb-16">
-            Select your professional role to access personalized campus tools and resources.
-        </p>
+    <div className="min-h-[100dvh] bg-slate-950 flex flex-col p-6 relative overflow-hidden">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-teal-500/20 rounded-full blur-[100px] pointer-events-none -mt-32 -mr-32"></div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="flex-1 flex flex-col justify-center relative z-10 mt-10">
+        <div className="mb-10 animate-fade-in">
+          <h1 className="text-4xl font-black text-white mb-2 tracking-tight">Choose<br/>Portal</h1>
+          <p className="text-slate-400 font-medium text-sm leading-relaxed">
+              Select your role to access personalized campus tools and resources.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 animate-fade-in" style={{ animationDelay: '100ms' }}>
             <RoleCard 
-                icon={<GraduationCap size={40} />} 
+                icon={<GraduationCap size={24} />} 
                 title="Student" 
                 desc="Access health insights and book appointments."
                 color="teal"
                 onClick={() => navigate('/student')}
             />
             <RoleCard 
-                icon={<Stethoscope size={40} />} 
+                icon={<Stethoscope size={24} />} 
                 title="Doctor" 
                 desc="Manage your patients and clinical schedule."
                 color="indigo"
                 onClick={() => navigate('/doctor')}
             />
             <RoleCard 
-                icon={<ShieldCheck size={40} />} 
+                icon={<ShieldCheck size={24} />} 
                 title="Admin" 
                 desc="Configure system health and analytics."
                 color="rose"
@@ -39,7 +44,7 @@ export default function RoleSelection() {
 
         <button 
             onClick={() => navigate('/login')}
-            className="mt-16 text-slate-400 font-bold uppercase text-[10px] tracking-[0.4em] hover:text-slate-900 transition-colors"
+            className="mt-12 py-4 text-slate-500 font-black uppercase text-[10px] tracking-widest pressable w-full text-center"
         >
             Switch Account
         </button>
@@ -50,24 +55,24 @@ export default function RoleSelection() {
 
 function RoleCard({ icon, title, desc, color, onClick }) {
     const colors = {
-        teal: "bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white border-teal-100",
-        indigo: "bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white border-indigo-100",
-        rose: "bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white border-rose-100"
+        teal: "bg-teal-500/10 text-teal-400 border-teal-500/20 hover:bg-teal-500/20",
+        indigo: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20 hover:bg-indigo-500/20",
+        rose: "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20"
     };
 
     return (
         <div 
             onClick={onClick}
-            className={`p-10 rounded-[2.5rem] border-2 cursor-pointer transition-all duration-500 group shadow-sm hover:shadow-2xl hover:-translate-y-2 ${colors[color]}`}
+            className={`p-5 rounded-[2rem] border transition-all duration-300 flex items-center gap-4 pressable ${colors[color]}`}
         >
-            <div className="mb-8 transform group-hover:scale-110 transition-transform duration-500">
+            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 bg-white/5`}>
                 {icon}
             </div>
-            <h3 className="text-2xl font-black mb-2">{title}</h3>
-            <p className="text-sm opacity-60 font-medium leading-relaxed">{desc}</p>
-            <div className="mt-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <ArrowRight size={20} />
+            <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-black text-white">{title}</h3>
+                <p className="text-[10px] text-slate-400 font-medium leading-relaxed truncate">{desc}</p>
             </div>
+            <ArrowRight size={18} className="opacity-50 flex-shrink-0" />
         </div>
     )
 }
