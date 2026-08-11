@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-import { useNavigation } from '../context/NavigationContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '../../context/NavigationContext';
 import {
   FileText,
   Download,
@@ -15,7 +15,7 @@ import {
   X,
   FileCheck,
 } from 'lucide-react';
-import PullToRefresh from '../components/PullToRefresh';
+import PullToRefresh from '../../components/PullToRefresh';
 
 const TABS = [
   { id: 'doctor_reports',  label: 'Doctor Reports' },

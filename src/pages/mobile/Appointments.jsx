@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-import { useNavigation } from '../context/NavigationContext';
-import { useToast } from '../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '../../context/NavigationContext';
+import { useToast } from '../../context/ToastContext';
 import { useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -25,8 +25,8 @@ import {
   CalendarX,
   Download
 } from 'lucide-react';
-import { SkeletonAppointmentCard } from '../components/Skeleton';
-import PullToRefresh from '../components/PullToRefresh';
+import { SkeletonAppointmentCard } from '../../components/Skeleton';
+import PullToRefresh from '../../components/PullToRefresh';
 
 const FILTERS = ['all', 'scheduled', 'expired', 'completed', 'cancelled'];
 

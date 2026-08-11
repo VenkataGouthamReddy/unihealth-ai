@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import {
   Bell,
   Calendar,
@@ -13,8 +13,8 @@ import {
   Check,
   FileText,
 } from 'lucide-react';
-import { SkeletonNotificationCard } from '../components/Skeleton';
-import PullToRefresh from '../components/PullToRefresh';
+import { SkeletonNotificationCard } from '../../components/Skeleton';
+import PullToRefresh from '../../components/PullToRefresh';
 
 const CATEGORIES = [
   { id: 'all',         label: 'All' },

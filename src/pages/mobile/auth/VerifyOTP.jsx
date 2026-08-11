@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 import { ArrowLeft, KeyRound, Sparkles, Loader2, AlertCircle, ShieldCheck, Timer, RotateCcw, CheckCircle2 } from 'lucide-react';
 
 export default function VerifyOTP() {

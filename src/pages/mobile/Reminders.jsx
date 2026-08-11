@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-import { useNavigation } from '../context/NavigationContext';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '../../context/NavigationContext';
 import {
   Plus,
   Clock,
@@ -21,7 +21,7 @@ import {
   Check,
   Loader2
 } from 'lucide-react';
-import { SkeletonReminderCard } from '../components/Skeleton';
+import { SkeletonReminderCard } from '../../components/Skeleton';
 
 const TYPE_ICONS = {
   'Medicine':  <Heart className="w-4 h-4" />,

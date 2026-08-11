@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
   LogOut,
@@ -20,7 +20,7 @@ import {
   Zap,
   Wind
 } from 'lucide-react';
-import { SkeletonCard, SkeletonListItem } from '../components/Skeleton';
+import { SkeletonCard, SkeletonListItem } from '../../components/Skeleton';
 
 export default function StudentDashboard() {
   const { user, logout } = useAuth();

@@ -11,7 +11,7 @@ import {
   MapPin,
   Clock,
 } from 'lucide-react';
-import { SkeletonDoctorCard } from '../components/Skeleton';
+import { SkeletonDoctorCard } from '../../components/Skeleton';
 
 const CATEGORIES = ['All', 'General', 'Cardiology', 'Neurology', 'Dermatology', 'Dental', 'Mental Health'];
 
