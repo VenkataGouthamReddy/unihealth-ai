@@ -1,10 +1,14 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.unihealth.ai.twa",
-    "sha256_cert_fingerprints": [
-      "REPLACE_WITH_YOUR_KEYSTORE_SHA256_FINGERPRINT"
-    ]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.unihealth_ai_gteb.twa",
+      "sha256_cert_fingerprints": [
+        "87:73:18:82:71:D0:04:D9:1F:51:6E:4B:22:25:A5:1C:6F:E7:68:0D:27:8A:F7:F5:FC:FD:5B:C7:50:3D:91:9E"
+      ]
+    }
   }
-}]
+]
