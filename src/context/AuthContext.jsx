@@ -9,8 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Always use the explicit API URL if provided (crucial for mobile web/PWA deployments), 
-  // otherwise fallback to relative path (Vite proxy/production).
-  axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+  // otherwise fallback to the production Render URL.
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'https://unihealth-api-2hcy.onrender.com';
   axios.defaults.timeout = 60000; // 60s timeout to accommodate cloud server spin-up
 
   if (token) {
@@ -18,7 +18,13 @@ export const AuthProvider = ({ children }) => {
   }
 
   axios.interceptors.response.use(
-    (response) => response,
+    (response) => {
+      // Prevent HTML fallback responses from Vercel crashing JSON parsing
+      if (response.data && typeof response.data === 'string' && response.data.trim().startsWith('<')) {
+         return Promise.reject(new Error("Received HTML instead of JSON"));
+      }
+      return response;
+    },
     async (error) => {
       const { config } = error;
       
